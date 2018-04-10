@@ -8,7 +8,8 @@
 
 import Foundation
 
-public class CashInApi {
+public class CashInAPI {
+    
     lazy var session: SessionProtocol = URLSession.shared
     
     private let hostName: String
@@ -17,7 +18,15 @@ public class CashInApi {
         self.hostName = hostName
     }
     
-    func payIn(token: String,
+    /**
+     * cashIn transfers money from Linked Card [cardId] to the Fintech Account, identified from [tenantId] [ownerId] [accountType] and [accountId] params.
+     * You have to set the amount and currency to transfer, both to set into [amount] param.
+     * Use [token] got from "Create User token" request.
+     * Use [idempotency] parameter to avoid multiple inserts.
+     * [completion] callback contains transactionId. Check if the Card issuer requires to perform a Secure3D procedure.
+     * Whether secure3D is required, you will find the specific redirect URL.
+     */
+    func cashIn(token: String,
                userId: String,
                accountId: String,
                accountType: String,
@@ -27,9 +36,9 @@ public class CashInApi {
                idempotency: String,
                completion: @escaping (CashInResponse?, Error?) -> Void) {
         
-        
+        let path = NetHelper.getPath(from: accountType)
         do {
-            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(getPath(from: accountType))/\(userId)/accounts/\(accountId)/linkedCards/\(cardId)/cashIns")
+            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(path)/\(userId)/accounts/\(accountId)/linkedCards/\(cardId)/cashIns")
                 else { fatalError() }
             
             var request = URLRequest(url: url)
@@ -123,19 +132,7 @@ public class CashInApi {
             completion(nil, error)
         }
     }
-    
-    func getPath(from accountType: String) -> String {
-        if(accountType == "PERSONAL"){
-            return "users"
-        } else {
-            return "enterprises"
-        }
-    }
+
 }
 
-extension URLRequest {
-    mutating func addBearerAuthorizationToken(token: String) {
-        self.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-    }
-}
 

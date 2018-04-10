@@ -7,8 +7,15 @@
 //
 
 import Foundation
-public class NetHelpers {
+public class NetHelper {
     
+    static func getPath(from accountType: String) -> String {
+        if(accountType == "PERSONAL"){
+            return "users"
+        } else {
+            return "enterprises"
+        }
+    }
 }
 
 protocol SessionProtocol {
@@ -33,4 +40,10 @@ enum WebserviceError : Error {
     case NOJSONReply
     case IdempotencyError
     case TokenError
+}
+
+extension URLRequest {
+    mutating func addBearerAuthorizationToken(token: String) {
+        self.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    }
 }
