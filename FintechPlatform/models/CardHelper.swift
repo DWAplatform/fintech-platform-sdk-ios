@@ -14,8 +14,7 @@ class CardHelper {
     static func generateAlias(cardNumber: String) -> String {
         let indexTo = cardNumber.index(cardNumber.startIndex, offsetBy: 6)
         let indexFrom = cardNumber.index(cardNumber.endIndex, offsetBy: -4)
-        
-        return "\(cardNumber.substring(to: indexTo))XXXXXX\(cardNumber.substring(from: indexFrom))"
+        return "\(String(cardNumber[..<indexTo]))XXXXXX\(String(cardNumber[indexFrom...]))"
     }
     
     func checkCardNumberFormat(cardNumber: String) throws {

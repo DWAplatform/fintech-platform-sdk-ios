@@ -40,6 +40,7 @@ enum WebserviceError : Error {
     case NOJSONReply
     case IdempotencyError
     case TokenError
+    case ResourseNotFound
 }
 
 extension URLRequest {
