@@ -21,4 +21,32 @@ public class FintechPlatformAPI {
     public func getCashInAPI(hostName: String) -> CashInAPI {
         return CashInAPI(hostName: hostName)
     }
+    
+    public func getCashOutAPI(hostName: String) -> CashOutAPI {
+        return CashOutAPI(hostName: hostName)
+    }
+    
+    public func getBalanceAPI(hostName: String) -> BalanceAPI {
+        return BalanceAPI(hostName: hostName)
+    }
+    
+    public func getTransactionsAPI(hostName: String) -> TransactionsAPI {
+        return TransactionsAPI(hostName: hostName)
+    }
+    
+    public func getBankAccountAPI(hostName: String) -> BankAccountAPI {
+        return BankAccountAPI(hostName: hostName)
+    }
+    
+    public func getPaymentCardAPI(hostName: String) -> PaymentCardAPI {
+        return PaymentCardAPI(hostName: hostName)
+    }
+    
+    public func getProfileAPI(hostName: String) -> ProfileAPI {
+        return ProfileAPI(hostName: hostName)
+    }
+    
+    public func getTransferAPI(hostName: String) -> TransferAPI {
+        return TransferAPI(hostName: hostName)
+    }
 }
