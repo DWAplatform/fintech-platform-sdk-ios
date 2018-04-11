@@ -29,6 +29,7 @@
 		BF43438D207DF58900C9C041 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43438C207DF58900C9C041 /* UserProfile.swift */; };
 		BF43438F207DF64500C9C041 /* CardSanityCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43438E207DF64500C9C041 /* CardSanityCheck.swift */; };
 		BF434391207E009500C9C041 /* UserDocuments.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF434390207E009500C9C041 /* UserDocuments.swift */; };
+		BF434393207E073800C9C041 /* TransferAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF434392207E073800C9C041 /* TransferAPI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		BF43438C207DF58900C9C041 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		BF43438E207DF64500C9C041 /* CardSanityCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSanityCheck.swift; sourceTree = "<group>"; };
 		BF434390207E009500C9C041 /* UserDocuments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDocuments.swift; sourceTree = "<group>"; };
+		BF434392207E073800C9C041 /* TransferAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferAPI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +140,7 @@
 				BF43437E207D37F900C9C041 /* BankAccountAPI.swift */,
 				BF434382207D394200C9C041 /* PaymentCardAPI.swift */,
 				BF434388207DF2FC00C9C041 /* ProfileAPI.swift */,
+				BF434392207E073800C9C041 /* TransferAPI.swift */,
 			);
 			path = fintech;
 			sourceTree = "<group>";
@@ -295,6 +298,7 @@
 				BF434385207D39A200C9C041 /* PaymentCardItem.swift in Sources */,
 				BF43436D207CF27500C9C041 /* FintechPlatformAPI.swift in Sources */,
 				BF43438D207DF58900C9C041 /* UserProfile.swift in Sources */,
+				BF434393207E073800C9C041 /* TransferAPI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
