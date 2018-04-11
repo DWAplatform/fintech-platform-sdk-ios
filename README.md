@@ -17,7 +17,7 @@ $ gem install cocoapods
 To integrate DWAplatform into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
 ```ruby
-    pod 'FintechPlatform', '~> 1.0.0'
+pod 'FintechPlatform', '~> 1.0.0'
 ```
 
 Then, run the following command:
@@ -42,7 +42,7 @@ Features
 -------------------------------------------------
 We supply the following modules:
 
-###### fintechplatform-api
+###### FintechPlatformAPI:
 
 1. Cash in 
 2. Cash out
@@ -53,7 +53,7 @@ We supply the following modules:
 7. Peer to peer transfers
 8. (profile) User personal informations
 
-Sample usage CashIn API Component in Kotlin
+Sample usage CashIn API Component in Swift
 -------------------------------------------------
 
 Fintech Account (accountId) is credited with 20,00 € using a card (cardId) owned by the user (userId)
@@ -78,8 +78,9 @@ Fintech Account (accountId) is credited with 20,00 € using a card (cardId) own
     //  Optional Idempotency
     let idempotencyKey = "idemp1"
     
-    //  create cash in API
-    let cashInAPI = FintechPlatformAPI.sharedInstance.getCashInAPI(hostName: hostName)
+    //  create cash in API using FintechPlatformAPI instance.
+    let fintechPlatform = FintechPlatformAPI.sharedInstance
+    let cashInAPI = fintechPlatform.getCashInAPI(hostName: hostName)
 
     //  Start Cash in
     cashInAPI.cashIn(token: accessToken,
@@ -92,12 +93,12 @@ Fintech Account (accountId) is credited with 20,00 € using a card (cardId) own
 	                idempotency: idempotencyKey) { optcashinresponse, opterror ->
 
         if let error = opterror {
-            completion(nil, handleErrors(error))
+            completion(nil, handleErrors(error: error))
             return
         }
 
         guard let cashInResponse = optcashinresponse else {
-            completion(nil, handleErrors(error))
+            completion(nil, nil)
             return
         }
     
@@ -108,6 +109,6 @@ Fintech Account (accountId) is credited with 20,00 € using a card (cardId) own
             // Cash in completed
         }
     }
-    
+
 ```
 
