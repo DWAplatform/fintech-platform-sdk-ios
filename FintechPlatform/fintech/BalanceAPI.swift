@@ -7,16 +7,16 @@
 //
 
 import Foundation
-public class BalanceAPI {
+open class BalanceAPI {
     lazy var session: SessionProtocol = URLSession.shared
     
     private let hostName: String
     
-    init(hostName: String) {
+    public init(hostName: String) {
         self.hostName = hostName
     }
     
-    func balance(token: String,
+    open func balance(token: String,
                  ownerId: String,
                  accountId: String,
                  tenantId: String,

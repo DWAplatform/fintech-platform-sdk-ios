@@ -7,10 +7,10 @@
 //
 
 import Foundation
-struct UserDocuments {
-    let docId: String?
-    let doctype: String?
-    let pages: [String]?
+public struct UserDocuments {
+    public let docId: String?
+    public let doctype: String?
+    public let pages: [String]?
     
     init(docId:String?,
          doctype: String?,

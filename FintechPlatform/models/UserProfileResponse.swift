@@ -7,9 +7,9 @@
 //
 
 import Foundation
-struct UserProfileResponse {
-    var userid: String
-    var token: String?
+public struct UserProfileResponse {
+    public let userid: String
+    public var token: String?
     
     init(userid: String) {
         self.userid = userid

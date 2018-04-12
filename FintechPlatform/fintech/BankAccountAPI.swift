@@ -7,16 +7,16 @@
 //
 
 import Foundation
-public class BankAccountAPI {
+open class BankAccountAPI {
     lazy var session: SessionProtocol = URLSession.shared
     
     private let hostName: String
     
-    init(hostName: String) {
+    public init(hostName: String) {
         self.hostName = hostName
     }
     
-    func createLinkedBank(token: String,
+    open func createLinkedBank(token: String,
                           ownerId: String,
                           accountId: String,
                           accountType: String,

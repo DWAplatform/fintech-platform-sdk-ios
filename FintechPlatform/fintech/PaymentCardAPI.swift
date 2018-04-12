@@ -7,17 +7,17 @@
 //
 
 import Foundation
-public class PaymentCardAPI {
+open class PaymentCardAPI {
     
     lazy var session: SessionProtocol = URLSession.shared
     
     private let hostName: String
     
-    init(hostName: String) {
+    public init(hostName: String) {
         self.hostName = hostName
     }
     
-    func registerCard(token: String,
+    open func registerCard(token: String,
                       ownerId: String,
                       accountId: String,
                       tenantId: String,

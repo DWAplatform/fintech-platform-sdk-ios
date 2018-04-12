@@ -8,13 +8,13 @@
 
 import Foundation
 
-public class CashInAPI {
+open class CashInAPI {
     
     lazy var session: SessionProtocol = URLSession.shared
     
     private let hostName: String
     
-    init(hostName: String) {
+    public init(hostName: String) {
         self.hostName = hostName
     }
     
@@ -26,7 +26,7 @@ public class CashInAPI {
      * [completion] callback contains transactionId. Check if the Card issuer requires to perform a Secure3D procedure.
      * Whether secure3D is required, you will find the specific redirect URL.
      */
-    func cashIn(token: String,
+    open func cashIn(token: String,
                userId: String,
                accountId: String,
                accountType: String,

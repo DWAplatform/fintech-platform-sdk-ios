@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8E4CA2E0CABAF86484CF727E /* Pods_FintechPlatformTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77388DF9753FA968BFEEEB11 /* Pods_FintechPlatformTests.framework */; };
 		BF434359207CEF0800C9C041 /* FintechPlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF43434F207CEF0800C9C041 /* FintechPlatform.framework */; };
 		BF43435E207CEF0800C9C041 /* FintechPlatformTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43435D207CEF0800C9C041 /* FintechPlatformTests.swift */; };
 		BF434360207CEF0800C9C041 /* FintechPlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = BF434352207CEF0800C9C041 /* FintechPlatform.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -43,6 +44,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A37622AEB1A9D3A0BE76E50 /* Pods_FintechPlatform.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FintechPlatform.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3657704FD0D71F9E37A3860C /* Pods-FintechPlatformTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FintechPlatformTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FintechPlatformTests/Pods-FintechPlatformTests.debug.xcconfig"; sourceTree = "<group>"; };
+		6150075E10E0BE9EE629057B /* Pods-FintechPlatform.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FintechPlatform.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FintechPlatform/Pods-FintechPlatform.debug.xcconfig"; sourceTree = "<group>"; };
+		649A90C58F2405681930A430 /* Pods-FintechPlatformTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FintechPlatformTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FintechPlatformTests/Pods-FintechPlatformTests.release.xcconfig"; sourceTree = "<group>"; };
+		77388DF9753FA968BFEEEB11 /* Pods_FintechPlatformTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FintechPlatformTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD06E15DCA9B3495403B0C50 /* Pods-FintechPlatform.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FintechPlatform.release.xcconfig"; path = "Pods/Target Support Files/Pods-FintechPlatform/Pods-FintechPlatform.release.xcconfig"; sourceTree = "<group>"; };
 		BF43434F207CEF0800C9C041 /* FintechPlatform.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FintechPlatform.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF434352207CEF0800C9C041 /* FintechPlatform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FintechPlatform.h; sourceTree = "<group>"; };
 		BF434353207CEF0800C9C041 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -84,18 +91,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF434359207CEF0800C9C041 /* FintechPlatform.framework in Frameworks */,
+				8E4CA2E0CABAF86484CF727E /* Pods_FintechPlatformTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		138DC1638F40A4FA9AC7D5E1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0A37622AEB1A9D3A0BE76E50 /* Pods_FintechPlatform.framework */,
+				77388DF9753FA968BFEEEB11 /* Pods_FintechPlatformTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		BF434345207CEF0800C9C041 = {
 			isa = PBXGroup;
 			children = (
 				BF434351207CEF0800C9C041 /* FintechPlatform */,
 				BF43435C207CEF0800C9C041 /* FintechPlatformTests */,
 				BF434350207CEF0800C9C041 /* Products */,
+				C33854E31A22504E612455E4 /* Pods */,
+				138DC1638F40A4FA9AC7D5E1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -170,6 +189,17 @@
 			path = helpers;
 			sourceTree = "<group>";
 		};
+		C33854E31A22504E612455E4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				6150075E10E0BE9EE629057B /* Pods-FintechPlatform.debug.xcconfig */,
+				AD06E15DCA9B3495403B0C50 /* Pods-FintechPlatform.release.xcconfig */,
+				3657704FD0D71F9E37A3860C /* Pods-FintechPlatformTests.debug.xcconfig */,
+				649A90C58F2405681930A430 /* Pods-FintechPlatformTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -188,6 +218,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BF434363207CEF0800C9C041 /* Build configuration list for PBXNativeTarget "FintechPlatform" */;
 			buildPhases = (
+				FE94346C37A7E17C8F00D34E /* [CP] Check Pods Manifest.lock */,
 				BF43434A207CEF0800C9C041 /* Sources */,
 				BF43434B207CEF0800C9C041 /* Frameworks */,
 				BF43434C207CEF0800C9C041 /* Headers */,
@@ -206,6 +237,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BF434366207CEF0800C9C041 /* Build configuration list for PBXNativeTarget "FintechPlatformTests" */;
 			buildPhases = (
+				4E3A9D44AB668BDE5F9F767D /* [CP] Check Pods Manifest.lock */,
 				BF434354207CEF0800C9C041 /* Sources */,
 				BF434355207CEF0800C9C041 /* Frameworks */,
 				BF434356207CEF0800C9C041 /* Resources */,
@@ -233,14 +265,16 @@
 					BF43434E207CEF0800C9C041 = {
 						CreatedOnToolsVersion = 9.3;
 						LastSwiftMigration = 0930;
+						ProvisioningStyle = Automatic;
 					};
 					BF434357207CEF0800C9C041 = {
 						CreatedOnToolsVersion = 9.3;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
 			buildConfigurationList = BF434349207CEF0800C9C041 /* Build configuration list for PBXProject "FintechPlatform" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -273,6 +307,45 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4E3A9D44AB668BDE5F9F767D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FintechPlatformTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FE94346C37A7E17C8F00D34E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FintechPlatform-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		BF43434A207CEF0800C9C041 /* Sources */ = {
@@ -373,7 +446,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -430,11 +503,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -443,6 +515,7 @@
 		};
 		BF434364207CEF0800C9C041 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6150075E10E0BE9EE629057B /* Pods-FintechPlatform.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -454,11 +527,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = FintechPlatform/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fintechplatform.api.FintechPlatform;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -470,6 +539,7 @@
 		};
 		BF434365207CEF0800C9C041 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AD06E15DCA9B3495403B0C50 /* Pods-FintechPlatform.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
@@ -481,11 +551,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = FintechPlatform/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fintechplatform.api.FintechPlatform;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -496,16 +562,13 @@
 		};
 		BF434367207CEF0800C9C041 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3657704FD0D71F9E37A3860C /* Pods-FintechPlatformTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 543376SB3C;
 				INFOPLIST_FILE = FintechPlatformTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fintechplatform.api.FintechPlatformTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -515,16 +578,13 @@
 		};
 		BF434368207CEF0800C9C041 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 649A90C58F2405681930A430 /* Pods-FintechPlatformTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 543376SB3C;
 				INFOPLIST_FILE = FintechPlatformTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fintechplatform.api.FintechPlatformTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;

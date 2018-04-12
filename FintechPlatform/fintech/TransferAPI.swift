@@ -7,17 +7,17 @@
 //
 
 import Foundation
-public class TransferAPI {
+open class TransferAPI {
     
     lazy var session: SessionProtocol = URLSession.shared
     
     private let hostName: String
     
-    init(hostName: String) {
+    public init(hostName: String) {
         self.hostName = hostName
     }
     
-    func p2p(token: String,
+    open func p2p(token: String,
              fromuserId: String,
              fromAccountId: String,
              fromAccountType: String,

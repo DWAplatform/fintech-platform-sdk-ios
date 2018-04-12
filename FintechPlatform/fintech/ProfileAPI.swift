@@ -7,16 +7,16 @@
 //
 
 import Foundation
-public class ProfileAPI {
+open class ProfileAPI {
     lazy var session: SessionProtocol = URLSession.shared
     
     private let hostName: String
     
-    init(hostName: String) {
+    public init(hostName: String) {
         self.hostName = hostName
     }
     
-    func searchUser(token: String,
+    open func searchUser(token: String,
                     tenantId: String,
                     userId: String,
                     completion: @escaping (UserProfile?, Error?) -> Void) {
@@ -34,7 +34,7 @@ public class ProfileAPI {
         }.resume()
     }
     
-    func editProfile(token: String,
+    open func editProfile(token: String,
                  userId: String,
                  tenantId: String,
                  name: String? = nil,
@@ -166,7 +166,7 @@ public class ProfileAPI {
         }
     }
     
-    func documents(token: String,
+    public func documents(token: String,
                     userId: String,
                     tenantId: String,
                     doctype: String,
@@ -234,7 +234,7 @@ public class ProfileAPI {
         }
     }
     
-    func getDocuments(token: String,
+    public func getDocuments(token: String,
                       userId: String,
                       tenantId: String,
                       completion: @escaping ([UserDocuments?]?, Error?) -> Void){

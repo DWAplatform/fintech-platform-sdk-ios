@@ -7,7 +7,7 @@
 //
 
 import Foundation
-public class NetHelper {
+class NetHelper {
     
     static func getPath(from accountType: String) -> String {
         if(accountType == "PERSONAL"){

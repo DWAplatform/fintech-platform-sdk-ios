@@ -7,7 +7,7 @@
 //
 
 import Foundation
-struct UserProfile {
+public struct UserProfile {
     var userid: String
     var name: String?
     var surname: String?

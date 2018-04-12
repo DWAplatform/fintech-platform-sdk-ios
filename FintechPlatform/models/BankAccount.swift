@@ -7,12 +7,12 @@
 //
 
 import Foundation
-struct BankAccount {
+public struct BankAccount {
     
-    let bankaccountid: String
-    let iban: String
-    let activestate: String
-    let accountId: String?
+    public let bankaccountid: String
+    public let iban: String
+    public let activestate: String
+    public let accountId: String?
     
     init(bankaccountid: String,
          iban: String,

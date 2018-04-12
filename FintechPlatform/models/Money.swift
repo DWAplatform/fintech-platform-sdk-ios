@@ -9,7 +9,7 @@
 import Foundation
 
 
-class Money {
+public class Money {
     
     private let value: Int64;
     private let currency: String?
@@ -19,12 +19,12 @@ class Money {
         self.currency = currency
     }
     
-    public init(value: Int) {
+    public init(value: Int, currency: String? = "EUR") {
         self.value = Int64(value)
-        self.currency = "EUR"
+        self.currency = currency
     }
     
-    static func verifiedValueOf(money: String) -> Money? {
+    public static func verifiedValueOf(money: String) -> Money? {
         let newmoney = money.replacingOccurrences(of: ",", with: ".")
         
         // check number of digits after .
@@ -70,15 +70,15 @@ class Money {
         return Money(value: iv)
     }
     
-    static func valueOf(money: String) -> Money {
+    public static func valueOf(money: String) -> Money {
         return verifiedValueOf(money: money) ?? Money(value: 0)
     }
     
-    func toString() -> String {
+    public func toString() -> String {
         return toString(separator: ",");
     }
     
-    func toString(separator: String) -> String {
+    public func toString(separator: String) -> String {
         
         var value = self.value
         var sign = ""
@@ -128,15 +128,15 @@ class Money {
         }
     }
     
-    func getValue() -> Int {
+    public func getValue() -> Int {
         return Int(value);
     }
     
-    func getLongvalue() -> Int64 {
+    public func getLongvalue() -> Int64 {
         return value;
     }
     
-    func getCurrency() -> String {
+    public func getCurrency() -> String {
         return currency!
     }
 }

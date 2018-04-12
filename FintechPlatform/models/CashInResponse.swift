@@ -7,10 +7,10 @@
 //
 
 import Foundation
-struct CashInResponse {
-    let transactionid: String
-    let securecodeneeded: Bool
-    let redirecturl: String?
+public struct CashInResponse {
+    public let transactionid: String
+    public let securecodeneeded: Bool
+    public let redirecturl: String?
     
     init(transactionid: String,
          securecodeneeded: Bool,

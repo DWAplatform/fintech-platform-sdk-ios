@@ -7,12 +7,12 @@
 //
 
 import Foundation
-struct PaymentCardItem {
-    let creditcardid: String
-    let numberalias: String
-    let expirationdate: String
-    let activestate: String
-    let currency: String
+public struct PaymentCardItem {
+    public let creditcardid: String
+    public let numberalias: String
+    public let expirationdate: String
+    public let activestate: String
+    public let currency: String
     
     init(creditcardid: String,
          numberalias: String,

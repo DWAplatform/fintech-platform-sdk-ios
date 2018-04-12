@@ -7,12 +7,12 @@
 //
 
 import Foundation
-public class CashOutAPI {
+open class CashOutAPI {
     lazy var session: SessionProtocol = URLSession.shared
     
     private let hostName: String
     
-    init(hostName: String) {
+    public init(hostName: String) {
         self.hostName = hostName
     }
     
@@ -22,7 +22,7 @@ public class CashOutAPI {
      * Use [token] got from "Create User token" request.
      * Use [idempotency] parameter to avoid multiple inserts.
      */
-    func cashOut(token: String,
+    open func cashOut(token: String,
                 userId: String,
                 accountId: String,
                 accountType: String,

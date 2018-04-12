@@ -7,23 +7,23 @@
 //
 
 import Foundation
-struct TransactionResponse {
+public struct TransactionResponse {
     
-    let transactionId: String
-    let accountId: String
-    let status: String
-    let operationtype: String
-    let creationdate: String
-    let creditedid: String?
-    let debitedId: String?
-    let creditedFunds: Int64?
-    let debitedFunds: Int64?
-    let creditedName: String?
-    let debitedName: String?
-    let creditedPhoto: String?
-    let debitedPhoto: String?
-    let error: String?
-    let message: String?
+    public let transactionId: String
+    public let accountId: String
+    public let status: String
+    public let operationtype: String
+    public let creationdate: String
+    public let creditedid: String?
+    public let debitedId: String?
+    public let creditedFunds: Int64?
+    public let debitedFunds: Int64?
+    public let creditedName: String?
+    public let debitedName: String?
+    public let creditedPhoto: String?
+    public let debitedPhoto: String?
+    public let error: String?
+    public let message: String?
     
     init(transactionId: String,
          accountId: String,
