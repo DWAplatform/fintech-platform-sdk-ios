@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "FintechPlatform"
-  s.version      = "0.0.1"
+  s.version      = "1.0.0"
   s.summary      = "iOS client library to work with Fintech Platform."
 
   # This description is used to generate tags and improve search results.
@@ -25,10 +25,16 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
-iOS client library to work with Fintech Platform.
+iOS client library to work with Fintech Platform:
+Cash in
+Cash out
+Balance
+Payment card registration
+IBAN address registration
+Transactions list
                    DESC
 
-  s.homepage     = "http://EXAMPLE/FintechPlatform"
+  s.homepage     = "https://github.com/DWAplatform/fintech-platform-sdk-ios"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -39,7 +45,7 @@ iOS client library to work with Fintech Platform.
   #  Popular ones are 'MIT', 'BSD' and 'Apache License, Version 2.0'.
   #
 
-  s.license      = "MIT"
+  s.license               = { :type => "MIT", :file => "LICENSE" }
   # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
 
 
@@ -64,7 +70,7 @@ iOS client library to work with Fintech Platform.
   #  the deployment target. You can optionally include the target after the platform.
   #
 
-  # s.platform     = :ios
+   s.platform     = :ios
   # s.platform     = :ios, "5.0"
 
   #  When using multiple platforms
@@ -72,6 +78,7 @@ iOS client library to work with Fintech Platform.
   # s.osx.deployment_target = "10.7"
   # s.watchos.deployment_target = "2.0"
   # s.tvos.deployment_target = "9.0"
+    s.ios.deployment_target = "8.0"
 
 
   # ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -91,9 +98,9 @@ iOS client library to work with Fintech Platform.
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "Classes", "Classes/**/*.{h,m}", "FintechPlatform/**/*.swift"
+  s.source_files  = "FintechPlatform/**/*.swift"
   s.exclude_files = "Classes/Exclude"
-
+  s.swift_version =  "4.0"
   # s.public_header_files = "Classes/**/*.h"
 
 
