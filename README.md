@@ -1,4 +1,4 @@
-DWAplatform iOS SDK
+Fintech Platform iOS SDK
 =================================================
 Fintech Platform is an iOS client library to work with Fintech Platform.
 
