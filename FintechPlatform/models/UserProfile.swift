@@ -23,20 +23,20 @@ public struct UserProfile {
     var occupation: String?
     var income: String?
     
-    init(userid: String,
-         name: String? = nil,
-         surname: String? = nil,
-         nationality: String? = nil,
-         dateOfBirth: String? = nil,
-         addressOfResidence: String? = nil,
-         postalCode: String? = nil,
-         cityOfResidence: String? = nil,
-         telephone: String? = nil,
-         email: String? = nil,
-         photo: String? = nil,
-         countryOfResidence: String? = nil,
-         occupation: String? = nil,
-         income: String? = nil) {
+    public init(userid: String,
+                 name: String? = nil,
+                 surname: String? = nil,
+                 nationality: String? = nil,
+                 dateOfBirth: String? = nil,
+                 addressOfResidence: String? = nil,
+                 postalCode: String? = nil,
+                 cityOfResidence: String? = nil,
+                 telephone: String? = nil,
+                 email: String? = nil,
+                 photo: String? = nil,
+                 countryOfResidence: String? = nil,
+                 occupation: String? = nil,
+                 income: String? = nil) {
         
         self.userid = userid
         self.name = name

@@ -25,7 +25,7 @@ public struct TransactionResponse {
     public let error: String?
     public let message: String?
     
-    init(transactionId: String,
+    public init(transactionId: String,
          accountId: String,
          status: String,
          operationtype: String,

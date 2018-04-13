@@ -11,7 +11,7 @@ public struct UserProfileResponse {
     public let userid: String
     public var token: String?
     
-    init(userid: String) {
+    public init(userid: String) {
         self.userid = userid
     }
 }

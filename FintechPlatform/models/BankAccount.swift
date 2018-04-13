@@ -14,7 +14,7 @@ public struct BankAccount {
     public let activestate: String
     public let accountId: String?
     
-    init(bankaccountid: String,
+    public init(bankaccountid: String,
          iban: String,
          activestate: String,
          accountId: String? = nil) {

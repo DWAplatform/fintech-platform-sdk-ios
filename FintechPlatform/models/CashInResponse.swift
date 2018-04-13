@@ -12,7 +12,7 @@ public struct CashInResponse {
     public let securecodeneeded: Bool
     public let redirecturl: String?
     
-    init(transactionid: String,
+    public init(transactionid: String,
          securecodeneeded: Bool,
          redirecturl: String?) {
         

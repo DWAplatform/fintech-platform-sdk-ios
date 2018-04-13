@@ -14,7 +14,7 @@ public struct PaymentCardItem {
     public let activestate: String
     public let currency: String
     
-    init(creditcardid: String,
+    public init(creditcardid: String,
          numberalias: String,
          expirationdate: String,
          activestate: String,

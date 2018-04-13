@@ -12,12 +12,12 @@ public struct UserDocuments {
     public let doctype: String?
     public let pages: [String]?
     
-    init(docId:String?,
-         doctype: String?,
-         pages: [String]?) {
+    public init(docId:String?,
+                 doctype: String?,
+                 pages: [String]?) {
         
-        self.docId = docId
-        self.doctype = doctype
-        self.pages = pages
-    }
+                self.docId = docId
+                self.doctype = doctype
+                self.pages = pages
+            }
 }
