@@ -16,17 +16,31 @@ open class PaymentCardAPI {
     public init(hostName: String) {
         self.hostName = hostName
     }
-    
+    /**
+     Register a Card. Use this method to register a user card and PLEASE DO NOT save card information on your own client or server side-parameters
+     
+     - parameters:
+        - token: got from "Create User token" request.
+        - tenantId: Fintech tenant id
+        - accountId: Fintech Account id
+        - ownerId: Fintech id of the owner of the Fintech Account
+        - accountType: set if PERSONAL or BUSINESS type of account
+        - cardNumber: 16 digits user card number, without spaces or dashes
+        - expiration: card expiration date in MMYY format
+        - cvx: 3 digit cxv card number
+        - currency: actual currency of the card operations
+     - Returns: PaymentCardItem with his own id, and alias card number.
+     */
     open func registerCard(token: String,
-                      ownerId: String,
-                      accountId: String,
-                      tenantId: String,
-                      accountType: String,
-                      cardNumber: String,
-                      expiration: String,
-                      cvx: String,
-                      currency: String,
-                      completion: @escaping (PaymentCardItem?, Error?) -> Void ){
+                           tenantId: String,
+                           accountId: String,
+                           ownerId: String,
+                           accountType: String,
+                           cardNumber: String,
+                           expiration: String,
+                           cvx: String,
+                           currency: String,
+                           completion: @escaping (PaymentCardItem?, Error?) -> Void ){
         
         self.createCreditCardRegistration(with: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, numberalias: CardHelper.generateAlias(cardNumber: cardNumber), expiration: expiration, currency: currency, token: token) { (optCardRegistration, optError) in
             if let error = optError { completion(nil, error); return }
@@ -153,10 +167,7 @@ open class PaymentCardAPI {
                              accountType: String,
                              token: String,
                              completion: @escaping (CardToRegister?, Error?) -> Void) {
-        
-//        if (!DWApayAPI.TEST_MODE) {
-//            completion(CardToRegister(cardNumber: cardToRegister.cardNumber, expiration: cardToRegister.expiration, cvx: cardToRegister.cxv), nil)
-//        } else {
+
         guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(NetHelper.getPath(from: accountType))/\(ownerId)/accounts/\(accountId)/linkedCardsTestCards")
             else { fatalError() }
         

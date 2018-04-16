@@ -93,4 +93,61 @@ open class CashOutAPI {
             completion(error)
         }
     }
+    
+    open func cashOutFee(token: String,
+                   ownerId: String,
+                   accountId: String,
+                   accountType: String,
+                   tenantId: String,
+                   linkedBankId: String,
+                   amount: Money,
+                   idempotency: String,
+                   completion: @escaping (Money?, Error?) -> Void) {
+        
+        let path = NetHelper.getPath(from: accountType)
+        
+        let url = hostName + "/rest/v1/account/tenants/\(tenantId)/\(path)/\(ownerId)/accounts/\(accountId)/linkedBanks/\(linkedBankId)/cashOutsFee"
+        
+        var params = Dictionary<String, String>()
+        params["amount"] = amount.toString()
+        params["currency"] = amount.getCurrency()
+        
+        guard let rurl = URL(string: NetHelper.getUrlDataString(url: url, params: params)) else { fatalError() }
+        var request = URLRequest(url:  rurl)
+        request.addBearerAuthorizationToken(token: token)
+        
+        session.dataTask(with: request) { (data, response, error) in
+            guard error == nil else { completion(nil, error); return }
+            
+            guard let data = data else {
+                completion(nil, WebserviceError.DataEmptyError)
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(nil, WebserviceError.NoHTTPURLResponse)
+                return
+            }
+            
+            if (httpResponse.statusCode != 200) {
+                completion(nil, WebserviceError.StatusCodeNotSuccess)
+                return
+            }
+            
+            do {
+                let reply = try JSONSerialization.jsonObject(
+                    with: data,
+                    options: []) as? [String:Any]
+                
+                guard let amount = reply?["amount"] as? Int64 else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return }
+                guard let currency = reply?["currency"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return }
+                
+                let moneyFee = Money(value: amount, currency: currency)
+                completion(moneyFee, nil)
+                
+            } catch {
+                completion(nil, error)
+            }
+        }.resume()
+    }
 }

@@ -16,6 +16,25 @@ class NetHelper {
             return "enterprises"
         }
     }
+    
+    static func getUrlDataString(url: String, params: Dictionary<String, String>) -> String {
+        var result = ""
+        var first = true
+        result.append(url)
+        for (key, value) in params {
+            if(first) {
+                result.append("?")
+                first = false
+            } else {
+                result.append("&")
+                result.append(key)
+                result.append("=")
+                result.append(value)
+            }
+        }
+        return result
+    }
+
 }
 
 protocol SessionProtocol {

@@ -21,7 +21,7 @@ open class BalanceAPI {
                  accountId: String,
                  tenantId: String,
                  accountType: String,
-                 completion: @escaping (Money?, Error?) -> Void) {
+                 completion: @escaping (BalanceItem?, Error?) -> Void) {
         
         guard let url = URL(string:
             hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(NetHelper.getPath(from: accountType))/\(ownerId)/accounts/\(accountId)/balance") else { fatalError() }
@@ -58,13 +58,11 @@ open class BalanceAPI {
                                          currency: balance["currency"] as? String)
                 
                 guard let availableBalance = reply?["availableBalance"] as? [String: Any] else  { return }
-                
-                //                  TODO  handle availableMoney
                 guard let availableAmount = availableBalance["amount"] as? Int64 else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return }
-                let _ = Money(value: availableAmount,
+                let availableMoneyBalance = Money(value: availableAmount,
                               currency: availableBalance["currency"] as? String)
                 
-                completion(moneyBalance, nil)
+                completion(BalanceItem(balance: moneyBalance, availableBalance: availableMoneyBalance), nil)
                 
             } catch {
                 completion(nil, error)
