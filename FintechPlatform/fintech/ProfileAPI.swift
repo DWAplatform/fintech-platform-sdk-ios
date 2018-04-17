@@ -15,7 +15,15 @@ open class ProfileAPI {
     public init(hostName: String) {
         self.hostName = hostName
     }
-    
+    /**
+     Get informations about User [userid] from Fintech Platform identified from [tenantId].
+     - parameters:
+         - token: got from "Create User token" request.
+         - tenantId: Fintech tenant id
+         - userId: Fintech unique id, identify User.
+         - completion: UserProfile contains all details about user profile.
+     - returns: UserProfile, all details about user profile.
+     */
     open func searchUser(token: String,
                     tenantId: String,
                     userId: String,
@@ -33,7 +41,24 @@ open class ProfileAPI {
             
         }.resume()
     }
-    
+    /**
+    Update User informations.
+    - parameters:
+        - token: got from "Create User token" request.
+        - tenantId: Fintech tenant id
+        - userId: Fintech unique id, identify User.
+        - nationality: nation code identifier using ISO 3166-1 alpha-2
+        - countryofresidence: country code identifier using ISO 3166-1 alpha-2
+        - birthday: date format "yyyy-MM-dd"
+        - photo: Base 64 encoded image
+        - income: annual income range, identified with a number for every range:
+            * "1": 0 – 18k
+            * "2": 18 – 30k
+            * "3": 30 – 50k
+            * "4": 50 – 80k
+            * "5": 80 – 120k
+            * "6": > 120k
+     */
     open func editProfile(token: String,
                  userId: String,
                  tenantId: String,
@@ -50,8 +75,6 @@ open class ProfileAPI {
                  email: String? = nil,
                  jobinfo: String? = nil,
                  income: String? = nil,
-                 phonetoken: String? = nil,
-                 pinCode: String? = nil,
                  completion: @escaping (UserProfileResponse?, Error?) -> Void) {
         
         do {
@@ -76,12 +99,12 @@ open class ProfileAPI {
                 jsonObject.setValue(countryofresidence, forKey: "countryOfResidence")
             }
             if let birthday = birthday {
-                // from "yyyy-MM-dd" to gg/mm/yyyy
-                let date = Date(timeIntervalSince1970: TimeInterval(birthday))
-                let dayTimePeriodFormatter = DateFormatter()
-                dayTimePeriodFormatter.dateFormat = "yyyy-MM-dd"
-                let str = dayTimePeriodFormatter.string(from: date)
-                jsonObject.setValue(str, forKey: "birthday")
+//                // from  gg/mm/yyyy to "yyyy-MM-dd"
+//                let date = Date(timeIntervalSince1970: TimeInterval(birthday))
+//                let dayTimePeriodFormatter = DateFormatter()
+//                dayTimePeriodFormatter.dateFormat = "yyyy-MM-dd"
+//                let str = dayTimePeriodFormatter.string(from: date)
+                jsonObject.setValue(birthday, forKey: "birthday")
             }
             if let address = address {
                 jsonObject.setValue(address, forKey: "addressOfResidence")
@@ -108,10 +131,7 @@ open class ProfileAPI {
             if let income = income {
                 jsonObject.setValue(income, forKey: "incomeRange")
             }
-            if let pin = pinCode {
-                jsonObject.setValue(pin, forKey: "pin")
-            }
-            
+
             let jsdata = try JSONSerialization.data(withJSONObject: jsonObject, options: JSONSerialization.WritingOptions())
             
             request.httpBody = jsdata
@@ -165,7 +185,18 @@ open class ProfileAPI {
             completion(nil, error)
         }
     }
-    
+    /**
+     Send User IDs document to Fintech Platform.
+     - parameters:
+        - token: got from "Create User token" request.
+        - tenantId: Fintech tenant id
+        - userId: Fintech unique id, identify User.
+        - docType: type of document uploaded [IDENTITY_CARD, PASSPORT, DRIVING_LICENCE ]
+        - documents: Array of Base 64 encoded image uploaded, usually front and back of the document.
+        - idempotency: parameter to avoid multiple inserts.
+        - completion: return document UUID identifier.
+     - returns: return document UUID identifier.
+     */
     public func documents(token: String,
                     userId: String,
                     tenantId: String,
@@ -234,6 +265,15 @@ open class ProfileAPI {
         }
     }
     
+    /**
+     Get User documents from Fintech Platform.
+     - parameters:
+        - token: got from "Create User token" request.
+        - tenantId: Fintech tenant id
+        - userId: Fintech unique id, identify User.
+        - completion: returns list of documents uploaded to Fintech Platform
+     - returns: returns list of documents uploaded to Fintech Platform
+     */
     public func getDocuments(token: String,
                       userId: String,
                       tenantId: String,

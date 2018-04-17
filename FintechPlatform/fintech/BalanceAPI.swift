@@ -16,6 +16,17 @@ open class BalanceAPI {
         self.hostName = hostName
     }
     
+    /**
+     Balance represent the total amount of money that User [ownerId] has in his own Fintech Account, identified from [tenantId] [accountType] and [accountId] params.
+     - parameters:
+         - token: got from "Create User token" request.
+         - tenantId: Fintech tenant id
+         - accountId: Fintech Account id
+         - ownerId: Fintech id of the owner of the Fintech Account
+         - accountType: set if PERSONAL or BUSINESS type of account
+         - completion: a balance item contains two variables, balance and availableBalance, or Error if error occurs
+     - returns: Balance item contains two variables, balance and availableBalance
+     */
     open func balance(token: String,
                  ownerId: String,
                  accountId: String,

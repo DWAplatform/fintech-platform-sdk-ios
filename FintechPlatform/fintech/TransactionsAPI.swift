@@ -17,6 +17,18 @@ open class TransactionsAPI {
         self.hostName = hostName
     }
     
+    /**
+    Get all transactions (cash in, cash out, purchases) of the Fintech Account selected.
+     - parameters:
+         - token: got from "Create User token" request.
+         - tenantId: Fintech tenant id
+         - accountId: Fintech Account id
+         - ownerId: Fintech id of the owner of the Fintech Account
+         - accountType: set if PERSONAL or BUSINESS type of account
+         - limit: the list of transactions will have a maximum length based on this paramenter, (default 5, max 100).
+         - offset: handles range of transactions to get.
+     - returns: TransactionResponse is a detailed model of transactions parameters.
+     */
     open func transactions(token: String,
                       ownerId: String,
                       accountId: String,

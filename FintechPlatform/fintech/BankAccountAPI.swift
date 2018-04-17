@@ -15,15 +15,28 @@ open class BankAccountAPI {
     public init(hostName: String) {
         self.hostName = hostName
     }
-    
+    /**
+     Link a new Bank Account using IBAN address to the Fintech Account.
+     - parameters:
+     - token: got from "Create User token" request.
+     - tenantId: Fintech tenant id
+     - accountId: Fintech Account id
+     - ownerId: Fintech id of the owner of the Fintech Account
+     - accountType: set if PERSONAL or BUSINESS type of account
+     - iban: IBAN address of bank account to link with Fintech Account
+     - idempotency: parameter to avoid multiple inserts.
+     * Use [token] got from "Create User token" request.
+     * Use [idempotency] parameter to avoid multiple inserts.
+     * [completion] callback will be call with BankAccount object in case of success or Exception in case of errors.
+     */
     open func createLinkedBank(token: String,
-                          ownerId: String,
-                          accountId: String,
-                          accountType: String,
-                          tenantId: String,
-                          iban: String,
-                          idempotency: String? = nil,
-                          completion: @escaping (BankAccount?, Error?) -> Void) {
+                               tenantId: String,
+                               accountId: String,
+                               ownerId: String,
+                               accountType: String,
+                               iban: String,
+                               idempotency: String? = nil,
+                               completion: @escaping (BankAccount?, Error?) -> Void) {
         
         do {
             guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(NetHelper.getPath(from: accountType))/\(ownerId)/accounts/\(accountId)/linkedBanks")
