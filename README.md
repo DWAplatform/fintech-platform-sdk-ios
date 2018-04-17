@@ -17,7 +17,7 @@ $ gem install cocoapods
 To integrate DWAplatform into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
 ```ruby
-pod 'FintechPlatform', '~> 1.1.0'
+pod 'FintechPlatform', '~> 1.1.1'
 ```
 
 Then, run the following command:
@@ -58,7 +58,9 @@ Sample usage CashIn API Component in Swift
 
 Fintech Account (accountId) is credited with 20,00 € using a card (cardId) owned by the user (userId)
 ``` swift
-
+    
+    import FintechPlatform
+    
     // ....
 
     //  Server host parameters
