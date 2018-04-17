@@ -17,25 +17,31 @@ open class CashOutAPI {
     }
     
     /**
-     * CashOut transfers money from Fintech Account, identified from [tenantId] [ownerId] [accountType] and [accountId] params, to linked bank account [linkedBankId]
-     * You have to set the [amount] to transfer.
-     * Use [token] got from "Create User token" request.
-     * Use [idempotency] parameter to avoid multiple inserts.
+     CashOut transfers money from Fintech Account to linked bank account [linkedBankId]
+     - parameters:
+        - token: got from "Create User token" request.
+        - tenantId: Fintech tenant id
+        - accountId: Fintech Account id
+        - ownerId: Fintech id of the owner of the Fintech Account
+        - accountType: set if PERSONAL or BUSINESS type of account
+        - linkedBankId: unique Id of bank account linked to Fintech Account
+        - amount: amount of money to transfer from Fintech Account to bank account
+        - idempotency: parameter to avoid multiple inserts.
      */
     open func cashOut(token: String,
-                userId: String,
-                accountId: String,
-                accountType: String,
-                tenantId: String,
-                linkedBankId: String,
-                amount: Int64,
-                idempotency: String,
-                completion: @escaping (Error?) -> Void) {
+                      tenantId: String,
+                      accountId: String,
+                      ownerId: String,
+                      accountType: String,
+                      linkedBankId: String,
+                      amount: Int64,
+                      idempotency: String,
+                      completion: @escaping (Error?) -> Void) {
         
         let path = NetHelper.getPath(from: accountType)
         
         do {
-            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(path)/\(userId)/accounts/\(accountId)/linkedBanks/\(linkedBankId)/cashOuts")
+            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(path)/\(ownerId)/accounts/\(accountId)/linkedBanks/\(linkedBankId)/cashOuts")
                 else { fatalError() }
             
             var request = URLRequest(url: url)
@@ -93,27 +99,32 @@ open class CashOutAPI {
             completion(error)
         }
     }
-    
+/**
+ Get fee for the amount to cash out from Fintech account to linked bank account.
+ - parameters:
+     - token: got from "Create User token" request.
+     - tenantId: Fintech tenant id
+     - accountId: Fintech Account id
+     - ownerId: Fintech id of the owner of the Fintech Account
+     - accountType: set if PERSONAL or BUSINESS type of account
+     - linkedBankId: unique Id of bank account linked to Fintech Account
+     - amount: amount of money to transfer from Fintech Account to bank account
+ */
     open func cashOutFee(token: String,
-                   ownerId: String,
-                   accountId: String,
-                   accountType: String,
-                   tenantId: String,
-                   linkedBankId: String,
-                   amount: Money,
-                   idempotency: String,
-                   completion: @escaping (Money?, Error?) -> Void) {
+                         tenantId: String,
+                         accountId: String,
+                         ownerId: String,
+                         accountType: String,
+                         linkedBankId: String,
+                         amount: Money,
+                         completion: @escaping (Money?, Error?) -> Void) {
         
         let path = NetHelper.getPath(from: accountType)
+        let query = "?amount=\(amount.getValue())&currency=\(amount.getCurrency())"
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(path)/\(ownerId)/accounts/\(accountId)/linkedBanks/\(linkedBankId)/cashOutsFee\(query)") else { fatalError() }
         
-        let url = hostName + "/rest/v1/account/tenants/\(tenantId)/\(path)/\(ownerId)/accounts/\(accountId)/linkedBanks/\(linkedBankId)/cashOutsFee"
-        
-        var params = Dictionary<String, String>()
-        params["amount"] = amount.toString()
-        params["currency"] = amount.getCurrency()
-        
-        guard let rurl = URL(string: NetHelper.getUrlDataString(url: url, params: params)) else { fatalError() }
-        var request = URLRequest(url:  rurl)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
         request.addBearerAuthorizationToken(token: token)
         
         session.dataTask(with: request) { (data, response, error) in

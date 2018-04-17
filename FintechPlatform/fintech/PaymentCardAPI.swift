@@ -59,6 +59,74 @@ open class PaymentCardAPI {
             }
         }
     }
+    /**
+     Get all Payment Cards linked to Fintech Platform Account.
+
+     - parameters:
+         - token: got from "Create User token" request.
+         - tenantId: Fintech tenant id
+         - accountId: Fintech Account id
+         - ownerId: Fintech id of the owner of the Fintech Account
+         - accountType: set if PERSONAL or BUSINESS type of account
+         - completion: ist of cards or an Exception if occurent some errors
+     - return: completion callback returns the list of cards or an Exception if occurent some errors
+     */
+    open func getPaymentCard(token: String,
+                             tenantId: String,
+                             accountId: String,
+                             ownerId: String,
+                             accountType: String,
+                             completion: @escaping ([PaymentCardItem]?, Error?) -> Void) {
+        let path = NetHelper.getPath(from: accountType)
+        guard let baseUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(path)/\(ownerId)/accounts/\(accountId)/linkedCards") else { fatalError() }
+        
+//        var params = Dictionary<String, String>()
+//        params["userid"] = ownerId
+//
+//        guard let rurl = URL(string: NetHelper.getUrlDataString(url: baseUrl, params: params)) else { fatalError() }
+        var request = URLRequest(url:  baseUrl)
+        request.httpMethod = "GET"
+        request.addBearerAuthorizationToken(token: token)
+        
+        session.dataTask(with: request) { (data, response, error) in
+            guard error == nil else { completion(nil, error); return }
+            
+            guard let data = data else {
+                completion(nil, WebserviceError.DataEmptyError)
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(nil, WebserviceError.NoHTTPURLResponse)
+                return
+            }
+            
+            if (httpResponse.statusCode != 200) {
+                completion(nil, WebserviceError.StatusCodeNotSuccess)
+                return
+            }
+            
+            do {
+                let reply = try JSONSerialization.jsonObject(
+                    with: data,
+                    options: []) as? [[String:Any]]
+                guard let cardlist = reply else { completion(nil, nil); return}
+                var paymentCardsList = [PaymentCardItem]()
+                for card in cardlist {
+                    guard let alias = card["alias"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
+                    guard let expiration = card["expiration"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
+                    guard let currency = card["currency"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
+                    guard let activestate = card["status"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
+                    guard let cardId = card["cardId"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
+                    
+                    paymentCardsList.append(PaymentCardItem(creditcardid: cardId, numberalias: alias, expirationdate: expiration, activestate: activestate, currency: currency))
+                }
+                completion(paymentCardsList, nil)
+            } catch {
+                completion(nil, error)
+            }
+        }.resume()
+    }
     
     private func createCreditCardRegistration(with ownerId: String,
                                               accountId: String,

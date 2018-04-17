@@ -19,12 +19,16 @@ open class CashInAPI {
     }
     
     /**
-     * cashIn transfers money from Linked Card [cardId] to the Fintech Account, identified from [tenantId] [ownerId] [accountType] and [accountId] params.
-     * You have to set the amount and currency to transfer, both to set into [amount] param.
-     * Use [token] got from "Create User token" request.
-     * Use [idempotency] parameter to avoid multiple inserts.
-     * [completion] callback contains transactionId. Check if the Card issuer requires to perform a Secure3D procedure.
-     * Whether secure3D is required, you will find the specific redirect URL.
+     * CashIn transfers money from Linked Card to the Fintech Account.
+     - parameters:
+         - token: got from "Create User token" request.
+         - tenantId: Fintech tenant id
+         - accountId: Fintech Account id
+         - ownerId: Fintech id of the owner of the Fintech Account
+         - accountType: set if PERSONAL or BUSINESS type of account
+         - cardId: unique Id of payment card linked to Fintech Account
+         - amount: amount of money to transfer from payment card to Fintech Account
+         - idempotency: parameter to avoid multiple inserts.
      */
     open func cashIn(token: String,
                        ownerId: String,
@@ -134,32 +138,31 @@ open class CashInAPI {
     }
     
     /**
-     * Gets Fee from Cash in performed by linked card [cardId].
-     * @oarams tenantId identifier of Fintech Account tenant
-     * Card is linked to Fintech Account, identified from [tenantId] [ownerId] [accountType] and [accountId] params.
-     * Set the [amount] in which [completion] fee will be estimated of.
-     * Use [token] got from "Create User token" request.
+    Gets Fee from amount to cash into Fintech Account.
+     - parameters:
+         - token: got from "Create User token" request.
+         - tenantId: Fintech tenant id
+         - accountId: Fintech Account id
+         - ownerId: Fintech id of the owner of the Fintech Account
+         - accountType: set if PERSONAL or BUSINESS type of account
+         - cardId: unique Id of payment card linked to Fintech Account
+         - amount: amount of money to transfer from Fintech Account to bank account
      */
     open func cashInFee(token: String,
-                    ownerId: String,
-                    accountId: String,
-                    accountType: String,
-                    tenantId: String,
-                    cardId: String,
-                    amount: Money,
-                    idempotency: String,
-                    completion: @escaping (Money?, Error?) -> Void) {
+                        tenantId: String,
+                        accountId: String,
+                        ownerId: String,
+                        accountType: String,
+                        cardId: String,
+                        amount: Money,
+                        completion: @escaping (Money?, Error?) -> Void) {
         
         let path = NetHelper.getPath(from: accountType)
-        
-        let url = hostName + "/rest/v1/account/tenants/\(tenantId)/\(path)/\(ownerId)/accounts/\(accountId)/linkedCards/\(cardId)/cashInsFee"
-        
-        var params = Dictionary<String, String>()
-        params["amount"] = amount.toString()
-        params["currency"] = amount.getCurrency()
-        
-        guard let rurl = URL(string: NetHelper.getUrlDataString(url: url, params: params)) else { fatalError() }
-        var request = URLRequest(url:  rurl)
+        let query = "?amount=\(amount.getValue())&currency=\(amount.getCurrency())"
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(path)/\(ownerId)/accounts/\(accountId)/linkedCards/\(cardId)/cashInsFee\(query)") else { fatalError() }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
         request.addBearerAuthorizationToken(token: token)
         
         session.dataTask(with: request) { (data, response, error) in
