@@ -44,11 +44,11 @@ open class PaymentCardAPI {
         
         self.createCreditCardRegistration(with: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, numberalias: CardHelper.generateAlias(cardNumber: cardNumber), expiration: expiration, currency: currency, token: token) { (optCardRegistration, optError) in
             if let error = optError { completion(nil, error); return }
-            if let cardRegistration = optCardRegistration {
+            if let cardReply = optCardRegistration {
                 self.getCardSafe(with: CardToRegister(cardNumber: cardNumber, expiration: expiration, cvx: cvx), ownerId: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, token: token) { (optCardToReg, optError) in
                     if let error = optError { completion(nil, error); return }
                     if let cardToReg = optCardToReg {
-                        self.postCardRegistrationData(with: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, cardnumber: cardToReg.cardNumber, expiration: cardToReg.expiration, cxv: cardToReg.cxv, cardRegistration: cardRegistration, token: token, completion: { (optPaymentCardItem, optError) in
+                        self.postCardRegistrationData(with: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, cardnumber: cardToReg.cardNumber, expiration: cardToReg.expiration, cxv: cardToReg.cxv, cardReply: cardReply, token: token, completion: { (optPaymentCardItem, optError) in
                             if let error = optError { completion(nil, error) }
                             if let paymentCard = optPaymentCardItem {
                                 completion(paymentCard, nil)
@@ -59,6 +59,7 @@ open class PaymentCardAPI {
             }
         }
     }
+    
     /**
      Get all Payment Cards linked to Fintech Platform Account.
 
@@ -80,10 +81,6 @@ open class PaymentCardAPI {
         let path = NetHelper.getPath(from: accountType)
         guard let baseUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(path)/\(ownerId)/accounts/\(accountId)/linkedCards") else { fatalError() }
         
-//        var params = Dictionary<String, String>()
-//        params["userid"] = ownerId
-//
-//        guard let rurl = URL(string: NetHelper.getUrlDataString(url: baseUrl, params: params)) else { fatalError() }
         var request = URLRequest(url:  baseUrl)
         request.httpMethod = "GET"
         request.addBearerAuthorizationToken(token: token)
@@ -136,7 +133,7 @@ open class PaymentCardAPI {
                                               expiration: String,
                                               currency: String,
                                               token: String,
-                                              completion: @escaping (CardRegistration?, Error?) -> Void) {
+                                              completion: @escaping (CreateCardRegistrationReply?, Error?) -> Void) {
         
         
         do {
@@ -183,11 +180,7 @@ open class PaymentCardAPI {
                         with: data,
                         options: []) as? [String:Any]
                     
-                    guard let anycreditcardid = reply?["cardId"] else {
-                        completion(nil, WebserviceError.MissingMandatoryReplyParameters)
-                        return
-                    }
-                    guard let creditcardid = anycreditcardid as? String else {
+                    guard let cardId = reply?["cardId"] as? String else {
                         completion(nil, WebserviceError.MissingMandatoryReplyParameters)
                         return
                     }
@@ -200,6 +193,7 @@ open class PaymentCardAPI {
                     let mapper = try JSONSerialization.jsonObject(
                         with: anycardRegistrationObj.data(using: String.Encoding.utf8)!,
                         options: [] ) as? [String:String]
+                    
                     guard let preregistrationData = mapper?["preregistrationData"] else {
                         completion(nil, WebserviceError.MissingMandatoryReplyParameters)
                         return
@@ -215,14 +209,18 @@ open class PaymentCardAPI {
                         return
                     }
                     
-                    let ucc = CardRegistration(url: url, usercardid: creditcardid, preregistrationData: preregistrationData, accessKey: accessKey)
-                    completion(ucc, nil)
+                    guard let cardRegistrationId = mapper?["cardRegistrationId"] else {
+                        completion(nil, WebserviceError.MissingMandatoryReplyParameters)
+                        return
+                    }
+                    
+                    let ucc = CardRegistration(url: url, usercardid: cardRegistrationId, preregistrationData: preregistrationData, accessKey: accessKey)
+                    let createRegistrationCardReply = CreateCardRegistrationReply(cardId: cardId, cardRegistration: ucc)
+                    completion(createRegistrationCardReply, nil)
                 } catch {
                     completion(nil, error)
                 }
-                
-                
-                }.resume()
+            }.resume()
         } catch let error {
             completion(nil, error)
         }
@@ -300,10 +298,10 @@ open class PaymentCardAPI {
                                           cardnumber: String,
                                           expiration: String,
                                           cxv: String,
-                                          cardRegistration: CardRegistration,
+                                          cardReply: CreateCardRegistrationReply,
                                           token: String,
                                           completion: @escaping (PaymentCardItem?, Error?) -> Void) {
-        
+        let cardRegistration = cardReply.cardRegistration
         let data = "data=\(cardRegistration.preregistrationData)&accessKeyRef=\(cardRegistration.accessKey)&cardNumber=\(cardnumber)&cardExpirationDate=\(expiration)&cardCvx=\(cxv)"
         
         print("postCardRegistrationData data=\(data)")
@@ -341,7 +339,7 @@ open class PaymentCardAPI {
                 return
             }
             
-            self.sendCardResponseString(with: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, responseString: responseString, cardRegistration: cardRegistration, token: token, completion: completion)
+            self.sendCardResponseString(with: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, responseString: responseString, cardReply: cardReply, token: token, completion: completion)
             
             }.resume()
     }
@@ -352,21 +350,22 @@ open class PaymentCardAPI {
                                         tenantId: String,
                                         accountType: String,
                                         responseString: String,
-                                        cardRegistration: CardRegistration,
+                                        cardReply: CreateCardRegistrationReply,
                                         token: String,
                                         completion: @escaping (PaymentCardItem?, Error?) -> Void) {
         
         do {
-            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(NetHelper.getPath(from: accountType))/\(ownerId)/accounts/\(accountId)/linkedCards/\(cardRegistration.usercardid)")
+            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(NetHelper.getPath(from: accountType))/\(ownerId)/accounts/\(accountId)/linkedCards/\(cardReply.cardId)")
                 else { fatalError() }
             
             var request = URLRequest(url: url)
             request.httpMethod = "PUT"
             
+            let cardRegistration = cardReply.cardRegistration
             let jsonObject: NSMutableDictionary = NSMutableDictionary()
             jsonObject.setValue(responseString, forKey: "registration")
             jsonObject.setValue(cardRegistration.accessKey, forKey: "accessKey")
-            jsonObject.setValue(cardRegistration.usercardid, forKey: "cardRegistrationId")
+            jsonObject.setValue(cardRegistration.cardRegistrationId, forKey: "cardRegistrationId")
             jsonObject.setValue(cardRegistration.preregistrationData, forKey: "preregistrationData")
             jsonObject.setValue(cardRegistration.url, forKey: "url")
             
@@ -436,7 +435,7 @@ open class PaymentCardAPI {
                 } catch {
                     completion(nil, error)
                 }
-                }.resume()
+            }.resume()
         } catch let error {
             completion(nil, error)
         }
@@ -446,13 +445,13 @@ open class PaymentCardAPI {
 
 struct CardRegistration {
     var url: String
-    var usercardid: String
+    var cardRegistrationId: String
     var preregistrationData: String
     var accessKey: String
     
     init(url: String, usercardid: String, preregistrationData: String, accessKey: String) {
         self.url = url
-        self.usercardid = usercardid
+        self.cardRegistrationId = usercardid
         self.preregistrationData = preregistrationData
         self.accessKey = accessKey
     }
@@ -469,6 +468,17 @@ struct CardToRegister {
         self.cardNumber = cardNumber
         self.expiration = expiration
         self.cxv = cvx
+    }
+}
+
+struct CreateCardRegistrationReply {
+    var cardId : String
+    var cardRegistration: CardRegistration
+    
+    init(cardId: String,
+         cardRegistration: CardRegistration) {
+        self.cardId = cardId
+        self.cardRegistration = cardRegistration
     }
 }
 
