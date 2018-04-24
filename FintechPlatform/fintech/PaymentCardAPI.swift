@@ -124,6 +124,49 @@ open class PaymentCardAPI {
             }
         }.resume()
     }
+    /**
+     Delete specific card linked to Fintech Platform Account.
+     
+     - parameters:
+         - token: got from "Create User token" request.
+         - tenantId: Fintech tenant id
+         - accountId: Fintech Account id
+         - ownerId: Fintech id of the owner of the Fintech Account
+         - accountType: set if PERSONAL or BUSINESS type of account
+         - cardId: Fintech Card id to delete
+         - completion: ist of cards or an Exception if occurent some errors
+     - return: completion callback returns a boolean if deletion was competed or an Error if not.
+     */
+    open func deletePaymentCard(token: String,
+                           tenantId: String,
+                           accountId: String,
+                           ownerId: String,
+                           accountType: String,
+                           cardId: String,
+                           completion: @escaping (Bool, Error?) -> Void) {
+        let path = NetHelper.getPath(from: accountType)
+        guard let baseUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(path)/\(ownerId)/accounts/\(accountId)/linkedCards/\(cardId)") else { fatalError() }
+        
+        var request = URLRequest(url:  baseUrl)
+        request.httpMethod = "DELETE"
+        request.addBearerAuthorizationToken(token: token)
+        
+        session.dataTask(with: request) { (_, response, error) in
+            guard error == nil else { completion(false, error); return }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(false, WebserviceError.NoHTTPURLResponse)
+                return
+            }
+            
+            if (httpResponse.statusCode != 200) {
+                completion(false, WebserviceError.StatusCodeNotSuccess)
+                return
+            }
+            
+            completion(true, nil)
+        }.resume()
+    }
     
     private func createCreditCardRegistration(with ownerId: String,
                                               accountId: String,
