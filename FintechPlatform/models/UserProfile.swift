@@ -8,26 +8,26 @@
 
 import Foundation
 public struct UserProfile {
-    var userid: String
-    var name: String?
-    var surname: String?
-    var nationality: String?
-    var dateOfBirth: String?
-    var addressOfResidence: String?
-    var postalCode: String?
-    var cityOfResidence: String?
-    var telephone: String?
-    var email: String?
-    var photo: String?
-    var countryOfResidence: String?
-    var occupation: String?
-    var income: String?
+    public var userid: String
+    public var name: String?
+    public var surname: String?
+    public var nationality: String?
+    public var birthday: Date?
+    public var addressOfResidence: String?
+    public var postalCode: String?
+    public var cityOfResidence: String?
+    public var telephone: String?
+    public var email: String?
+    public var photo: String?
+    public var countryOfResidence: String?
+    public var occupation: String?
+    public var income: String?
     
     public init(userid: String,
                  name: String? = nil,
                  surname: String? = nil,
                  nationality: String? = nil,
-                 dateOfBirth: String? = nil,
+                 birthday: Date? = nil,
                  addressOfResidence: String? = nil,
                  postalCode: String? = nil,
                  cityOfResidence: String? = nil,
@@ -42,7 +42,7 @@ public struct UserProfile {
         self.name = name
         self.surname = surname
         self.nationality = nationality
-        self.dateOfBirth = dateOfBirth
+        self.birthday = birthday
         self.addressOfResidence = addressOfResidence
         self.postalCode = postalCode
         self.cityOfResidence = cityOfResidence

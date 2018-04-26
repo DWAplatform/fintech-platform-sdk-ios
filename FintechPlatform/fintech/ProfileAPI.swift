@@ -49,7 +49,7 @@ open class ProfileAPI {
         - userId: Fintech unique id, identify User.
         - nationality: nation code identifier using ISO 3166-1 alpha-2
         - countryofresidence: country code identifier using ISO 3166-1 alpha-2
-        - birthday: date format "yyyy-MM-dd"
+        - birthday: Date format
         - photo: Base 64 encoded image
         - income: annual income range, identified with a number for every range:
             * "1": 0 – 18k
@@ -66,7 +66,7 @@ open class ProfileAPI {
                  surname: String? = nil,
                  nationality: String? = nil,
                  countryofresidence: String? = nil,
-                 birthday: Int64? = nil,
+                 birthday: Date? = nil,
                  address: String? = nil,
                  zipcode: String? = nil,
                  city: String? = nil,
@@ -99,12 +99,12 @@ open class ProfileAPI {
                 jsonObject.setValue(countryofresidence, forKey: "countryOfResidence")
             }
             if let birthday = birthday {
-//                // from  gg/mm/yyyy to "yyyy-MM-dd"
-//                let date = Date(timeIntervalSince1970: TimeInterval(birthday))
-//                let dayTimePeriodFormatter = DateFormatter()
-//                dayTimePeriodFormatter.dateFormat = "yyyy-MM-dd"
-//                let str = dayTimePeriodFormatter.string(from: date)
-                jsonObject.setValue(birthday, forKey: "birthday")
+                // from  timeinterval to "yyyy-MM-dd"
+                
+                let dayTimePeriodFormatter = DateFormatter()
+                dayTimePeriodFormatter.dateFormat = "yyyy-MM-dd"
+                let str = dayTimePeriodFormatter.string(from: birthday)
+                jsonObject.setValue(str, forKey: "birthday")
             }
             if let address = address {
                 jsonObject.setValue(address, forKey: "addressOfResidence")
@@ -383,7 +383,7 @@ open class ProfileAPI {
                 
                 let optDateBirthday: Date? = dateFormatter.date(from: birthday)
                 if let dateBirthday = optDateBirthday {
-                    userprofile?.dateOfBirth = String(Int64(dateBirthday.timeIntervalSince1970))
+                    userprofile?.birthday = dateBirthday
                 }
             }
             
