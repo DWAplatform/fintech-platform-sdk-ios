@@ -25,13 +25,13 @@ class PaymentCardApiIntegrationTest: XCTestCase {
     
     func testCards() {
         //  Server host parameters
-        let hostName = "multibank24.com"
-        let accessToken = "XXXXXXYYYYYY.....ZZZZZZ"
+        let hostName = "http://localhost:9000"
+        let accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE1MjU0Mjg2MDEsImlhdCI6MTUyNTM0MjIwMSwidGVuYW50SWQiOiJiMDQ1NmNjNC01NTc0LTQ4M2UtYjRmOS1lODg2Y2MzZmVkZmUiLCJhY2NvdW50VHlwZSI6IlBFUlNPTkFMIiwib3duZXJJZCI6ImFiODg5YjAxLTI3NDYtNDcwYS1iMWI2LTZlNWM2NjBhNWYxYiIsImFjY291bnRJZCI6IjMxMWU1NmY4LTk0OGEtNDA4MS1iNWYyLTllOTJmM2ZkNjFmYiIsImp3dFR5cGUiOiJBQ0NPVU5UIiwic2NvcGUiOlsiTElOS0VEX0NBUkQiLCJMSU5LRURfQ0FSRF9DQVNIX0lOIl19.Qu2B4i3Z5A-yN_NNBWRxFT3o-c0szASxYI5YY8Ajfu-CrpCxKBCJdYdjFwVG8Hhf6rft8GhM9eTlGdWu6veRLw"
         
         //  Set User Account Linked Card parameters
-        let tenantId = "87e4ff86-18b6-44cf-87af-af2411ab68c5"
-        let userId = "08ad02e8-89fb-44b8-ab65-87eea175adc2"
-        let accountId = "f0c84dbc-5d1d-4973-b212-1ac2cd34e5c3"
+        let tenantId = "b0456cc4-5574-483e-b4f9-e886cc3fedfe"
+        let userId = "ab889b01-2746-470a-b1b6-6e5c660a5f1b"
+        let accountId = "311e56f8-948a-4081-b5f2-9e92f3fd61fb"
         
     
         //  Optional Idempotency
@@ -42,9 +42,10 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         let paymentCardAPI = fintechPlatform.getPaymentCardAPI(hostName: hostName)
         
         let expectationRegisterCard = XCTestExpectation(description: "registerCard")
-        
+        let expectationGetCards = XCTestExpectation(description: "getCards")
         // create card
         var paymentCard: PaymentCardItem? = nil
+        var cardsList : [PaymentCardItem]? = nil
         
         paymentCardAPI.registerCard(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL", cardNumber: "1234123412341234", expiration: "0122", cvx: "123", currency: "EUR") { optPaymentCardItem, optError in
 
@@ -57,16 +58,49 @@ class PaymentCardApiIntegrationTest: XCTestCase {
             expectationRegisterCard.fulfill()
         }
         
-        wait(for: [expectationRegisterCard], timeout: 10.0)
+        wait(for: [expectationRegisterCard], timeout: 5.0)
         
         print(paymentCard?.creditcardid)
         
         // getPaymentCard
+        paymentCardAPI.getPaymentCard(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL") { (optList, optError) in
+            XCTAssertNil(optError, "Error reply")
+            XCTAssertNotNil(optList, "No payment Cards list")
+            cardsList = optList
+            
+            XCTAssert(cardsList?.count == 1, "Card Not Registered")
+            XCTAssertTrue(cardsList?[0].creditcardid == paymentCard?.creditcardid)
+            
+            expectationGetCards.fulfill()
+        }
+        
+        wait(for: [expectationGetCards], timeout: 10.0)
         
         // create Card
+        paymentCardAPI.registerCard(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL", cardNumber: "9876987698769876", expiration: "1224", cvx: "987", currency: "EUR") { optPaymentCardItem, optError in
+            
+            XCTAssertNil(optError, "Error reply")
+            
+            XCTAssertNotNil(optPaymentCardItem, "No payment Card Item")
+            // complete with xctassert on optPaymentCardItem
+            expectationRegisterCard.fulfill()
+        }
+        
+        wait(for: [expectationRegisterCard], timeout: 5.0)
         
         // getPaymentCard
+        paymentCardAPI.getPaymentCard(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL") { (optList, optError) in
+            XCTAssertNil(optError, "Error reply")
+            XCTAssertNotNil(optList, "No payment Cards list")
+            cardsList = optList
+            
+            XCTAssert(cardsList?.count == 2, "Card Not Registered")
+            XCTAssertTrue(cardsList?[1].creditcardid == paymentCard?.creditcardid)
+            
+            expectationGetCards.fulfill()
+        }
         
+        wait(for: [expectationGetCards], timeout: 10.0)
         // set Default
         
         // getPaymentCard
