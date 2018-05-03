@@ -40,15 +40,16 @@ open class PaymentCardAPI {
                            expiration: String,
                            cvx: String,
                            currency: String,
+                           idempotency: String,
                            completion: @escaping (PaymentCardItem?, Error?) -> Void ){
         
-        self.createCreditCardRegistration(with: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, numberalias: CardHelper.generateAlias(cardNumber: cardNumber), expiration: expiration, currency: currency, token: token) { (optCardRegistration, optError) in
+        self.createCreditCardRegistration(with: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, numberalias: CardHelper.generateAlias(cardNumber: cardNumber), expiration: expiration, currency: currency, token: token, idempontency: idempotency) { (optCardRegistration, optError) in
             if let error = optError { completion(nil, error); return }
             if let cardReply = optCardRegistration {
                 self.getCardSafe(with: CardToRegister(cardNumber: cardNumber, expiration: expiration, cvx: cvx), ownerId: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, token: token) { (optCardToReg, optError) in
                     if let error = optError { completion(nil, error); return }
                     if let cardToReg = optCardToReg {
-                        self.postCardRegistrationData(with: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, cardnumber: cardToReg.cardNumber, expiration: cardToReg.expiration, cxv: cardToReg.cxv, cardReply: cardReply, token: token, completion: { (optPaymentCardItem, optError) in
+                        self.postCardRegistrationData(with: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, cardnumber: cardToReg.cardNumber, expiration: cardToReg.expiration, cxv: cardToReg.cxv, cardReply: cardReply, token: token, idempontency: idempotency, completion: { (optPaymentCardItem, optError) in
                             if let error = optError { completion(nil, error) }
                             if let paymentCard = optPaymentCardItem {
                                 completion(paymentCard, nil)
@@ -72,7 +73,7 @@ open class PaymentCardAPI {
          - completion: ist of cards or an Exception if occurent some errors
      - return: completion callback returns the list of cards or an Exception if occurent some errors
      */
-    open func getPaymentCard(token: String,
+    open func getPaymentCards(token: String,
                              tenantId: String,
                              accountId: String,
                              ownerId: String,
@@ -115,8 +116,8 @@ open class PaymentCardAPI {
                     guard let currency = card["currency"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
                     guard let activestate = card["status"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
                     guard let cardId = card["cardId"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
-                    
-                    paymentCardsList.append(PaymentCardItem(creditcardid: cardId, numberalias: alias, expirationdate: expiration, activestate: activestate, currency: currency))
+                    guard let isDefault = card["default"] as? Bool else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
+                    paymentCardsList.append(PaymentCardItem(cardId: cardId, numberalias: alias, expirationdate: expiration, activestate: activestate, currency: currency, isDefault: isDefault))
                 }
                 completion(paymentCardsList, nil)
             } catch {
@@ -168,6 +169,58 @@ open class PaymentCardAPI {
         }.resume()
     }
     
+    open func setDefaultCard(token:String,
+                             ownerId: String,
+                             accountId: String,
+                             accountType: String,
+                             tenantId: String,
+                             cardId: String,
+                             completion: @escaping (PaymentCardItem?, Error?) -> Void) {
+        let path = NetHelper.getPath(from: accountType)
+        guard let baseUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(path)/\(ownerId)/accounts/\(accountId)/linkedCards/\(cardId)/default") else { fatalError() }
+        
+        var request = URLRequest(url:  baseUrl)
+        request.httpMethod = "PUT"
+        request.addBearerAuthorizationToken(token: token)
+        
+        session.dataTask(with: request) { (data, response, error) in
+            guard error == nil else { completion(nil, error); return }
+            
+            guard let data = data else {
+                completion(nil, WebserviceError.DataEmptyError)
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(nil, WebserviceError.NoHTTPURLResponse)
+                return
+            }
+            
+            if (httpResponse.statusCode != 200) {
+                completion(nil, WebserviceError.StatusCodeNotSuccess)
+                return
+            }
+            do {
+                let reply = try JSONSerialization.jsonObject(
+                    with: data,
+                    options: []) as? [String:Any]
+                guard let card = reply else { completion(nil, nil); return}
+               
+                guard let alias = card["alias"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
+                guard let expiration = card["expiration"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
+                guard let currency = card["currency"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
+                guard let activestate = card["status"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
+                guard let cardId = card["cardId"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
+                guard let isDefault = card["default"] as? Bool else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
+                    
+                completion(PaymentCardItem(cardId: cardId, numberalias: alias, expirationdate: expiration, activestate: activestate, currency: currency, isDefault: isDefault), nil)
+                
+            } catch {
+                completion(nil, error)
+            }
+        }.resume()
+    }
+    
     private func createCreditCardRegistration(with ownerId: String,
                                               accountId: String,
                                               tenantId: String,
@@ -176,6 +229,7 @@ open class PaymentCardAPI {
                                               expiration: String,
                                               currency: String,
                                               token: String,
+                                              idempontency: String,
                                               completion: @escaping (CreateCardRegistrationReply?, Error?) -> Void) {
         
         
@@ -343,6 +397,7 @@ open class PaymentCardAPI {
                                           cxv: String,
                                           cardReply: CreateCardRegistrationReply,
                                           token: String,
+                                          idempontency: String,
                                           completion: @escaping (PaymentCardItem?, Error?) -> Void) {
         let cardRegistration = cardReply.cardRegistration
         let data = "data=\(cardRegistration.preregistrationData)&accessKeyRef=\(cardRegistration.accessKey)&cardNumber=\(cardnumber)&cardExpirationDate=\(expiration)&cardCvx=\(cxv)"
@@ -445,34 +500,39 @@ open class PaymentCardAPI {
                 do {
                     let reply = try JSONSerialization.jsonObject(
                         with: data,
-                        options: []) as? [String:String]
+                        options: []) as? [String:Any]
                     
-                    guard let creditcardid = reply?["cardId"] else {
+                    guard let cardId = reply?["cardId"] as? String else {
                         completion(nil, WebserviceError.MissingMandatoryReplyParameters)
                         return
                     }
                     
-                    guard let numberalias = reply?["alias"] else {
+                    guard let numberalias = reply?["alias"] as? String else {
                         completion(nil, WebserviceError.MissingMandatoryReplyParameters)
                         return
                     }
                     
-                    guard let expirationdate = reply?["expiration"] else {
+                    guard let expirationdate = reply?["expiration"] as? String else {
                         completion(nil, WebserviceError.MissingMandatoryReplyParameters)
                         return
                     }
                     
-                    guard let activestate = reply?["status"] else {
+                    guard let activestate = reply?["status"] as? String else {
                         completion(nil, WebserviceError.MissingMandatoryReplyParameters)
                         return
                     }
                     
-                    guard let currency = reply?["currency"] else {
+                    guard let currency = reply?["currency"] as? String else {
                         completion(nil, WebserviceError.MissingMandatoryReplyParameters)
                         return
                     }
                     
-                    let ucc = PaymentCardItem(creditcardid: creditcardid, numberalias: numberalias, expirationdate: expirationdate, activestate: activestate, currency: currency)
+                    guard let isDefault = reply?["default"] as? Bool else {
+                        completion(nil, WebserviceError.MissingMandatoryReplyParameters)
+                        return
+                    }
+                    
+                    let ucc = PaymentCardItem(cardId: cardId, numberalias: numberalias, expirationdate: expirationdate, activestate: activestate, currency: currency, isDefault: isDefault)
                     
                     completion(ucc, nil)
                 } catch {

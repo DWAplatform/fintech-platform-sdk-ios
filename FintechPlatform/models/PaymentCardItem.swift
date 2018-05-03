@@ -8,22 +8,25 @@
 
 import Foundation
 public struct PaymentCardItem {
-    public let creditcardid: String
+    public let cardId: String
     public let numberalias: String
     public let expirationdate: String
     public let activestate: String
     public let currency: String
+    public let isDefault: Bool
     
-    public init(creditcardid: String,
+    public init(cardId: String,
          numberalias: String,
          expirationdate: String,
          activestate: String,
-         currency: String){
+         currency: String,
+         isDefault: Bool){
         
-        self.creditcardid = creditcardid
+        self.cardId = cardId
         self.numberalias = numberalias
         self.expirationdate = expirationdate
         self.activestate = activestate
         self.currency = currency
+        self.isDefault = isDefault
     }
 }
