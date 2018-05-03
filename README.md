@@ -92,7 +92,7 @@ Fintech Account (accountId) is credited with 20,00 € using a card (cardId) own
 	                tenantId: tenantId,
 	                cardId: cardId,
 	                amount: amountToCashIn,
-	                idempotency: idempotencyKey) { optcashinresponse, opterror ->
+	                idempotency: idempotencyKey) { optcashinresponse, opterror in
 
         if let error = opterror {
             completion(nil, handleErrors(error: error))
