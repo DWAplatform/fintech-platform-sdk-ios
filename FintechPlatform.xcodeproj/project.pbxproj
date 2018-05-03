@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		11FBA61EEC74C05CA91BB2F1 /* Pods_FintechPlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A37622AEB1A9D3A0BE76E50 /* Pods_FintechPlatform.framework */; };
 		8E4CA2E0CABAF86484CF727E /* Pods_FintechPlatformTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77388DF9753FA968BFEEEB11 /* Pods_FintechPlatformTests.framework */; };
+		B4316CB5209AFB29007B2E7E /* PaymentCardApiIntegrationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4316CB4209AFB29007B2E7E /* PaymentCardApiIntegrationTest.swift */; };
 		BF434359207CEF0800C9C041 /* FintechPlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF43434F207CEF0800C9C041 /* FintechPlatform.framework */; };
 		BF43435E207CEF0800C9C041 /* FintechPlatformTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43435D207CEF0800C9C041 /* FintechPlatformTests.swift */; };
 		BF434360207CEF0800C9C041 /* FintechPlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = BF434352207CEF0800C9C041 /* FintechPlatform.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -52,6 +53,7 @@
 		649A90C58F2405681930A430 /* Pods-FintechPlatformTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FintechPlatformTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FintechPlatformTests/Pods-FintechPlatformTests.release.xcconfig"; sourceTree = "<group>"; };
 		77388DF9753FA968BFEEEB11 /* Pods_FintechPlatformTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FintechPlatformTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD06E15DCA9B3495403B0C50 /* Pods-FintechPlatform.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FintechPlatform.release.xcconfig"; path = "Pods/Target Support Files/Pods-FintechPlatform/Pods-FintechPlatform.release.xcconfig"; sourceTree = "<group>"; };
+		B4316CB4209AFB29007B2E7E /* PaymentCardApiIntegrationTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentCardApiIntegrationTest.swift; sourceTree = "<group>"; };
 		BF43434F207CEF0800C9C041 /* FintechPlatform.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FintechPlatform.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF434352207CEF0800C9C041 /* FintechPlatform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FintechPlatform.h; sourceTree = "<group>"; };
 		BF434353207CEF0800C9C041 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 			children = (
 				BF43435D207CEF0800C9C041 /* FintechPlatformTests.swift */,
 				BF43435F207CEF0800C9C041 /* Info.plist */,
+				B4316CB4209AFB29007B2E7E /* PaymentCardApiIntegrationTest.swift */,
 			);
 			path = FintechPlatformTests;
 			sourceTree = "<group>";
@@ -228,6 +231,7 @@
 				BF43434B207CEF0800C9C041 /* Frameworks */,
 				BF43434C207CEF0800C9C041 /* Headers */,
 				BF43434D207CEF0800C9C041 /* Resources */,
+				5A26F114FD676593EBBA5A3D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -246,6 +250,8 @@
 				BF434354207CEF0800C9C041 /* Sources */,
 				BF434355207CEF0800C9C041 /* Frameworks */,
 				BF434356207CEF0800C9C041 /* Resources */,
+				F14B6C45CF843B673F599809 /* [CP] Embed Pods Frameworks */,
+				61E1CE2FEFF48C5BA33C7629 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -329,7 +335,52 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		5A26F114FD676593EBBA5A3D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FintechPlatform/Pods-FintechPlatform-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		61E1CE2FEFF48C5BA33C7629 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FintechPlatformTests/Pods-FintechPlatformTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F14B6C45CF843B673F599809 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FintechPlatformTests/Pods-FintechPlatformTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FE94346C37A7E17C8F00D34E /* [CP] Check Pods Manifest.lock */ = {
@@ -347,7 +398,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -385,6 +436,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B4316CB5209AFB29007B2E7E /* PaymentCardApiIntegrationTest.swift in Sources */,
 				BF43435E207CEF0800C9C041 /* FintechPlatformTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
