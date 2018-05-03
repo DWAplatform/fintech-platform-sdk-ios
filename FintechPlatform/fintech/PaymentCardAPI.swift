@@ -116,7 +116,7 @@ open class PaymentCardAPI {
                     guard let currency = card["currency"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
                     guard let activestate = card["status"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
                     guard let cardId = card["cardId"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
-                    guard let isDefault = card["default"] as? Bool else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
+                    let isDefault = card["defaultCard"] as? Bool
                     paymentCardsList.append(PaymentCardItem(cardId: cardId, numberalias: alias, expirationdate: expiration, activestate: activestate, currency: currency, isDefault: isDefault))
                 }
                 completion(paymentCardsList, nil)
@@ -211,7 +211,7 @@ open class PaymentCardAPI {
                 guard let currency = card["currency"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
                 guard let activestate = card["status"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
                 guard let cardId = card["cardId"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
-                guard let isDefault = card["default"] as? Bool else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
+                let isDefault = card["defaultCard"] as? Bool
                     
                 completion(PaymentCardItem(cardId: cardId, numberalias: alias, expirationdate: expiration, activestate: activestate, currency: currency, isDefault: isDefault), nil)
                 
@@ -527,12 +527,7 @@ open class PaymentCardAPI {
                         return
                     }
                     
-                    guard let isDefault = reply?["default"] as? Bool else {
-                        completion(nil, WebserviceError.MissingMandatoryReplyParameters)
-                        return
-                    }
-                    
-                    let ucc = PaymentCardItem(cardId: cardId, numberalias: numberalias, expirationdate: expirationdate, activestate: activestate, currency: currency, isDefault: isDefault)
+                    let ucc = PaymentCardItem(cardId: cardId, numberalias: numberalias, expirationdate: expirationdate, activestate: activestate, currency: currency, isDefault: nil)
                     
                     completion(ucc, nil)
                 } catch {

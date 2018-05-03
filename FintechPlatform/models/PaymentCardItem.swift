@@ -13,14 +13,14 @@ public struct PaymentCardItem {
     public let expirationdate: String
     public let activestate: String
     public let currency: String
-    public let isDefault: Bool
+    public let isDefault: Bool?
     
     public init(cardId: String,
          numberalias: String,
          expirationdate: String,
          activestate: String,
          currency: String,
-         isDefault: Bool){
+         isDefault: Bool?){
         
         self.cardId = cardId
         self.numberalias = numberalias
