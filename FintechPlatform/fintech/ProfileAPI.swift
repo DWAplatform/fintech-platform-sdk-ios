@@ -202,7 +202,7 @@ open class ProfileAPI {
                     tenantId: String,
                     doctype: String,
                     documents: [String?],
-                    idempotency: String,
+                    idempotency: String? = nil,
                     completion: @escaping (String?, Error?) -> Void) {
     
         guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/users/\(userId)/documents") else { fatalError() }
@@ -225,8 +225,9 @@ open class ProfileAPI {
             request.httpBody = jsdata
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.addValue("application/json", forHTTPHeaderField: "Accept")
-            
-            
+            if let idempotency = idempotency {
+                request.addValue(idempotency, forHTTPHeaderField: "Idempotency-Key")
+            }
             request.addBearerAuthorizationToken(token: token)
             request.httpMethod = "POST"
             session.dataTask(with: request) { (data, response, error) in

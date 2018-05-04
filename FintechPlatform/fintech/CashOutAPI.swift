@@ -35,7 +35,7 @@ open class CashOutAPI {
                       accountType: String,
                       linkedBankId: String,
                       amount: Int64,
-                      idempotency: String,
+                      idempotency: String? = nil,
                       completion: @escaping (Error?) -> Void) {
         
         let path = NetHelper.getPath(from: accountType)
@@ -60,6 +60,9 @@ open class CashOutAPI {
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.addValue("application/json", forHTTPHeaderField: "Accept")
             request.addBearerAuthorizationToken(token: token)
+            if let idempotency = idempotency {
+                request.addValue(idempotency, forHTTPHeaderField: "Idempotency-Key")
+            }
             
             session.dataTask(with: request) { (data, response, error) in
                 guard error == nil else { completion(nil); return }

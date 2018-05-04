@@ -37,7 +37,7 @@ open class CashInAPI {
                        tenantId: String,
                        cardId: String,
                        amount: Money,
-                       idempotency: String,
+                       idempotency: String? = nil,
                        completion: @escaping (CashInResponse?, Error?) -> Void) {
         
         let path = NetHelper.getPath(from: accountType)
@@ -60,14 +60,16 @@ open class CashInAPI {
             
             jsonObject.setValue(joAmount, forKey: "amount")
             jsonObject.setValue(joFee, forKey: "fee")
-            jsonObject.setValue(idempotency, forKey: "idempotency")
+            
             
             let jsdata = try JSONSerialization.data(withJSONObject: jsonObject, options: JSONSerialization.WritingOptions())
             
             request.httpBody = jsdata
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.addValue("application/json", forHTTPHeaderField: "Accept")
-            
+            if let idempotency = idempotency {
+                request.addValue(idempotency, forHTTPHeaderField: "Idempotency-Key")
+            }
             request.addBearerAuthorizationToken(token: token)
             
             session.dataTask(with: request) { (data, response, error) in

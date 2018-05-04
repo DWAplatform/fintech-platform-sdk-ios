@@ -43,13 +43,13 @@ open class PaymentCardAPI {
                            idempotency: String,
                            completion: @escaping (PaymentCardItem?, Error?) -> Void ){
         
-        self.createCreditCardRegistration(with: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, numberalias: CardHelper.generateAlias(cardNumber: cardNumber), expiration: expiration, currency: currency, token: token, idempontency: idempotency) { (optCardRegistration, optError) in
+        self.createCreditCardRegistration(with: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, numberalias: CardHelper.generateAlias(cardNumber: cardNumber), expiration: expiration, currency: currency, token: token, idempotency: idempotency) { (optCardRegistration, optError) in
             if let error = optError { completion(nil, error); return }
             if let cardReply = optCardRegistration {
                 self.getCardSafe(with: CardToRegister(cardNumber: cardNumber, expiration: expiration, cvx: cvx), ownerId: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, token: token) { (optCardToReg, optError) in
                     if let error = optError { completion(nil, error); return }
                     if let cardToReg = optCardToReg {
-                        self.postCardRegistrationData(with: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, cardnumber: cardToReg.cardNumber, expiration: cardToReg.expiration, cxv: cardToReg.cxv, cardReply: cardReply, token: token, idempontency: idempotency, completion: { (optPaymentCardItem, optError) in
+                        self.postCardRegistrationData(with: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, cardnumber: cardToReg.cardNumber, expiration: cardToReg.expiration, cxv: cardToReg.cxv, cardReply: cardReply, token: token, idempotency: idempotency, completion: { (optPaymentCardItem, optError) in
                             if let error = optError { completion(nil, error) }
                             if let paymentCard = optPaymentCardItem {
                                 completion(paymentCard, nil)
@@ -125,6 +125,7 @@ open class PaymentCardAPI {
             }
         }.resume()
     }
+    
     /**
      Delete specific card linked to Fintech Platform Account.
      
@@ -135,7 +136,7 @@ open class PaymentCardAPI {
          - ownerId: Fintech id of the owner of the Fintech Account
          - accountType: set if PERSONAL or BUSINESS type of account
          - cardId: Fintech Card id to delete
-         - completion: ist of cards or an Exception if occurent some errors
+         - completion: list of cards or an Exception if occurent some errors
      - return: completion callback returns a boolean if deletion was competed or an Error if not.
      */
     open func deletePaymentCard(token: String,
@@ -169,6 +170,19 @@ open class PaymentCardAPI {
         }.resume()
     }
     
+    /**
+     Set specific card linked to Fintech Platform Account as default.
+     
+     - parameters:
+         - token: got from "Create User token" request.
+         - tenantId: Fintech tenant id
+         - accountId: Fintech Account id
+         - ownerId: Fintech id of the owner of the Fintech Account
+         - accountType: set whether PERSONAL or BUSINESS type of account
+         - cardId: Fintech Card id to set as default card
+         - completion: default card or an Exception if occurent some errors
+     - return: completion callback returns a boolean if deletion was competed or an Error if not.
+     */
     open func setDefaultCard(token:String,
                              ownerId: String,
                              accountId: String,
@@ -229,7 +243,7 @@ open class PaymentCardAPI {
                                               expiration: String,
                                               currency: String,
                                               token: String,
-                                              idempontency: String,
+                                              idempotency: String? = nil,
                                               completion: @escaping (CreateCardRegistrationReply?, Error?) -> Void) {
         
         
@@ -252,6 +266,9 @@ open class PaymentCardAPI {
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.addValue("application/json", forHTTPHeaderField: "Accept")
             request.addBearerAuthorizationToken(token: token)
+            if let idempotency = idempotency {
+                request.addValue(idempotency, forHTTPHeaderField: "Idempotency-Key")
+            }
             
             session.dataTask(with: request) { (data, response, error) in
                 guard error == nil else { completion(nil, error); return }
@@ -397,7 +414,7 @@ open class PaymentCardAPI {
                                           cxv: String,
                                           cardReply: CreateCardRegistrationReply,
                                           token: String,
-                                          idempontency: String,
+                                          idempotency: String? = nil,
                                           completion: @escaping (PaymentCardItem?, Error?) -> Void) {
         let cardRegistration = cardReply.cardRegistration
         let data = "data=\(cardRegistration.preregistrationData)&accessKeyRef=\(cardRegistration.accessKey)&cardNumber=\(cardnumber)&cardExpirationDate=\(expiration)&cardCvx=\(cxv)"
@@ -413,7 +430,9 @@ open class PaymentCardAPI {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = data.data(using: .utf8)
-        
+        if let idempotency = idempotency {
+            request.addValue(idempotency, forHTTPHeaderField: "Idempotency-Key")
+        }
         session.dataTask(with: request) { (data, response, error) in
             guard error == nil else { completion(nil, error); return }
             

@@ -28,7 +28,7 @@ open class TransferAPI {
              toTenantId: String,
              message: String?,
              amount: Int64,
-             idempotency: String,
+             idempotency: String? = nil,
              completion: @escaping (Error?) -> Void) {
         
         do {
@@ -59,7 +59,9 @@ open class TransferAPI {
             request.httpBody = jsdata
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.addValue("application/json", forHTTPHeaderField: "Accept")
-            
+            if let idempotency = idempotency {
+                request.addValue(idempotency, forHTTPHeaderField: "Idempotency-Key")
+            }
             request.addBearerAuthorizationToken(token: token)
             
             session.dataTask(with: request) { (data, response, error) in
