@@ -42,20 +42,9 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         tenantId = ProcessInfo.processInfo.environment["TENANT_ID"]!
         userId = ProcessInfo.processInfo.environment["OWNER_ID"]!
         accountId = ProcessInfo.processInfo.environment["ACCOUNT_ID"]!
-        
-        /*hostName="http://localhost:9000"
-    accessToken="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE1MjU1OTQyNDEsImlhdCI6MTUyNTUwNzg0MSwidGVuYW50SWQiOiJiMDQ1NmNjNC01NTc0LTQ4M2UtYjRmOS1lODg2Y2MzZmVkZmUiLCJhY2NvdW50VHlwZSI6IlBFUlNPTkFMIiwib3duZXJJZCI6Ijk0MmQ5NTg0LWU0M2UtNDFjMS04Yzg5LWUwN2EzZjQ3ZjBjNyIsImFjY291bnRJZCI6ImRiNzY2NGVlLTcyNDMtNDQ5NS1hZmU5LTlkNjQzNzEwNWUzOSIsImp3dFR5cGUiOiJBQ0NPVU5UIiwic2NvcGUiOlsiTElOS0VEX0NBUkQiLCJMSU5LRURfQ0FSRF9DQVNIX0lOIl19.YqzO2-UkbE1i6a4dG-tqPfbtoneiWfnoHFTpyzHRS16g-RaIf_dM-SiLtkdRDizm0IzZ-eu614Pdaf3B33bf8w"
-        
-        tenantId="b0456cc4-5574-483e-b4f9-e886cc3fedfe"
-        
-        userId="942d9584-e43e-41c1-8c89-e07a3f47f0c7"
-        
-        accountId="db7664ee-7243-4495-afe9-9d6437105e39"*/
-
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
     
