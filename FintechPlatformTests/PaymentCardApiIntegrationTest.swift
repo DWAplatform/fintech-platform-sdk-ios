@@ -11,6 +11,18 @@ import Foundation
 import XCTest
 @testable import FintechPlatform
 
+extension PaymentCardItem: Equatable {
+    public static func == (lhs: PaymentCardItem, rhs: PaymentCardItem) -> Bool {
+        return
+            lhs.cardId == rhs.cardId &&
+                lhs.numberalias == rhs.numberalias &&
+                lhs.expirationdate == rhs.expirationdate &&
+        lhs.activestate == rhs.activestate &&
+        lhs.currency == rhs.currency &&
+        lhs.isDefault == rhs.isDefault
+    }
+}
+
 class PaymentCardApiIntegrationTest: XCTestCase {
 
     var hostName: String? = nil
@@ -24,22 +36,13 @@ class PaymentCardApiIntegrationTest: XCTestCase {
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
-        /*
+        
         hostName = ProcessInfo.processInfo.environment["HOSTNAME"]!
         accessToken = ProcessInfo.processInfo.environment["ACCOUNT_TOKEN"]!
         tenantId = ProcessInfo.processInfo.environment["TENANT_ID"]!
         userId = ProcessInfo.processInfo.environment["OWNER_ID"]!
         accountId = ProcessInfo.processInfo.environment["ACCOUNT_ID"]!
- */
-        hostName = "http://35.197.200.118"
-        accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE1MjU1MzI5OTYsImlhdCI6MTUyNTQ0NjU5NiwidGVuYW50SWQiOiJiMDQ1NmNjNC01NTc0LTQ4M2UtYjRmOS1lODg2Y2MzZmVkZmUiLCJhY2NvdW50VHlwZSI6IlBFUlNPTkFMIiwib3duZXJJZCI6ImIwMTdlMmMyLTgzNTgtNDE1MC1hOTA4LTdmOGI3MTIyYTU5ZCIsImFjY291bnRJZCI6ImJhMTYwYTBhLTQ5MTItNGNkMC1hZDExLTNiMDVkMTZiYjBmMiIsImp3dFR5cGUiOiJBQ0NPVU5UIiwic2NvcGUiOlsiTElOS0VEX0NBUkQiLCJMSU5LRURfQ0FSRF9DQVNIX0lOIl19.Y9skvjxrHBs6pGqmzYLm2P3vln3hT2Foraj17kiIaEVR4HO03gzWG7O3iy67W0Fz4t_V8Sg4xUKYC46rN8U8eA"
-        tenantId = "b0456cc4-5574-483e-b4f9-e886cc3fedfe"
-        userId = "b017e2c2-8358-4150-a908-7f8b7122a59d"
-        accountId = "ba160a0a-4912-4cd0-ad11-3b05d16bb0f2"
-        
-        /*
-          ACCOUNT_ID=
- */
+
     }
     
     override func tearDown() {
@@ -92,8 +95,8 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         XCTAssertNil(cardsListOptError, "getPaymentCards Error reply")
         XCTAssertNotNil(cardsList, "getPaymentCards No payment Cards list")
         
-        XCTAssert(cardsList?.count == 1, "getPaymentCards Card Not Registered")
-        XCTAssertTrue(cardsList?[0].cardId == paymentCard1?.cardId)
+        XCTAssertEqual(cardsList!.count, 1, "getPaymentCards Card Not Registered")
+        XCTAssert(cardsList!.contains(paymentCard1!))
         
         // create Second Card
         var paymentCard2: PaymentCardItem? = nil
@@ -123,12 +126,14 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         }
         
         wait(for: [expectationGetCards2], timeout: 600.0)
+        
         XCTAssertNil(cardsListOptError, "Error reply")
         XCTAssertNotNil(cardsList, "No payment Cards list")
-        XCTAssert(cardsList?.count == 2, "Card Not Registered")
-        // FIXME: I'm not sure about the order.
-        XCTAssertTrue(cardsList?[0].cardId == paymentCard2?.cardId)
-        XCTAssertTrue(cardsList?[1].cardId == paymentCard1?.cardId)
+        XCTAssertEqual(cardsList!.count, 2, "Card Not Registered")
+        
+        XCTAssert(cardsList!.contains(paymentCard1!))
+        XCTAssert(cardsList!.contains(paymentCard2!))
+        
         
         // set the First Card as Default
         let expectationDefaultCard1 = XCTestExpectation(description: "setFirstCardDefault")
@@ -147,10 +152,9 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         XCTAssertNil(setDefaultCard1optError, "Error reply")
         XCTAssertNotNil(setDefaultCard1, "No payment Cards list")
-        XCTAssert(paymentCard1?.cardId == setDefaultCard1?.cardId, "paymentcard is not default card")
-        XCTAssertNotNil(setDefaultCard1!.isDefault)
-        XCTAssert(setDefaultCard1!.isDefault!, "Card is not default")
         
+        let paymentCard1Default = PaymentCardItem(cardId: paymentCard1!.cardId, numberalias: paymentCard1!.numberalias, expirationdate: paymentCard1!.expirationdate, activestate: paymentCard1!.activestate, currency: paymentCard1!.currency, isDefault: true)
+        XCTAssert(paymentCard1Default == setDefaultCard1, "paymentcard is not default card")
         
         // getPaymentCard, expect 2 cards, the first as default and the other not
         let expectationGetCards3 = XCTestExpectation(description: "getCardsWithDefault")
@@ -167,15 +171,12 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         XCTAssertNil(cardsListOptError, "Error reply")
         XCTAssertNotNil(cardsList, "No payment Cards list")
-        // FIXME: I'm not sure about the order.
-        XCTAssertTrue(cardsList?[1].cardId == paymentCard1?.cardId)
+        XCTAssertEqual(cardsList!.count, 2, "Cards Not Registered")
         
-        XCTAssertNotNil(cardsList?[1].isDefault)
-        XCTAssertTrue((cardsList?[1].isDefault)!)
+        XCTAssert(cardsList!.contains(paymentCard1Default))
         
-        XCTAssertTrue(cardsList?[0].cardId == paymentCard2?.cardId)
-        XCTAssertNotNil(cardsList?[0].isDefault)
-        XCTAssertFalse((cardsList?[0].isDefault)!)
+        let paymentCard2NotDefault = PaymentCardItem(cardId: paymentCard2!.cardId, numberalias: paymentCard2!.numberalias, expirationdate: paymentCard2!.expirationdate, activestate: paymentCard2!.activestate, currency: paymentCard2!.currency, isDefault: false)
+        XCTAssert(cardsList!.contains(paymentCard2NotDefault))
         
 
         // set the Second Card as Default
@@ -194,10 +195,9 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         XCTAssertNil(setDefaultCard2optError, "Error reply")
         XCTAssertNotNil(setDefaultCard2, "No payment Cards list")
-        XCTAssert(paymentCard2?.cardId == setDefaultCard2?.cardId, "paymentcard is not default card")
-        XCTAssertNotNil(setDefaultCard2!.isDefault)
-        XCTAssert(setDefaultCard2!.isDefault!, "Card is not default")
         
+        let paymentCard2Default = PaymentCardItem(cardId: paymentCard2!.cardId, numberalias: paymentCard2!.numberalias, expirationdate: paymentCard2!.expirationdate, activestate: paymentCard2!.activestate, currency: paymentCard2!.currency, isDefault: true)
+        XCTAssert(paymentCard2Default == setDefaultCard2, "paymentcard is not default card")
         
         // getPaymentCard, expect 2 cards, the second as default and the other not
         let expectationGetCards4 = XCTestExpectation(description: "getCardsWithAnotherDefault")
@@ -214,14 +214,12 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         XCTAssertNil(cardsListOptError, "Error reply")
         XCTAssertNotNil(cardsList, "No payment Cards list")
         
-        XCTAssertTrue(cardsList?[1].cardId == paymentCard1?.cardId)
-        // FIXME: I'm not sure about the order.
+        XCTAssertEqual(cardsList!.count, 2, "Cards Not Registered")
         
-        XCTAssertNotNil(cardsList?[1].isDefault)
-        XCTAssertFalse((cardsList?[1].isDefault)!)
+        let paymentCard1NotDefault = PaymentCardItem(cardId: paymentCard1!.cardId, numberalias: paymentCard1!.numberalias, expirationdate: paymentCard1!.expirationdate, activestate: paymentCard1!.activestate, currency: paymentCard1!.currency, isDefault: false)
         
-        XCTAssertNotNil(cardsList?[0].isDefault)
-        XCTAssertTrue((cardsList?[0].isDefault)!)
+        XCTAssert(cardsList!.contains(paymentCard1NotDefault))
+        XCTAssert(cardsList!.contains(paymentCard2Default))
         
         // delete the second Card
         let expectationDeleteCard1 = XCTestExpectation(description: "DeleteSecondCard")
@@ -256,8 +254,8 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         XCTAssertNil(cardsListOptError, "Error reply")
         XCTAssertNotNil(cardsList, "No payment Cards list")
         
-        XCTAssertTrue(cardsList?.count == 1)
-        XCTAssertEqual(cardsList?[0].cardId, paymentCard1?.cardId)
+        XCTAssertEqual(cardsList?.count, 1)
+        XCTAssert(cardsList!.contains(paymentCard1NotDefault))
         
         // deleteCard the first card
         let expectationDeleteCard2 = XCTestExpectation(description: "DeleteLastCard")
@@ -292,7 +290,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         XCTAssertNil(cardsListOptError, "Error reply")
         XCTAssertNotNil(cardsList, "No payment Cards list")
-        XCTAssertTrue(cardsList?.count == 0)
+        XCTAssertEqual(cardsList?.count, 0)
     }
 
     
