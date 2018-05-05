@@ -260,7 +260,6 @@ open class PaymentCardAPI {
                     completion(nil, WebserviceError.DataEmptyError)
                     return
                 }
-                print(data)
                 
                 guard let httpResponse = response as? HTTPURLResponse else {
                     completion(nil, WebserviceError.NoHTTPURLResponse)
