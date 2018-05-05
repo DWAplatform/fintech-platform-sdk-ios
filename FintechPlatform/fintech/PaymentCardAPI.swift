@@ -61,6 +61,41 @@ open class PaymentCardAPI {
         }
     }
     
+    // completion(nil, WebserviceError.MissingMandatoryReplyParameters);
+    private func toPaymentCardItem(card: [String:Any]) -> PaymentCardItem? {
+        guard let alias = card["alias"] as? String else { return nil }
+        guard let expiration = card["expiration"] as? String else { return nil }
+        guard let currency = card["currency"] as? String else { return nil }
+        guard let activestate = card["status"] as? String else { return nil }
+        guard let cardId = card["cardId"] as? String else { return nil }
+        let isDefault = card["defaultCard"] as? Bool
+        
+        let issuer: PaymentCardIssuer?
+        if let issuerStr = card["issuer"] as? String {
+            issuer = PaymentCardIssuer(rawValue: issuerStr)
+        } else {
+            issuer = nil
+        }
+        
+        let created: Date?
+        if let createdStr = card["created"] as? String {
+            let dtc = DateTimeConversion()
+            created = dtc.convertFromRFC3339ToDate(str: createdStr)
+        } else {
+            created = nil
+        }
+        
+        let updated: Date?
+        if let updatedStr = card["updated"] as? String {
+            let dtc = DateTimeConversion()
+            updated = dtc.convertFromRFC3339ToDate(str: updatedStr)
+        } else {
+            updated = nil
+        }
+        
+        return PaymentCardItem(cardId: cardId, numberalias: alias, expirationdate: expiration, activestate: activestate, currency: currency, isDefault: isDefault, issuer: issuer, created: created, updated: updated)
+    }
+    
     /**
      Get all Payment Cards linked to Fintech Platform Account.
 
@@ -111,13 +146,9 @@ open class PaymentCardAPI {
                 guard let cardlist = reply else { completion(nil, nil); return}
                 var paymentCardsList = [PaymentCardItem]()
                 for card in cardlist {
-                    guard let alias = card["alias"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
-                    guard let expiration = card["expiration"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
-                    guard let currency = card["currency"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
-                    guard let activestate = card["status"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
-                    guard let cardId = card["cardId"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
-                    let isDefault = card["defaultCard"] as? Bool
-                    paymentCardsList.append(PaymentCardItem(cardId: cardId, numberalias: alias, expirationdate: expiration, activestate: activestate, currency: currency, isDefault: isDefault))
+                    if let pc = self.toPaymentCardItem(card: card) {
+                        paymentCardsList.append(pc)
+                    }
                 }
                 completion(paymentCardsList, nil)
             } catch {
@@ -206,14 +237,9 @@ open class PaymentCardAPI {
                     options: []) as? [String:Any]
                 guard let card = reply else { completion(nil, nil); return}
                
-                guard let alias = card["alias"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
-                guard let expiration = card["expiration"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
-                guard let currency = card["currency"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
-                guard let activestate = card["status"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
-                guard let cardId = card["cardId"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return}
-                let isDefault = card["defaultCard"] as? Bool
-                    
-                completion(PaymentCardItem(cardId: cardId, numberalias: alias, expirationdate: expiration, activestate: activestate, currency: currency, isDefault: isDefault), nil)
+                guard let pc = self.toPaymentCardItem(card: card) else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return }
+                
+                completion(pc, nil)
                 
             } catch {
                 completion(nil, error)
@@ -502,34 +528,11 @@ open class PaymentCardAPI {
                         with: data,
                         options: []) as? [String:Any]
                     
-                    guard let cardId = reply?["cardId"] as? String else {
-                        completion(nil, WebserviceError.MissingMandatoryReplyParameters)
-                        return
-                    }
+                    guard let card = reply else { completion(nil, nil); return}
                     
-                    guard let numberalias = reply?["alias"] as? String else {
-                        completion(nil, WebserviceError.MissingMandatoryReplyParameters)
-                        return
-                    }
+                    guard let pc = self.toPaymentCardItem(card: card) else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return }
                     
-                    guard let expirationdate = reply?["expiration"] as? String else {
-                        completion(nil, WebserviceError.MissingMandatoryReplyParameters)
-                        return
-                    }
-                    
-                    guard let activestate = reply?["status"] as? String else {
-                        completion(nil, WebserviceError.MissingMandatoryReplyParameters)
-                        return
-                    }
-                    
-                    guard let currency = reply?["currency"] as? String else {
-                        completion(nil, WebserviceError.MissingMandatoryReplyParameters)
-                        return
-                    }
-                    
-                    let ucc = PaymentCardItem(cardId: cardId, numberalias: numberalias, expirationdate: expirationdate, activestate: activestate, currency: currency, isDefault: nil)
-                    
-                    completion(ucc, nil)
+                    completion(pc, nil)
                 } catch {
                     completion(nil, error)
                 }

@@ -7,6 +7,15 @@
 //
 
 import Foundation
+
+public enum PaymentCardIssuer: String {
+    case VISA
+    case MASTERCARD
+    case DINERS
+    case MAESTRO
+    case UNKNOWN
+}
+
 public struct PaymentCardItem {
     public let cardId: String
     public let numberalias: String
@@ -14,13 +23,19 @@ public struct PaymentCardItem {
     public let activestate: String
     public let currency: String
     public let isDefault: Bool?
+    public let issuer: PaymentCardIssuer?
+    public let created: Date?
+    public let updated: Date?
     
     public init(cardId: String,
          numberalias: String,
          expirationdate: String,
          activestate: String,
          currency: String,
-         isDefault: Bool?){
+         isDefault: Bool?,
+         issuer: PaymentCardIssuer?,
+         created: Date?,
+         updated: Date?){
         
         self.cardId = cardId
         self.numberalias = numberalias
@@ -28,5 +43,8 @@ public struct PaymentCardItem {
         self.activestate = activestate
         self.currency = currency
         self.isDefault = isDefault
+        self.issuer = issuer
+        self.created = created
+        self.updated = updated
     }
 }

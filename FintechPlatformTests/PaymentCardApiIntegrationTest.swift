@@ -42,6 +42,15 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         tenantId = ProcessInfo.processInfo.environment["TENANT_ID"]!
         userId = ProcessInfo.processInfo.environment["OWNER_ID"]!
         accountId = ProcessInfo.processInfo.environment["ACCOUNT_ID"]!
+        
+        /*hostName="http://localhost:9000"
+    accessToken="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE1MjU1OTQyNDEsImlhdCI6MTUyNTUwNzg0MSwidGVuYW50SWQiOiJiMDQ1NmNjNC01NTc0LTQ4M2UtYjRmOS1lODg2Y2MzZmVkZmUiLCJhY2NvdW50VHlwZSI6IlBFUlNPTkFMIiwib3duZXJJZCI6Ijk0MmQ5NTg0LWU0M2UtNDFjMS04Yzg5LWUwN2EzZjQ3ZjBjNyIsImFjY291bnRJZCI6ImRiNzY2NGVlLTcyNDMtNDQ5NS1hZmU5LTlkNjQzNzEwNWUzOSIsImp3dFR5cGUiOiJBQ0NPVU5UIiwic2NvcGUiOlsiTElOS0VEX0NBUkQiLCJMSU5LRURfQ0FSRF9DQVNIX0lOIl19.YqzO2-UkbE1i6a4dG-tqPfbtoneiWfnoHFTpyzHRS16g-RaIf_dM-SiLtkdRDizm0IzZ-eu614Pdaf3B33bf8w"
+        
+        tenantId="b0456cc4-5574-483e-b4f9-e886cc3fedfe"
+        
+        userId="942d9584-e43e-41c1-8c89-e07a3f47f0c7"
+        
+        accountId="db7664ee-7243-4495-afe9-9d6437105e39"*/
 
     }
     
@@ -76,7 +85,6 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         XCTAssertNil(paymentCard1OptError, "registerCard Error reply")
         XCTAssertNotNil(paymentCard1, "registerCard No payment Card Item")
-        
         
         // getPaymentCards, expect only the First Card created
         let expectationGetCards1 = XCTestExpectation(description: "getCards")
@@ -153,8 +161,10 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         XCTAssertNil(setDefaultCard1optError, "Error reply")
         XCTAssertNotNil(setDefaultCard1, "No payment Cards list")
         
-        let paymentCard1Default = PaymentCardItem(cardId: paymentCard1!.cardId, numberalias: paymentCard1!.numberalias, expirationdate: paymentCard1!.expirationdate, activestate: paymentCard1!.activestate, currency: paymentCard1!.currency, isDefault: true)
+        let paymentCard1Default = PaymentCardItem(cardId: paymentCard1!.cardId, numberalias: paymentCard1!.numberalias, expirationdate: paymentCard1!.expirationdate, activestate: paymentCard1!.activestate, currency: paymentCard1!.currency, isDefault: true, issuer: paymentCard1!.issuer, created: paymentCard1!.created, updated: setDefaultCard1!.updated)
         XCTAssert(paymentCard1Default == setDefaultCard1, "paymentcard is not default card")
+        
+        XCTAssertGreaterThanOrEqual(setDefaultCard1!.updated!, paymentCard1!.updated!)
         
         // getPaymentCard, expect 2 cards, the first as default and the other not
         let expectationGetCards3 = XCTestExpectation(description: "getCardsWithDefault")
@@ -175,10 +185,9 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         XCTAssert(cardsList!.contains(paymentCard1Default))
         
-        let paymentCard2NotDefault = PaymentCardItem(cardId: paymentCard2!.cardId, numberalias: paymentCard2!.numberalias, expirationdate: paymentCard2!.expirationdate, activestate: paymentCard2!.activestate, currency: paymentCard2!.currency, isDefault: false)
+        let paymentCard2NotDefault = PaymentCardItem(cardId: paymentCard2!.cardId, numberalias: paymentCard2!.numberalias, expirationdate: paymentCard2!.expirationdate, activestate: paymentCard2!.activestate, currency: paymentCard2!.currency, isDefault: false, issuer: paymentCard2!.issuer, created: paymentCard2!.created, updated: setDefaultCard1!.updated)
         XCTAssert(cardsList!.contains(paymentCard2NotDefault))
         
-
         // set the Second Card as Default
         var setDefaultCard2:PaymentCardItem? = nil
         var setDefaultCard2optError:Error? = nil
@@ -196,7 +205,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         XCTAssertNil(setDefaultCard2optError, "Error reply")
         XCTAssertNotNil(setDefaultCard2, "No payment Cards list")
         
-        let paymentCard2Default = PaymentCardItem(cardId: paymentCard2!.cardId, numberalias: paymentCard2!.numberalias, expirationdate: paymentCard2!.expirationdate, activestate: paymentCard2!.activestate, currency: paymentCard2!.currency, isDefault: true)
+        let paymentCard2Default = PaymentCardItem(cardId: paymentCard2!.cardId, numberalias: paymentCard2!.numberalias, expirationdate: paymentCard2!.expirationdate, activestate: paymentCard2!.activestate, currency: paymentCard2!.currency, isDefault: true, issuer: paymentCard2!.issuer, created: paymentCard2!.created, updated: setDefaultCard2!.updated)
         XCTAssert(paymentCard2Default == setDefaultCard2, "paymentcard is not default card")
         
         // getPaymentCard, expect 2 cards, the second as default and the other not
@@ -216,7 +225,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         XCTAssertEqual(cardsList!.count, 2, "Cards Not Registered")
         
-        let paymentCard1NotDefault = PaymentCardItem(cardId: paymentCard1!.cardId, numberalias: paymentCard1!.numberalias, expirationdate: paymentCard1!.expirationdate, activestate: paymentCard1!.activestate, currency: paymentCard1!.currency, isDefault: false)
+        let paymentCard1NotDefault = PaymentCardItem(cardId: paymentCard1!.cardId, numberalias: paymentCard1!.numberalias, expirationdate: paymentCard1!.expirationdate, activestate: paymentCard1!.activestate, currency: paymentCard1!.currency, isDefault: false, issuer: paymentCard1!.issuer, created: paymentCard1!.created, updated: setDefaultCard2!.updated)
         
         XCTAssert(cardsList!.contains(paymentCard1NotDefault))
         XCTAssert(cardsList!.contains(paymentCard2Default))
