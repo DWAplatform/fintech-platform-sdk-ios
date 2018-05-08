@@ -85,25 +85,42 @@ class CashInApiIntegrationTest: XCTestCase {
         XCTAssertGreaterThanOrEqual(cashIn1Fee!.getLongvalue(), 0)
         
         // cashIn without 3d secure
-        let expectationCashIn = XCTestExpectation(description: "CashIn")
-        var cashIn1OptError: Error? = nil
-        var cashIn1: Money? = nil
+        let expectationCashIn1 = XCTestExpectation(description: "CashIn")
+        var cashIn1OptError1: Error? = nil
+        var cashIn1: CashInResponse? = nil
         
-        cashInAPI.cashIn(token: accessToken, ownerId: userId, accountType: "PERSONAL", cardId: paymentCard1!.cardId, amount: Money(value: 1000)) { optCashInResponse, optError in
-            cashIn1FeeOptError = optError
-            cashIn1Fee = optCashInResponse
+        cashInAPI.cashIn(token: accessToken, ownerId: userId, accountId: accountId, accountType: "PERSONAL", tenantId: tenantId, cardId: paymentCard1!.cardId, amount: Money(value: 1000), idempotency: "IdempCashIn") { optCashInResponse, optError in
+            cashIn1OptError1 = optError
+            cashIn1 = optCashInResponse
             
-            expectationCashInFee.fulfill()
+            expectationCashIn1.fulfill()
         }
         
-        wait(for: [expectationCashInFee], timeout: 600.0)
+        wait(for: [expectationCashIn1], timeout: 600.0)
         
-        XCTAssertNil(cashIn1FeeOptError, "CashInFee Error reply")
-        XCTAssertNotNil(cashIn1Fee, "CashIn No Fee In Response")
+        XCTAssertNil(cashIn1OptError1, "CashInFee Error reply")
+        XCTAssertNotNil(cashIn1, "CashIn No Fee In Response")
+        XCTAssertFalse(cashIn1!.securecodeneeded)
+        XCTAssertEqual(cashIn1?.status, CashInStatus.SUCCEEDED)
         
-        XCTAssertEqual(cashIn1Fee!.getCurrency(), "EUR")
-        XCTAssertGreaterThanOrEqual(cashIn1Fee!.getLongvalue(), 0)
+        // cashIn with 3d secure
+        let expectationCashIn2 = XCTestExpectation(description: "CashIn")
+        var cashIn1OptError2: Error? = nil
+        var cashIn2: CashInResponse? = nil
         
+        cashInAPI.cashIn(token: accessToken, ownerId: userId, accountId: accountId, accountType: "PERSONAL", tenantId: tenantId, cardId: paymentCard1!.cardId, amount: Money(value: 10000), idempotency: "IdempCashIn") { optCashInResponse, optError in
+            cashIn1OptError2 = optError
+            cashIn2 = optCashInResponse
+            
+            expectationCashIn2.fulfill()
+        }
+        
+        wait(for: [expectationCashIn2], timeout: 600.0)
+        
+        XCTAssertNil(cashIn1OptError2, "CashInFee Error reply")
+        XCTAssertNotNil(cashIn2, "CashIn No Fee In Response")
+        XCTAssertTrue(cashIn2!.securecodeneeded)
+        XCTAssertEqual(cashIn2?.status, CashInStatus.CREATED)
         
     }
     
