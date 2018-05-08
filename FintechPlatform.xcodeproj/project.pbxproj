@@ -11,6 +11,7 @@
 		8E4CA2E0CABAF86484CF727E /* Pods_FintechPlatformTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77388DF9753FA968BFEEEB11 /* Pods_FintechPlatformTests.framework */; };
 		B4316CB5209AFB29007B2E7E /* PaymentCardApiIntegrationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4316CB4209AFB29007B2E7E /* PaymentCardApiIntegrationTest.swift */; };
 		B4339A39209DBD2D002CDE58 /* DateTimeConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4339A38209DBD2D002CDE58 /* DateTimeConversion.swift */; };
+		B4C15B1C20A0325200ADA8A2 /* CashInApiIntegrationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C15B1B20A0325200ADA8A2 /* CashInApiIntegrationTest.swift */; };
 		BF434359207CEF0800C9C041 /* FintechPlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF43434F207CEF0800C9C041 /* FintechPlatform.framework */; };
 		BF43435E207CEF0800C9C041 /* FintechPlatformTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43435D207CEF0800C9C041 /* FintechPlatformTests.swift */; };
 		BF434360207CEF0800C9C041 /* FintechPlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = BF434352207CEF0800C9C041 /* FintechPlatform.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -56,6 +57,7 @@
 		AD06E15DCA9B3495403B0C50 /* Pods-FintechPlatform.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FintechPlatform.release.xcconfig"; path = "Pods/Target Support Files/Pods-FintechPlatform/Pods-FintechPlatform.release.xcconfig"; sourceTree = "<group>"; };
 		B4316CB4209AFB29007B2E7E /* PaymentCardApiIntegrationTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentCardApiIntegrationTest.swift; sourceTree = "<group>"; };
 		B4339A38209DBD2D002CDE58 /* DateTimeConversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimeConversion.swift; sourceTree = "<group>"; };
+		B4C15B1B20A0325200ADA8A2 /* CashInApiIntegrationTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashInApiIntegrationTest.swift; sourceTree = "<group>"; };
 		BF43434F207CEF0800C9C041 /* FintechPlatform.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FintechPlatform.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF434352207CEF0800C9C041 /* FintechPlatform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FintechPlatform.h; sourceTree = "<group>"; };
 		BF434353207CEF0800C9C041 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 				BF43435D207CEF0800C9C041 /* FintechPlatformTests.swift */,
 				BF43435F207CEF0800C9C041 /* Info.plist */,
 				B4316CB4209AFB29007B2E7E /* PaymentCardApiIntegrationTest.swift */,
+				B4C15B1B20A0325200ADA8A2 /* CashInApiIntegrationTest.swift */,
 			);
 			path = FintechPlatformTests;
 			sourceTree = "<group>";
@@ -441,6 +444,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B4316CB5209AFB29007B2E7E /* PaymentCardApiIntegrationTest.swift in Sources */,
+				B4C15B1C20A0325200ADA8A2 /* CashInApiIntegrationTest.swift in Sources */,
 				BF43435E207CEF0800C9C041 /* FintechPlatformTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
