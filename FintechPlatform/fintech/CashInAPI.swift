@@ -116,6 +116,10 @@ open class CashInAPI {
                         completion(nil, WebserviceError.MissingMandatoryReplyParameters)
                         return
                     }
+                    guard let status = reply?["status"] as? String else {
+                        completion(nil, WebserviceError.MissingMandatoryReplyParameters)
+                        return
+                    }
                     
                     let optredirecturl: String?
                     if let redirecturl = reply?["redirectURL"] {
@@ -124,7 +128,23 @@ open class CashInAPI {
                         optredirecturl = nil
                     }
                     
-                    let payinreply = CashInResponse(transactionid: transactionid, securecodeneeded: securecodeneeded, redirecturl: optredirecturl)
+                    let created: Date?
+                    if let createdStr = reply?["created"] as? String {
+                        let dtc = DateTimeConversion()
+                        created = dtc.convertFromRFC3339ToDate(str: createdStr)
+                    } else {
+                        created = nil
+                    }
+                    
+                    let updated: Date?
+                    if let updatedStr = reply?["updated"] as? String {
+                        let dtc = DateTimeConversion()
+                        updated = dtc.convertFromRFC3339ToDate(str: updatedStr)
+                    } else {
+                        updated = nil
+                    }
+                    
+                    let payinreply = CashInResponse(transactionid: transactionid, securecodeneeded: securecodeneeded, redirecturl: optredirecturl, status: CashInStatus(rawValue: status)!, created: created, updated: updated)
                     
                     completion(payinreply, nil)
                 } catch {
