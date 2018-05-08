@@ -12,9 +12,11 @@ open class PaymentCardAPI {
     lazy var session: SessionProtocol = URLSession.shared
     
     private let hostName: String
+    private let isSandbox: Bool
     
-    public init(hostName: String) {
+    public init(hostName: String, isSandbox: Bool) {
         self.hostName = hostName
+        self.isSandbox = isSandbox
     }
     /**
      Register a Card. Use this method to register a user card and PLEASE DO NOT save card information on your own client or server side-parameters
@@ -46,7 +48,7 @@ open class PaymentCardAPI {
         self.createCreditCardRegistration(with: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, numberalias: CardHelper.generateAlias(cardNumber: cardNumber), expiration: expiration, currency: currency, token: token, idempotency: idempotency) { (optCardRegistration, optError) in
             if let error = optError { completion(nil, error); return }
             if let cardReply = optCardRegistration {
-                self.getCardSafe(with: CardToRegister(cardNumber: cardNumber, expiration: expiration, cvx: cvx), ownerId: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, token: token) { (optCardToReg, optError) in
+                self.getCardSafe(with: CardToRegister(cardNumber: cardNumber, expiration: expiration, cvx: cvx), ownerId: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, token: token, isSandbox: self.isSandbox) { (optCardToReg, optError) in
                     if let error = optError { completion(nil, error); return }
                     if let cardToReg = optCardToReg {
                         self.postCardRegistrationData(with: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, cardnumber: cardToReg.cardNumber, expiration: cardToReg.expiration, cxv: cardToReg.cxv, cardReply: cardReply, token: token, idempotency: idempotency, completion: { (optPaymentCardItem, optError) in
@@ -355,8 +357,12 @@ open class PaymentCardAPI {
                              tenantId: String,
                              accountType: String,
                              token: String,
+                             isSandbox: Bool,
                              completion: @escaping (CardToRegister?, Error?) -> Void) {
 
+        if (!self.isSandbox) {
+            completion(CardToRegister(cardNumber: cardToRegister.cardNumber, expiration: cardToRegister.expiration, cvx: cardToRegister.cxv), nil)
+        }
         guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(NetHelper.getPath(from: accountType))/\(ownerId)/accounts/\(accountId)/linkedCardsTestCards")
             else { fatalError() }
         
