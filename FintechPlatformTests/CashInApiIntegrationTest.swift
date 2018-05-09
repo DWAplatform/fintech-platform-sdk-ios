@@ -30,6 +30,7 @@ class CashInApiIntegrationTest: XCTestCase {
         tenantId = ProcessInfo.processInfo.environment["TENANT_ID"]!
         userId = ProcessInfo.processInfo.environment["OWNER_ID"]!
         accountId = ProcessInfo.processInfo.environment["ACCOUNT_ID"]!
+
     }
     
     override func tearDown() {
@@ -44,7 +45,7 @@ class CashInApiIntegrationTest: XCTestCase {
         guard let accountId = accountId else { XCTFail(); return }
         
         //  create payment card API using FintechPlatformAPI instance.
-        let paymentCardAPI = fintechPlatform.getPaymentCardAPI(hostName: hostName)
+        let paymentCardAPI = fintechPlatform.getPaymentCardAPI(hostName: hostName, isSanbox: true)
         
         
         // create First Card

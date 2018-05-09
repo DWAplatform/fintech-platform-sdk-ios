@@ -42,6 +42,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         tenantId = ProcessInfo.processInfo.environment["TENANT_ID"]!
         userId = ProcessInfo.processInfo.environment["OWNER_ID"]!
         accountId = ProcessInfo.processInfo.environment["ACCOUNT_ID"]!
+ 
     }
     
     override func tearDown() {
@@ -56,8 +57,21 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         guard let accountId = accountId else { XCTFail(); return }
         
         //  create payment card API using FintechPlatformAPI instance.
-        let paymentCardAPI = fintechPlatform.getPaymentCardAPI(hostName: hostName)
+        let paymentCardAPI = fintechPlatform.getPaymentCardAPI(hostName: hostName, isSanbox: true)
         
+        // get Cards list
+        let expectationGetCards = XCTestExpectation(description: "getCardsFirstTime")
+        var cardsList : [PaymentCardItem]? = nil
+        var cardsListOptError: Error? = nil
+        paymentCardAPI.getPaymentCards(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL") { (optList, optError) in
+            
+            cardsListOptError = optError
+            cardsList = optList
+            
+            expectationGetCards.fulfill()
+        }
+        wait(for: [expectationGetCards], timeout: 600.0)
+        let initialCardsNumber = cardsList!.count
         
         // create First Card
         var paymentCard1: PaymentCardItem? = nil
@@ -77,11 +91,10 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         // getPaymentCards, expect only the First Card created
         let expectationGetCards1 = XCTestExpectation(description: "getCards")
-        var cardsList : [PaymentCardItem]? = nil
-        var cardsListOptError: Error? = nil
+        var cardsListOptError1: Error? = nil
         paymentCardAPI.getPaymentCards(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL") { (optList, optError) in
             
-            cardsListOptError = optError
+            cardsListOptError1 = optError
             cardsList = optList
             
             expectationGetCards1.fulfill()
@@ -89,10 +102,10 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         wait(for: [expectationGetCards1], timeout: 600.0)
         
-        XCTAssertNil(cardsListOptError, "getPaymentCards Error reply")
+        XCTAssertNil(cardsListOptError1, "getPaymentCards Error reply")
         XCTAssertNotNil(cardsList, "getPaymentCards No payment Cards list")
         
-        XCTAssertEqual(cardsList!.count, 1, "getPaymentCards Card Not Registered")
+        XCTAssertEqual(cardsList!.count, initialCardsNumber + 1, "getPaymentCards Card Not Registered")
         XCTAssert(cardsList!.contains(paymentCard1!))
         
         // create Second Card
@@ -116,9 +129,6 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         paymentCardAPI.getPaymentCards(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL") { (optList, optError) in
             cardsListOptError = optError
             cardsList = optList
-            
-            
-            
             expectationGetCards2.fulfill()
         }
         
@@ -126,8 +136,8 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         XCTAssertNil(cardsListOptError, "Error reply")
         XCTAssertNotNil(cardsList, "No payment Cards list")
-        XCTAssertEqual(cardsList!.count, 2, "Card Not Registered")
         
+        XCTAssertEqual(cardsList!.count, initialCardsNumber + 2, "Card Not Registered")
         XCTAssert(cardsList!.contains(paymentCard1!))
         XCTAssert(cardsList!.contains(paymentCard2!))
         
@@ -149,6 +159,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         XCTAssertNil(setDefaultCard1optError, "Error reply")
         XCTAssertNotNil(setDefaultCard1, "No payment Cards list")
+        XCTAssertEqual(cardsList!.count, initialCardsNumber + 2, "Card Not Registered")
         
         let paymentCard1Default = PaymentCardItem(cardId: paymentCard1!.cardId, numberalias: paymentCard1!.numberalias, expirationdate: paymentCard1!.expirationdate, activestate: paymentCard1!.activestate, currency: paymentCard1!.currency, isDefault: true, issuer: paymentCard1!.issuer, created: paymentCard1!.created, updated: setDefaultCard1!.updated)
         XCTAssert(paymentCard1Default == setDefaultCard1, "paymentcard is not default card")
@@ -170,7 +181,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         XCTAssertNil(cardsListOptError, "Error reply")
         XCTAssertNotNil(cardsList, "No payment Cards list")
-        XCTAssertEqual(cardsList!.count, 2, "Cards Not Registered")
+        XCTAssertEqual(cardsList!.count, initialCardsNumber + 2, "Card Not Registered")
         
         XCTAssert(cardsList!.contains(paymentCard1Default))
         
@@ -212,7 +223,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         XCTAssertNil(cardsListOptError, "Error reply")
         XCTAssertNotNil(cardsList, "No payment Cards list")
         
-        XCTAssertEqual(cardsList!.count, 2, "Cards Not Registered")
+        XCTAssertEqual(cardsList!.count, initialCardsNumber + 2, "Card Not Registered")
         
         let paymentCard1NotDefault = PaymentCardItem(cardId: paymentCard1!.cardId, numberalias: paymentCard1!.numberalias, expirationdate: paymentCard1!.expirationdate, activestate: paymentCard1!.activestate, currency: paymentCard1!.currency, isDefault: false, issuer: paymentCard1!.issuer, created: paymentCard1!.created, updated: setDefaultCard2!.updated)
         
@@ -252,7 +263,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         XCTAssertNil(cardsListOptError, "Error reply")
         XCTAssertNotNil(cardsList, "No payment Cards list")
         
-        XCTAssertEqual(cardsList?.count, 1)
+        XCTAssertEqual(cardsList!.count, initialCardsNumber + 1, "Card Not Registered")
         XCTAssert(cardsList!.contains(paymentCard1NotDefault))
         
         // deleteCard the first card
@@ -288,7 +299,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         XCTAssertNil(cardsListOptError, "Error reply")
         XCTAssertNotNil(cardsList, "No payment Cards list")
-        XCTAssertEqual(cardsList?.count, 0)
+        XCTAssertEqual(cardsList!.count, initialCardsNumber, "Card Not Registered")
     }
 
     
