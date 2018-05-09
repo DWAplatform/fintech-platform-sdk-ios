@@ -38,8 +38,8 @@ public class FintechPlatformAPI {
         return BankAccountAPI(hostName: hostName)
     }
     
-    public func getPaymentCardAPI(hostName: String) -> PaymentCardAPI {
-        return PaymentCardAPI(hostName: hostName)
+    public func getPaymentCardAPI(hostName: String, isSanbox: Bool) -> PaymentCardAPI {
+        return PaymentCardAPI(hostName: hostName, isSandbox: isSanbox)
     }
     
     public func getProfileAPI(hostName: String) -> ProfileAPI {
