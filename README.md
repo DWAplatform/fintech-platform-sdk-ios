@@ -17,7 +17,7 @@ $ gem install cocoapods
 To integrate DWAplatform into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
 ```ruby
-pod 'FintechPlatform', '~> 1.3.2'
+pod 'FintechPlatform', '~> 1.3.4'
 ```
 
 Then, run the following command:
