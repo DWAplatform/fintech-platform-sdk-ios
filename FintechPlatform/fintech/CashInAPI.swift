@@ -71,7 +71,7 @@ open class CashInAPI {
             request.addBearerAuthorizationToken(token: token)
             
             session.dataTask(with: request) { (data, response, error) in
-                guard error == nil else { completion(nil, error); return }
+                if let error = error { completion(nil, error); return }
                 guard let data = data else {
                     completion(nil, WebserviceError.DataEmptyError)
                     return
@@ -83,17 +83,10 @@ open class CashInAPI {
                 }
                 
                 if (httpResponse.statusCode != 200) {
-                    switch(httpResponse.statusCode) {
-                    case 409:
-                        completion(nil, WebserviceError.IdempotencyError)
-                    case 401:
-                        completion(nil, WebserviceError.TokenError)
-                    default:
-                        completion(nil, WebserviceError.StatusCodeNotSuccess)
-                    }
+                    completion(nil, NetHelper.createRequestError(data: data, error: error))
                     return
                 }
-                
+            
                 do {
                     let reply = try JSONSerialization.jsonObject(
                         with: data,
@@ -148,10 +141,10 @@ open class CashInAPI {
                     
                     completion(payinreply, nil)
                 } catch {
-                    completion(nil, error)
+                    completion(nil, WebserviceError.NOJSONReply)
                 }
                 
-                }.resume()
+            }.resume()
         } catch let error {
             completion(nil, error)
         }

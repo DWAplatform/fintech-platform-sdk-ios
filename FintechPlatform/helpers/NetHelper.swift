@@ -35,6 +35,33 @@ class NetHelper {
         return result
     }
 
+    static func createRequestError(data: Data, error: Error?) -> Error {
+        do {
+            let optErrorResponse = try JSONSerialization.jsonObject(
+                with: data,
+                options: []) as? [[String:String]]
+        
+            if let errorResponse = optErrorResponse {
+                var errorsList = [ServerError]()
+                for item in errorResponse {
+                    
+                    if let code = item["code"], let message = item["message"] {
+                        
+                        if let errorCode = ErrorCode(rawValue: code){
+                            errorsList.append(ServerError(code: errorCode, message: message))
+                        } else {
+                            errorsList.append(ServerError(code: ErrorCode.unknown_error, message: message))
+                        }
+                    }
+                }
+                return WebserviceError.APIResponseError(serverErrors: errorsList, error: error)
+            } else {
+                return WebserviceError.NOJSONReply
+            }
+        } catch {
+            return WebserviceError.NOJSONReply
+        }
+    }
 }
 
 protocol SessionProtocol {
@@ -50,7 +77,7 @@ protocol SessionProtocol {
 
 extension URLSession: SessionProtocol {}
 
-enum WebserviceError : Error {
+public enum WebserviceError : Error {
     case DataEmptyError
     case NoHTTPURLResponse
     case StatusCodeNotSuccess
@@ -60,6 +87,7 @@ enum WebserviceError : Error {
     case IdempotencyError
     case TokenError
     case ResourseNotFound
+    case APIResponseError(serverErrors: [ServerError]?, error: Error?)
 }
 
 extension URLRequest {

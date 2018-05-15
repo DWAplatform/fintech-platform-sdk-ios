@@ -132,7 +132,7 @@ open class PaymentCardAPI {
             }
             
             guard let httpResponse = response as? HTTPURLResponse else {
-                completion(nil, WebserviceError.NoHTTPURLResponse)
+                completion(nil, NetHelper.createRequestError(data: data, error: error))
                 return
             }
             
@@ -185,16 +185,19 @@ open class PaymentCardAPI {
         request.httpMethod = "DELETE"
         request.addBearerAuthorizationToken(token: token)
         
-        session.dataTask(with: request) { (_, response, error) in
+        session.dataTask(with: request) { (data, response, error) in
             guard error == nil else { completion(false, error); return }
-            
+            guard let data = data else {
+                completion(false, WebserviceError.DataEmptyError)
+                return
+            }
             guard let httpResponse = response as? HTTPURLResponse else {
                 completion(false, WebserviceError.NoHTTPURLResponse)
                 return
             }
             
             if (httpResponse.statusCode != 200) {
-                completion(false, WebserviceError.StatusCodeNotSuccess)
+                completion(false, NetHelper.createRequestError(data: data, error: error))
                 return
             }
             
@@ -225,7 +228,7 @@ open class PaymentCardAPI {
             }
             
             guard let httpResponse = response as? HTTPURLResponse else {
-                completion(nil, WebserviceError.NoHTTPURLResponse)
+                completion(nil, NetHelper.createRequestError(data: data, error: error))
                 return
             }
             
@@ -290,7 +293,7 @@ open class PaymentCardAPI {
                 }
                 
                 guard let httpResponse = response as? HTTPURLResponse else {
-                    completion(nil, WebserviceError.NoHTTPURLResponse)
+                    completion(nil, NetHelper.createRequestError(data: data, error: error))
                     return
                 }
                 
@@ -381,7 +384,7 @@ open class PaymentCardAPI {
             }
             
             guard let httpResponse = response as? HTTPURLResponse else {
-                completion(nil, WebserviceError.NoHTTPURLResponse)
+                completion(nil, NetHelper.createRequestError(data: data, error: error))
                 return
             }
             
@@ -460,7 +463,7 @@ open class PaymentCardAPI {
             }
             
             if (httpResponse.statusCode != 200) {
-                completion(nil, WebserviceError.StatusCodeNotSuccess)
+                completion(nil, NetHelper.createRequestError(data: data, error: error))
                 return
             }
             
@@ -520,7 +523,7 @@ open class PaymentCardAPI {
                 }
                 
                 guard let httpResponse = response as? HTTPURLResponse else {
-                    completion(nil, WebserviceError.NoHTTPURLResponse)
+                    completion(nil, NetHelper.createRequestError(data: data, error: error))
                     return
                 }
                 

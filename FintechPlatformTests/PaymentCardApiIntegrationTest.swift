@@ -36,12 +36,17 @@ class PaymentCardApiIntegrationTest: XCTestCase {
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
+        //        hostName = ProcessInfo.processInfo.environment["HOSTNAME"]!
+        //        accessToken = ProcessInfo.processInfo.environment["ACCOUNT_TOKEN"]!
+        //        tenantId = ProcessInfo.processInfo.environment["TENANT_ID"]!
+        //        userId = ProcessInfo.processInfo.environment["OWNER_ID"]!
+        //        accountId = ProcessInfo.processInfo.environment["ACCOUNT_ID"]!
         
-        hostName = ProcessInfo.processInfo.environment["HOSTNAME"]!
-        accessToken = ProcessInfo.processInfo.environment["ACCOUNT_TOKEN"]!
-        tenantId = ProcessInfo.processInfo.environment["TENANT_ID"]!
-        userId = ProcessInfo.processInfo.environment["OWNER_ID"]!
-        accountId = ProcessInfo.processInfo.environment["ACCOUNT_ID"]!
+        hostName = "http://10.0.0.7:9000"
+        accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE1MjY0NjE4NDksImlhdCI6MTUyNjM3NTQ0OSwidGVuYW50SWQiOiJiMDQ1NmNjNC01NTc0LTQ4M2UtYjRmOS1lODg2Y2MzZmVkZmUiLCJhY2NvdW50VHlwZSI6IlBFUlNPTkFMIiwib3duZXJJZCI6ImUwNzAxNjYxLTJiMTQtNDYyYS1hODI3LTY4OGQyMzI1MjhhMyIsImFjY291bnRJZCI6ImNlZTM4ZGM5LWU2OWQtNDhmNi1hNTAwLTVmNGIxNmMwYzFmOCIsImp3dFR5cGUiOiJBQ0NPVU5UIiwic2NvcGUiOlsiTElOS0VEX0NBUkQiLCJMSU5LRURfQ0FSRF9DQVNIX0lOIl19.PXj6fXvgqZJRkEME2BwtVvMGWCqrlYdhlY46qsZJ0uA54VK3FqA5ab20u1gq9GYdnpfNgV-hEnFAbKZ8Dpzwtg"
+        tenantId = "b0456cc4-5574-483e-b4f9-e886cc3fedfe"
+        userId = "e0701661-2b14-462a-a827-688d232528a3"
+        accountId = "cee38dc9-e69d-48f6-a500-5f4b16c0c1f8"
  
     }
     
@@ -300,13 +305,61 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         XCTAssertNil(cardsListOptError, "Error reply")
         XCTAssertNotNil(cardsList, "No payment Cards list")
         XCTAssertEqual(cardsList!.count, initialCardsNumber, "Card Not Registered")
-    }
+        
+        // create Card for testing errors
+        paymentCardAPI.registerCard(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL", cardNumber: "1234123412341234", expiration: "0122", cvx: "123", currency: "EUR", idempotency: "idemp1") { optPaymentCardItem, optError in
+            paymentCard1 = optPaymentCardItem
+        }
+        
+        // getPaymentCard, expect auth error
+        let expectationGetCardsErr = XCTestExpectation(description: "getCardsFirstTime")
 
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+        var cardsListOptErrors: Error? = nil
+        paymentCardAPI.getPaymentCards(token: accessToken, tenantId: tenantId, accountId: UUID().uuidString, ownerId: userId, accountType: "PERSONAL") { (optList, optError) in
+            
+            cardsListOptErrors = optError
+            cardsList = optList
+            
+            expectationGetCardsErr.fulfill()
+        }
+        
+        wait(for: [expectationGetCardsErr], timeout: 600.0)
+        
+        XCTAssertNotNil(cardsListOptErrors, "Error reply")
+        XCTAssertNil(cardsList, "No payment Cards list")
+        XCTAssertTrue(cardsListOptErrors is WebserviceError)
+        if let cardError = cardsListOptErrors as? WebserviceError {
+            switch(cardError){
+            case let .APIResponseError(serverErrors, _):
+                XCTAssertEqual(serverErrors?[0].code, ErrorCode.authentication_error)
+            default: break
+            }
+        }
+        
+        // deleteCard error
+        let expectationDeleteCard = XCTestExpectation(description: "DeleteLastCard")
+        var deleteCardOptError: Error? = nil
+        var deleteCard:Bool? = nil
+        if let cardId = paymentCard1?.cardId {
+            paymentCardAPI.deletePaymentCard(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "error", cardId: cardId) { (optBool, optError) in
+                
+                deleteCardOptError = optError
+                deleteCard = optBool
+                
+                expectationDeleteCard.fulfill()
+            }
+        }
+        wait(for: [expectationDeleteCard], timeout: 600.0)
+        
+        XCTAssertNotNil(deleteCardOptError, "Error reply")
+        XCTAssertFalse(deleteCard!)
+        XCTAssertTrue(deleteCardOptError is WebserviceError)
+        if let deleteError = deleteCardOptError as? WebserviceError {
+            switch(deleteError){
+            case let .APIResponseError(serverErrors, _):
+                XCTAssertEqual(serverErrors?[0].code, ErrorCode.authentication_error)
+            default: break
+            }
         }
     }
     
