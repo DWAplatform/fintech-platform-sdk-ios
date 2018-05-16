@@ -42,11 +42,11 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         //        userId = ProcessInfo.processInfo.environment["OWNER_ID"]!
         //        accountId = ProcessInfo.processInfo.environment["ACCOUNT_ID"]!
         
-        hostName = "http://10.0.0.7:9000"
-        accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE1MjY0NjE4NDksImlhdCI6MTUyNjM3NTQ0OSwidGVuYW50SWQiOiJiMDQ1NmNjNC01NTc0LTQ4M2UtYjRmOS1lODg2Y2MzZmVkZmUiLCJhY2NvdW50VHlwZSI6IlBFUlNPTkFMIiwib3duZXJJZCI6ImUwNzAxNjYxLTJiMTQtNDYyYS1hODI3LTY4OGQyMzI1MjhhMyIsImFjY291bnRJZCI6ImNlZTM4ZGM5LWU2OWQtNDhmNi1hNTAwLTVmNGIxNmMwYzFmOCIsImp3dFR5cGUiOiJBQ0NPVU5UIiwic2NvcGUiOlsiTElOS0VEX0NBUkQiLCJMSU5LRURfQ0FSRF9DQVNIX0lOIl19.PXj6fXvgqZJRkEME2BwtVvMGWCqrlYdhlY46qsZJ0uA54VK3FqA5ab20u1gq9GYdnpfNgV-hEnFAbKZ8Dpzwtg"
-        tenantId = "b0456cc4-5574-483e-b4f9-e886cc3fedfe"
-        userId = "e0701661-2b14-462a-a827-688d232528a3"
-        accountId = "cee38dc9-e69d-48f6-a500-5f4b16c0c1f8"
+        hostName = ""
+        accessToken = ""
+        tenantId = ""
+        userId = ""
+        accountId = ""
  
     }
     

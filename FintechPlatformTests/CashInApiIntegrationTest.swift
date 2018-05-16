@@ -31,11 +31,11 @@ class CashInApiIntegrationTest: XCTestCase {
 //        userId = ProcessInfo.processInfo.environment["OWNER_ID"]!
 //        accountId = ProcessInfo.processInfo.environment["ACCOUNT_ID"]!
         
-        hostName = "http://10.0.0.7:9000"
-        accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE1MjY0NjE4NDksImlhdCI6MTUyNjM3NTQ0OSwidGVuYW50SWQiOiJiMDQ1NmNjNC01NTc0LTQ4M2UtYjRmOS1lODg2Y2MzZmVkZmUiLCJhY2NvdW50VHlwZSI6IlBFUlNPTkFMIiwib3duZXJJZCI6ImUwNzAxNjYxLTJiMTQtNDYyYS1hODI3LTY4OGQyMzI1MjhhMyIsImFjY291bnRJZCI6ImNlZTM4ZGM5LWU2OWQtNDhmNi1hNTAwLTVmNGIxNmMwYzFmOCIsImp3dFR5cGUiOiJBQ0NPVU5UIiwic2NvcGUiOlsiTElOS0VEX0NBUkQiLCJMSU5LRURfQ0FSRF9DQVNIX0lOIl19.PXj6fXvgqZJRkEME2BwtVvMGWCqrlYdhlY46qsZJ0uA54VK3FqA5ab20u1gq9GYdnpfNgV-hEnFAbKZ8Dpzwtg"
-        tenantId = "b0456cc4-5574-483e-b4f9-e886cc3fedfe"
-        userId = "e0701661-2b14-462a-a827-688d232528a3"
-        accountId = "cee38dc9-e69d-48f6-a500-5f4b16c0c1f8"
+        hostName = ""
+        accessToken = ""
+        tenantId = ""
+        userId = ""
+        accountId = ""
 
     }
     
@@ -43,7 +43,7 @@ class CashInApiIntegrationTest: XCTestCase {
         super.tearDown()
     }
     
-    func testCards() {
+    func testCashIn() {
         guard let hostName = hostName else { XCTFail(); return }
         guard let accessToken = accessToken else { XCTFail(); return }
         guard let tenantId = tenantId else { XCTFail(); return }
@@ -109,6 +109,33 @@ class CashInApiIntegrationTest: XCTestCase {
         XCTAssertNotNil(cashIn1, "CashIn No Fee In Response")
         XCTAssertFalse(cashIn1!.securecodeneeded)
         XCTAssertEqual(cashIn1?.status, CashInStatus.SUCCEEDED)
+        XCTAssertNotEqual(cashIn1?.status, CashInStatus.FAILED)
+        
+        // cashIn failed
+        let expectationCashIn11 = XCTestExpectation(description: "CashIn")
+        var cashIn1OptError11: Error? = nil
+        var cashIn11: CashInResponse? = nil
+        
+        cashInAPI.cashIn(token: accessToken, ownerId: userId, accountId: accountId, accountType: "PERSONAL", tenantId: tenantId, cardId: paymentCard1!.cardId, amount: Money(value: -500), idempotency: "IdempCashIn11") { optCashInResponse, optError in
+            cashIn1OptError11 = optError
+            cashIn11 = optCashInResponse
+            
+            expectationCashIn11.fulfill()
+        }
+        
+        wait(for: [expectationCashIn11], timeout: 600.0)
+        
+        XCTAssertNotNil(cashIn1OptError11, "CashInFee Error reply")
+        XCTAssertNil(cashIn11, "CashIn No Fee In Response")
+        XCTAssertTrue(cashIn1OptError11 is WebserviceError)
+        if let cashInError = cashIn1OptError11 as? WebserviceError {
+            switch(cashInError){
+            case let .APIResponseError(serverErrors, _):
+                XCTAssertEqual(serverErrors?[0].code, ErrorCode.asp_generic_error)
+                XCTAssertTrue((serverErrors?[0].message.contains("can't be negative"))! )
+            default: break
+            }
+        }
         
         // cashIn with 3d secure
         let expectationCashIn2 = XCTestExpectation(description: "CashIn")
