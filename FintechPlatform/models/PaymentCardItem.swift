@@ -16,6 +16,13 @@ public enum PaymentCardIssuer: String {
     case UNKNOWN
 }
 
+public enum PaymentCardStatus: String {
+    case CREATED
+    case VALIDATED
+    case NOT_ACTIVE
+    case INVALID
+}
+
 public struct PaymentCardItem {
     public let cardId: String
     public let numberalias: String
@@ -24,6 +31,7 @@ public struct PaymentCardItem {
     public let currency: String
     public let isDefault: Bool?
     public let issuer: PaymentCardIssuer?
+    public let status: PaymentCardStatus?
     public let created: Date?
     public let updated: Date?
     
@@ -34,6 +42,7 @@ public struct PaymentCardItem {
          currency: String,
          isDefault: Bool?,
          issuer: PaymentCardIssuer?,
+         status: PaymentCardStatus?,
          created: Date?,
          updated: Date?){
         
@@ -44,6 +53,7 @@ public struct PaymentCardItem {
         self.currency = currency
         self.isDefault = isDefault
         self.issuer = issuer
+        self.status = status
         self.created = created
         self.updated = updated
     }

@@ -93,6 +93,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         XCTAssertNil(paymentCard1OptError, "registerCard Error reply")
         XCTAssertNotNil(paymentCard1, "registerCard No payment Card Item")
+        XCTAssertEqual(paymentCard1?.status, PaymentCardStatus.CREATED)
         
         // getPaymentCards, expect only the First Card created
         let expectationGetCards1 = XCTestExpectation(description: "getCards")
@@ -166,7 +167,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         XCTAssertNotNil(setDefaultCard1, "No payment Cards list")
         XCTAssertEqual(cardsList!.count, initialCardsNumber + 2, "Card Not Registered")
         
-        let paymentCard1Default = PaymentCardItem(cardId: paymentCard1!.cardId, numberalias: paymentCard1!.numberalias, expirationdate: paymentCard1!.expirationdate, activestate: paymentCard1!.activestate, currency: paymentCard1!.currency, isDefault: true, issuer: paymentCard1!.issuer, created: paymentCard1!.created, updated: setDefaultCard1!.updated)
+        let paymentCard1Default = PaymentCardItem(cardId: paymentCard1!.cardId, numberalias: paymentCard1!.numberalias, expirationdate: paymentCard1!.expirationdate, activestate: paymentCard1!.activestate, currency: paymentCard1!.currency, isDefault: true, issuer: paymentCard1!.issuer, status: paymentCard1?.status, created: paymentCard1!.created, updated: setDefaultCard1!.updated)
         XCTAssert(paymentCard1Default == setDefaultCard1, "paymentcard is not default card")
         
         XCTAssertGreaterThanOrEqual(setDefaultCard1!.updated!, paymentCard1!.updated!)
@@ -190,7 +191,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         XCTAssert(cardsList!.contains(paymentCard1Default))
         
-        let paymentCard2NotDefault = PaymentCardItem(cardId: paymentCard2!.cardId, numberalias: paymentCard2!.numberalias, expirationdate: paymentCard2!.expirationdate, activestate: paymentCard2!.activestate, currency: paymentCard2!.currency, isDefault: false, issuer: paymentCard2!.issuer, created: paymentCard2!.created, updated: setDefaultCard1!.updated)
+        let paymentCard2NotDefault = PaymentCardItem(cardId: paymentCard2!.cardId, numberalias: paymentCard2!.numberalias, expirationdate: paymentCard2!.expirationdate, activestate: paymentCard2!.activestate, currency: paymentCard2!.currency, isDefault: false, issuer: paymentCard2!.issuer, status: paymentCard2?.status, created: paymentCard2!.created, updated: setDefaultCard1!.updated)
         XCTAssert(cardsList!.contains(paymentCard2NotDefault))
         
         // set the Second Card as Default
@@ -210,7 +211,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         XCTAssertNil(setDefaultCard2optError, "Error reply")
         XCTAssertNotNil(setDefaultCard2, "No payment Cards list")
         
-        let paymentCard2Default = PaymentCardItem(cardId: paymentCard2!.cardId, numberalias: paymentCard2!.numberalias, expirationdate: paymentCard2!.expirationdate, activestate: paymentCard2!.activestate, currency: paymentCard2!.currency, isDefault: true, issuer: paymentCard2!.issuer, created: paymentCard2!.created, updated: setDefaultCard2!.updated)
+        let paymentCard2Default = PaymentCardItem(cardId: paymentCard2!.cardId, numberalias: paymentCard2!.numberalias, expirationdate: paymentCard2!.expirationdate, activestate: paymentCard2!.activestate, currency: paymentCard2!.currency, isDefault: true, issuer: paymentCard2!.issuer, status: paymentCard2?.status, created: paymentCard2!.created, updated: setDefaultCard2!.updated)
         XCTAssert(paymentCard2Default == setDefaultCard2, "paymentcard is not default card")
         
         // getPaymentCard, expect 2 cards, the second as default and the other not
@@ -230,7 +231,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         XCTAssertEqual(cardsList!.count, initialCardsNumber + 2, "Card Not Registered")
         
-        let paymentCard1NotDefault = PaymentCardItem(cardId: paymentCard1!.cardId, numberalias: paymentCard1!.numberalias, expirationdate: paymentCard1!.expirationdate, activestate: paymentCard1!.activestate, currency: paymentCard1!.currency, isDefault: false, issuer: paymentCard1!.issuer, created: paymentCard1!.created, updated: setDefaultCard2!.updated)
+        let paymentCard1NotDefault = PaymentCardItem(cardId: paymentCard1!.cardId, numberalias: paymentCard1!.numberalias, expirationdate: paymentCard1!.expirationdate, activestate: paymentCard1!.activestate, currency: paymentCard1!.currency, isDefault: false, issuer: paymentCard1!.issuer, status: paymentCard1?.status, created: paymentCard1!.created, updated: setDefaultCard2!.updated)
         
         XCTAssert(cardsList!.contains(paymentCard1NotDefault))
         XCTAssert(cardsList!.contains(paymentCard2Default))

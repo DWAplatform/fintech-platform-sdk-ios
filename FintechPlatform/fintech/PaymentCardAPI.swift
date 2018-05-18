@@ -79,6 +79,11 @@ open class PaymentCardAPI {
             issuer = nil
         }
         
+        let status: PaymentCardStatus?
+        if let statusStr = card["status"] as? String {
+            status = PaymentCardStatus(rawValue: statusStr)
+        } else { status = nil }
+        
         let created: Date?
         if let createdStr = card["created"] as? String {
             let dtc = DateTimeConversion()
@@ -95,7 +100,7 @@ open class PaymentCardAPI {
             updated = nil
         }
         
-        return PaymentCardItem(cardId: cardId, numberalias: alias, expirationdate: expiration, activestate: activestate, currency: currency, isDefault: isDefault, issuer: issuer, created: created, updated: updated)
+        return PaymentCardItem(cardId: cardId, numberalias: alias, expirationdate: expiration, activestate: activestate, currency: currency, isDefault: isDefault, issuer: issuer, status: status, created: created, updated: updated)
     }
     
     /**

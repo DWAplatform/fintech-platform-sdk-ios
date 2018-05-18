@@ -114,6 +114,22 @@ open class CashInAPI {
                         return
                     }
                     
+                    if (CashInStatus(rawValue: status)! == .FAILED) {
+                        if let errorObj = reply?["error"] as? [String:String] {
+                            if let code = errorObj["code"], let message = errorObj["message"] {
+                                
+                                var errorsList = [ServerError]()
+                                if let errorCode = ErrorCode(rawValue: code){
+                                    errorsList.append(ServerError(code: errorCode, message: message))
+                                } else {
+                                    errorsList.append(ServerError(code: ErrorCode.unknown_error, message: message))
+                                }
+                                
+                                completion(nil, WebserviceError.APIResponseError(serverErrors: errorsList, error: error))
+                            }
+                        }
+                    }
+                    
                     let optredirecturl: String?
                     if let redirecturl = reply?["redirectURL"] {
                         optredirecturl = redirecturl as? String
@@ -136,7 +152,7 @@ open class CashInAPI {
                     } else {
                         updated = nil
                     }
-                    
+                
                     let payinreply = CashInResponse(transactionid: transactionid, securecodeneeded: securecodeneeded, redirecturl: optredirecturl, status: CashInStatus(rawValue: status)!, created: created, updated: updated)
                     
                     completion(payinreply, nil)
