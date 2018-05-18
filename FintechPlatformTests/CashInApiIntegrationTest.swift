@@ -180,6 +180,32 @@ class CashInApiIntegrationTest: XCTestCase {
             default: break
             }
         }
+        
+        // cashIn with ASP error
+        let expectationCashIn4 = XCTestExpectation(description: "CashInError")
+        var cashIn1OptError4: Error? = nil
+        var cashIn4: CashInResponse? = nil
+        
+        cashInAPI.cashIn(token: accessToken, ownerId: userId, accountId: accountId, accountType: "PERSONAL", tenantId: tenantId, cardId: paymentCard1!.cardId, amount: Money(value: 100000000), idempotency: "IdempCashInError") { optCashInResponse, optError in
+            cashIn1OptError4 = optError
+            cashIn4 = optCashInResponse
+            
+            expectationCashIn4.fulfill()
+        }
+        
+        wait(for: [expectationCashIn4], timeout: 600.0)
+        
+        XCTAssertNotNil(cashIn1OptError4, "CashIn Error reply")
+        XCTAssertNil(cashIn4, "CashIn not done")
+        XCTAssertTrue(cashIn1OptError4 is WebserviceError)
+        if let cashInError = cashIn1OptError4 as? WebserviceError {
+            switch(cashInError){
+            case let .APIResponseError(serverErrors, _):
+                XCTAssertEqual(serverErrors?[0].code, ErrorCode.asp_transaction_amount_is_higher_than_maximum_permitted_amount)
+            default: break
+            }
+        }
+        
     }
     
     

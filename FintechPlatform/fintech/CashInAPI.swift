@@ -126,6 +126,7 @@ open class CashInAPI {
                                 }
                                 
                                 completion(nil, WebserviceError.APIResponseError(serverErrors: errorsList, error: error))
+                                return
                             }
                         }
                     }
