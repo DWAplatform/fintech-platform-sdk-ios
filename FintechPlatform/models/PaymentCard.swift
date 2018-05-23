@@ -23,12 +23,12 @@ public enum PaymentCardStatus: String {
     case INVALID
 }
 
-public struct PaymentCardItem {
+public struct PaymentCard {
+    
     public let cardId: String
-    public let numberalias: String
-    public let expirationdate: String
-    public let activestate: String
-    public let currency: String
+    public let alias: String?
+    public let expiration: String?
+    public let currency: Currency?
     public let isDefault: Bool?
     public let issuer: PaymentCardIssuer?
     public let status: PaymentCardStatus?
@@ -36,10 +36,9 @@ public struct PaymentCardItem {
     public let updated: Date?
     
     public init(cardId: String,
-         numberalias: String,
-         expirationdate: String,
-         activestate: String,
-         currency: String,
+         alias: String?,
+         expiration: String?,
+         currency: Currency?,
          isDefault: Bool?,
          issuer: PaymentCardIssuer?,
          status: PaymentCardStatus?,
@@ -47,9 +46,8 @@ public struct PaymentCardItem {
          updated: Date?){
         
         self.cardId = cardId
-        self.numberalias = numberalias
-        self.expirationdate = expirationdate
-        self.activestate = activestate
+        self.alias = alias
+        self.expiration = expiration
         self.currency = currency
         self.isDefault = isDefault
         self.issuer = issuer

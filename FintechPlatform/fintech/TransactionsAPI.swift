@@ -41,9 +41,9 @@ open class TransactionsAPI {
         var optUrl : URL?
         if let limit = limit , let offset = offset {
             let query = "?limit=\(limit)&offset=\(offset)"
-            optUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(NetHelper.getPath(from: accountType))/\(ownerId)/accounts/\(accountId)/transactionsDetailed\(query)")
+            optUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(NetHelper.getPath(from: AccountType(rawValue: accountType)!))/\(ownerId)/accounts/\(accountId)/transactionsDetailed\(query)")
         } else {
-            optUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(NetHelper.getPath(from: accountType))/\(ownerId)/accounts/\(accountId)/transactionsDetailed")
+            optUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(NetHelper.getPath(from: AccountType(rawValue: accountType)!))/\(ownerId)/accounts/\(accountId)/transactionsDetailed")
         }
         
         guard let url =  optUrl else { fatalError() }

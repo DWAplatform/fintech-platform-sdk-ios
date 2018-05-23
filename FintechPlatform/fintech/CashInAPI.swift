@@ -31,18 +31,15 @@ open class CashInAPI {
          - idempotency: parameter to avoid multiple inserts.
      */
     open func cashIn(token: String,
-                       ownerId: String,
-                       accountId: String,
-                       accountType: String,
-                       tenantId: String,
-                       cardId: String,
-                       amount: Money,
-                       idempotency: String,
-                       completion: @escaping (CashInResponse?, Error?) -> Void) {
+                     account: Account,
+                     cardId: String,
+                     amount: Money,
+                     idempotency: String,
+                     completion: @escaping (CashInResponse?, Error?) -> Void) {
         
-        let path = NetHelper.getPath(from: accountType)
+        let path = NetHelper.getPath(from: account.accountType)
         do {
-            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(path)/\(ownerId)/accounts/\(accountId)/linkedCards/\(cardId)/cashIns")
+            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(path)/\(account.ownerId)/accounts/\(account.accountId)/linkedCards/\(cardId)/cashIns")
                 else { fatalError() }
             
             var request = URLRequest(url: url)
@@ -179,17 +176,15 @@ open class CashInAPI {
          - amount: amount of money to transfer from Fintech Account to bank account
      */
     open func cashInFee(token: String,
-                        tenantId: String,
-                        accountId: String,
-                        ownerId: String,
-                        accountType: String,
+                        account: Account,
                         cardId: String,
                         amount: Money,
                         completion: @escaping (Money?, Error?) -> Void) {
         
-        let path = NetHelper.getPath(from: accountType)
+        let path = NetHelper.getPath(from: account.accountType)
+        
         let query = "?amount=\(amount.getValue())&currency=\(amount.getCurrency())"
-        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(path)/\(ownerId)/accounts/\(accountId)/linkedCards/\(cardId)/cashInsFee\(query)") else { fatalError() }
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(path)/\(account.ownerId)/accounts/\(account.accountId)/linkedCards/\(cardId)/cashInsFee\(query)") else { fatalError() }
 
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -221,7 +216,7 @@ open class CashInAPI {
                 guard let amount = reply?["amount"] as? Int64 else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return }
                 guard let currency = reply?["currency"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return }
 
-                let moneyFee = Money(value: amount, currency: currency)
+                let moneyFee = Money(value: amount, currency: Currency(rawValue: currency))
                 completion(moneyFee, nil)
                 
             } catch {

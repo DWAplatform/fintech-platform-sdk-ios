@@ -11,13 +11,13 @@ import Foundation
 import XCTest
 @testable import FintechPlatform
 
-extension PaymentCardItem: Equatable {
-    public static func == (lhs: PaymentCardItem, rhs: PaymentCardItem) -> Bool {
+extension PaymentCard: Equatable {
+    public static func == (lhs: PaymentCard, rhs: PaymentCard) -> Bool {
         return
             lhs.cardId == rhs.cardId &&
-                lhs.numberalias == rhs.numberalias &&
-                lhs.expirationdate == rhs.expirationdate &&
-        lhs.activestate == rhs.activestate &&
+                lhs.alias == rhs.alias &&
+                lhs.expiration == rhs.expiration &&
+        lhs.status == rhs.status &&
         lhs.currency == rhs.currency &&
         lhs.isDefault == rhs.isDefault
     }
@@ -27,27 +27,25 @@ class PaymentCardApiIntegrationTest: XCTestCase {
 
     var hostName: String? = nil
     var accessToken: String? = nil
-    var tenantId: String? = nil
-    var userId: String? = nil
-    var accountId: String? = nil
+    var account: Account? = nil
+    var tenantId: UUID? = nil
+    var userId: UUID? = nil
     
     let fintechPlatform = FintechPlatformAPI.sharedInstance
     
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
+        
         //        hostName = ProcessInfo.processInfo.environment["HOSTNAME"]!
         //        accessToken = ProcessInfo.processInfo.environment["ACCOUNT_TOKEN"]!
         //        tenantId = ProcessInfo.processInfo.environment["TENANT_ID"]!
         //        userId = ProcessInfo.processInfo.environment["OWNER_ID"]!
         //        accountId = ProcessInfo.processInfo.environment["ACCOUNT_ID"]!
         
-        hostName = ""
-        accessToken = ""
-        tenantId = ""
-        userId = ""
-        accountId = ""
- 
+        let accountId = "a4b99e52-2465-4290-94e6-493ed46b34de"
+        
+        account = Account(tenantId!, AccountType.PERSONAL, userId!, UUID(uuidString: accountId)!)
     }
     
     override func tearDown() {
@@ -57,18 +55,16 @@ class PaymentCardApiIntegrationTest: XCTestCase {
     func testCards() {
         guard let hostName = hostName else { XCTFail(); return }
         guard let accessToken = accessToken else { XCTFail(); return }
-        guard let tenantId = tenantId else { XCTFail(); return }
-        guard let userId = userId else { XCTFail(); return }
-        guard let accountId = accountId else { XCTFail(); return }
+        guard let account = account else { XCTFail(); return }
         
         //  create payment card API using FintechPlatformAPI instance.
         let paymentCardAPI = fintechPlatform.getPaymentCardAPI(hostName: hostName, isSanbox: true)
         
         // get Cards list
         let expectationGetCards = XCTestExpectation(description: "getCardsFirstTime")
-        var cardsList : [PaymentCardItem]? = nil
+        var cardsList : [PaymentCard]? = nil
         var cardsListOptError: Error? = nil
-        paymentCardAPI.getPaymentCards(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL") { (optList, optError) in
+        paymentCardAPI.getPaymentCards(token: accessToken, account: account) { (optList, optError) in
             
             cardsListOptError = optError
             cardsList = optList
@@ -79,10 +75,10 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         let initialCardsNumber = cardsList!.count
         
         // create First Card
-        var paymentCard1: PaymentCardItem? = nil
+        var paymentCard1: PaymentCard? = nil
         var paymentCard1OptError: Error? = nil
         let expectationRegisterCard1 = XCTestExpectation(description: "registerCard")
-        paymentCardAPI.registerCard(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL", cardNumber: "1234123412341234", expiration: "0122", cvx: "123", currency: "EUR", idempotency: "idemp1") { optPaymentCardItem, optError in
+        paymentCardAPI.registerCard(token: accessToken, account: account, cardNumber: "1234123412341234", expiration: "0122", cvx: "123", currency: "EUR", idempotency: "idemp1") { optPaymentCardItem, optError in
 
             paymentCard1OptError = optError
             paymentCard1 = optPaymentCardItem
@@ -98,7 +94,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         // getPaymentCards, expect only the First Card created
         let expectationGetCards1 = XCTestExpectation(description: "getCards")
         var cardsListOptError1: Error? = nil
-        paymentCardAPI.getPaymentCards(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL") { (optList, optError) in
+        paymentCardAPI.getPaymentCards(token: accessToken, account: account) { (optList, optError) in
             
             cardsListOptError1 = optError
             cardsList = optList
@@ -115,10 +111,10 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         XCTAssert(cardsList!.contains(paymentCard1!))
         
         // create Second Card
-        var paymentCard2: PaymentCardItem? = nil
+        var paymentCard2: PaymentCard? = nil
         var paymentCard2OptError: Error? = nil
         let expectationRegisterCard2 = XCTestExpectation(description: "registerSecondCard")
-        paymentCardAPI.registerCard(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL", cardNumber: "9876987698769876", expiration: "1224", cvx: "987", currency: "EUR", idempotency: "idemp2") { optPaymentCardItem, optError in
+        paymentCardAPI.registerCard(token: accessToken, account: account, cardNumber: "9876987698769876", expiration: "1224", cvx: "987", currency: "EUR", idempotency: "idemp2") { optPaymentCardItem, optError in
             
             paymentCard2OptError = optError
             paymentCard2 = optPaymentCardItem
@@ -132,7 +128,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         // getPaymentCards, expect two Cards
         let expectationGetCards2 = XCTestExpectation(description: "getTwoCards")
-        paymentCardAPI.getPaymentCards(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL") { (optList, optError) in
+        paymentCardAPI.getPaymentCards(token: accessToken, account: account) { (optList, optError) in
             cardsListOptError = optError
             cardsList = optList
             expectationGetCards2.fulfill()
@@ -150,10 +146,10 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         // set the First Card as Default
         let expectationDefaultCard1 = XCTestExpectation(description: "setFirstCardDefault")
-        var setDefaultCard1:PaymentCardItem? = nil
+        var setDefaultCard1:PaymentCard? = nil
         var setDefaultCard1optError:Error? = nil
         if let cardId = paymentCard1?.cardId {
-            paymentCardAPI.setDefaultCard(token: accessToken, ownerId: userId, accountId: accountId, accountType: "PERSONAL", tenantId: tenantId, cardId: cardId) { (optPaymentCard, optError) in
+            paymentCardAPI.setDefaultCard(token: accessToken, account: account, cardId: cardId) { (optPaymentCard, optError) in
                 
                 setDefaultCard1 = optPaymentCard
                 setDefaultCard1optError = optError
@@ -167,14 +163,14 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         XCTAssertNotNil(setDefaultCard1, "No payment Cards list")
         XCTAssertEqual(cardsList!.count, initialCardsNumber + 2, "Card Not Registered")
         
-        let paymentCard1Default = PaymentCardItem(cardId: paymentCard1!.cardId, numberalias: paymentCard1!.numberalias, expirationdate: paymentCard1!.expirationdate, activestate: paymentCard1!.activestate, currency: paymentCard1!.currency, isDefault: true, issuer: paymentCard1!.issuer, status: paymentCard1?.status, created: paymentCard1!.created, updated: setDefaultCard1!.updated)
+        let paymentCard1Default = PaymentCard(cardId: paymentCard1!.cardId, alias: paymentCard1!.alias, expiration: paymentCard1!.expiration, currency: paymentCard1!.currency, isDefault: true, issuer: paymentCard1!.issuer, status: paymentCard1?.status, created: paymentCard1!.created, updated: setDefaultCard1!.updated)
         XCTAssert(paymentCard1Default == setDefaultCard1, "paymentcard is not default card")
         
         XCTAssertGreaterThanOrEqual(setDefaultCard1!.updated!, paymentCard1!.updated!)
         
         // getPaymentCard, expect 2 cards, the first as default and the other not
         let expectationGetCards3 = XCTestExpectation(description: "getCardsWithDefault")
-        paymentCardAPI.getPaymentCards(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL") { (optList, optError) in
+        paymentCardAPI.getPaymentCards(token: accessToken, account: account) { (optList, optError) in
             
             cardsListOptError = optError
             cardsList = optList
@@ -191,15 +187,15 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         XCTAssert(cardsList!.contains(paymentCard1Default))
         
-        let paymentCard2NotDefault = PaymentCardItem(cardId: paymentCard2!.cardId, numberalias: paymentCard2!.numberalias, expirationdate: paymentCard2!.expirationdate, activestate: paymentCard2!.activestate, currency: paymentCard2!.currency, isDefault: false, issuer: paymentCard2!.issuer, status: paymentCard2?.status, created: paymentCard2!.created, updated: setDefaultCard1!.updated)
+        let paymentCard2NotDefault = PaymentCard(cardId: paymentCard2!.cardId, alias: paymentCard2!.alias, expiration: paymentCard2!.expiration, currency: paymentCard2!.currency, isDefault: false, issuer: paymentCard2!.issuer, status: paymentCard2?.status, created: paymentCard2!.created, updated: setDefaultCard1!.updated)
         XCTAssert(cardsList!.contains(paymentCard2NotDefault))
         
         // set the Second Card as Default
-        var setDefaultCard2:PaymentCardItem? = nil
+        var setDefaultCard2:PaymentCard? = nil
         var setDefaultCard2optError:Error? = nil
         let expectationDefaultCard2 = XCTestExpectation(description: "setSecondCardDefault")
         if let cardId = paymentCard2?.cardId {
-            paymentCardAPI.setDefaultCard(token: accessToken, ownerId: userId, accountId: accountId, accountType: "PERSONAL", tenantId: tenantId, cardId: cardId) { (optPaymentCard, optError) in
+            paymentCardAPI.setDefaultCard(token: accessToken, account: account, cardId: cardId) { (optPaymentCard, optError) in
                 setDefaultCard2 = optPaymentCard
                 setDefaultCard2optError = optError
                 
@@ -211,12 +207,12 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         XCTAssertNil(setDefaultCard2optError, "Error reply")
         XCTAssertNotNil(setDefaultCard2, "No payment Cards list")
         
-        let paymentCard2Default = PaymentCardItem(cardId: paymentCard2!.cardId, numberalias: paymentCard2!.numberalias, expirationdate: paymentCard2!.expirationdate, activestate: paymentCard2!.activestate, currency: paymentCard2!.currency, isDefault: true, issuer: paymentCard2!.issuer, status: paymentCard2?.status, created: paymentCard2!.created, updated: setDefaultCard2!.updated)
+        let paymentCard2Default = PaymentCard(cardId: paymentCard2!.cardId, alias: paymentCard2!.alias, expiration: paymentCard2!.expiration, currency: paymentCard2!.currency, isDefault: true, issuer: paymentCard2!.issuer, status: paymentCard2?.status, created: paymentCard2!.created, updated: setDefaultCard2!.updated)
         XCTAssert(paymentCard2Default == setDefaultCard2, "paymentcard is not default card")
         
         // getPaymentCard, expect 2 cards, the second as default and the other not
         let expectationGetCards4 = XCTestExpectation(description: "getCardsWithAnotherDefault")
-        paymentCardAPI.getPaymentCards(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL") { (optList, optError) in
+        paymentCardAPI.getPaymentCards(token: accessToken, account: account) { (optList, optError) in
             
             cardsListOptError = optError
             cardsList = optList
@@ -231,7 +227,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         XCTAssertEqual(cardsList!.count, initialCardsNumber + 2, "Card Not Registered")
         
-        let paymentCard1NotDefault = PaymentCardItem(cardId: paymentCard1!.cardId, numberalias: paymentCard1!.numberalias, expirationdate: paymentCard1!.expirationdate, activestate: paymentCard1!.activestate, currency: paymentCard1!.currency, isDefault: false, issuer: paymentCard1!.issuer, status: paymentCard1?.status, created: paymentCard1!.created, updated: setDefaultCard2!.updated)
+        let paymentCard1NotDefault = PaymentCard(cardId: paymentCard1!.cardId, alias: paymentCard1!.alias, expiration: paymentCard1!.expiration, currency: paymentCard1!.currency, isDefault: false, issuer: paymentCard1!.issuer, status: paymentCard1?.status, created: paymentCard1!.created, updated: setDefaultCard2!.updated)
         
         XCTAssert(cardsList!.contains(paymentCard1NotDefault))
         XCTAssert(cardsList!.contains(paymentCard2Default))
@@ -241,7 +237,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         var deleteCard1OptError: Error? = nil
         var deleteCard1:Bool? = nil
         if let cardId = paymentCard2?.cardId {
-            paymentCardAPI.deletePaymentCard(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL", cardId: cardId) { (optBool, optError) in
+            paymentCardAPI.deletePaymentCard(token: accessToken, account: account, cardId: cardId) { (optBool, optError) in
                 deleteCard1OptError = optError
                 deleteCard1 = optBool
                 expectationDeleteCard1.fulfill()
@@ -256,7 +252,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         // getPaymentCard, expect only the first card
         let expectationGetCards5 = XCTestExpectation(description: "getCardsAfterDeletion")
-        paymentCardAPI.getPaymentCards(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL") { (optList, optError) in
+        paymentCardAPI.getPaymentCards(token: accessToken, account: account) { (optList, optError) in
             
             cardsListOptError = optError
             cardsList = optList
@@ -277,7 +273,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         var deleteCard2OptError: Error? = nil
         var deleteCard2:Bool? = nil
         if let cardId = paymentCard1?.cardId {
-            paymentCardAPI.deletePaymentCard(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL", cardId: cardId) { (optBool, optError) in
+            paymentCardAPI.deletePaymentCard(token: accessToken, account: account, cardId: cardId) { (optBool, optError) in
                 
                 deleteCard2OptError = optError
                 deleteCard2 = optBool
@@ -293,7 +289,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         
         // getPaymentCard, expect empty cards
         let expectationGetCards6 = XCTestExpectation(description: "getEmptyCardList")
-        paymentCardAPI.getPaymentCards(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL") { (optList, optError) in
+        paymentCardAPI.getPaymentCards(token: accessToken, account: account) { (optList, optError) in
             
             cardsListOptError = optError
             cardsList = optList
@@ -308,7 +304,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         XCTAssertEqual(cardsList!.count, initialCardsNumber, "Card Not Registered")
         
         // create Card for testing errors
-        paymentCardAPI.registerCard(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL", cardNumber: "1234123412341234", expiration: "0122", cvx: "123", currency: "EUR", idempotency: "idemp1") { optPaymentCardItem, optError in
+        paymentCardAPI.registerCard(token: accessToken, account: account, cardNumber: "1234123412341234", expiration: "0122", cvx: "123", currency: "EUR", idempotency: "idemp1") { optPaymentCardItem, optError in
             paymentCard1 = optPaymentCardItem
         }
         
@@ -316,7 +312,7 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         let expectationGetCardsErr = XCTestExpectation(description: "getCardsFirstTime")
 
         var cardsListOptErrors: Error? = nil
-        paymentCardAPI.getPaymentCards(token: accessToken, tenantId: tenantId, accountId: UUID().uuidString, ownerId: userId, accountType: "PERSONAL") { (optList, optError) in
+        paymentCardAPI.getPaymentCards(token: accessToken,account: Account(tenantId!, .PERSONAL, userId!, UUID())) { (optList, optError) in
             
             cardsListOptErrors = optError
             cardsList = optList
@@ -338,30 +334,30 @@ class PaymentCardApiIntegrationTest: XCTestCase {
         }
         
         // deleteCard error
-        let expectationDeleteCard = XCTestExpectation(description: "DeleteLastCard")
-        var deleteCardOptError: Error? = nil
-        var deleteCard:Bool? = nil
-        if let cardId = paymentCard1?.cardId {
-            paymentCardAPI.deletePaymentCard(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "error", cardId: cardId) { (optBool, optError) in
-                
-                deleteCardOptError = optError
-                deleteCard = optBool
-                
-                expectationDeleteCard.fulfill()
-            }
-        }
-        wait(for: [expectationDeleteCard], timeout: 600.0)
-        
-        XCTAssertNotNil(deleteCardOptError, "Error reply")
-        XCTAssertFalse(deleteCard!)
-        XCTAssertTrue(deleteCardOptError is WebserviceError)
-        if let deleteError = deleteCardOptError as? WebserviceError {
-            switch(deleteError){
-            case let .APIResponseError(serverErrors, _):
-                XCTAssertEqual(serverErrors?[0].code, ErrorCode.authentication_error)
-            default: break
-            }
-        }
+//        let expectationDeleteCard = XCTestExpectation(description: "DeleteLastCard")
+//        var deleteCardOptError: Error? = nil
+//        var deleteCard:Bool? = nil
+//        if let cardId = paymentCard1?.cardId {
+//            paymentCardAPI.deletePaymentCard(token: accessToken, account: ACCOUNT(tenantId!, accountId: accountId, ownerId: userId, accountType: "error", cardId: cardId) { (optBool, optError) in
+//
+//                deleteCardOptError = optError
+//                deleteCard = optBool
+//
+//                expectationDeleteCard.fulfill()
+//            }
+//        }
+//        wait(for: [expectationDeleteCard], timeout: 600.0)
+//
+//        XCTAssertNotNil(deleteCardOptError, "Error reply")
+//        XCTAssertFalse(deleteCard!)
+//        XCTAssertTrue(deleteCardOptError is WebserviceError)
+//        if let deleteError = deleteCardOptError as? WebserviceError {
+//            switch(deleteError){
+//            case let .APIResponseError(serverErrors, _):
+//                XCTAssertEqual(serverErrors?[0].code, ErrorCode.authentication_error)
+//            default: break
+//            }
+//        }
     }
     
 }

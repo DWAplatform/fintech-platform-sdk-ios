@@ -8,18 +8,17 @@
 
 import Foundation
 
-
 public class Money {
     
     private let value: Int64;
-    private let currency: String?
+    private let currency: Currency?
     
-    public init(value: Int64, currency: String? = "EUR") {
+    public init(value: Int64, currency: Currency? = .EUR) {
         self.value = value
         self.currency = currency
     }
     
-    public init(value: Int, currency: String? = "EUR") {
+    public init(value: Int, currency: Currency? = .EUR) {
         self.value = Int64(value)
         self.currency = currency
     }
@@ -136,7 +135,20 @@ public class Money {
         return value;
     }
     
-    public func getCurrency() -> String {
+    public func getCurrency() -> Currency {
         return currency!
     }
+}
+
+public enum Currency: String {
+    case EUR
+    case USD
+    case GBP
+    case SEK
+    case NOK
+    case DKK
+    case CHF
+    case PLN
+    case CAD
+    case AUD
 }

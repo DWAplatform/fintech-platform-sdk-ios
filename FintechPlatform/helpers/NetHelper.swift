@@ -9,10 +9,11 @@
 import Foundation
 class NetHelper {
     
-    static func getPath(from accountType: String) -> String {
-        if(accountType == "PERSONAL"){
+    static func getPath(from accountType: AccountType) -> String {
+        switch accountType {
+        case .PERSONAL:
             return "users"
-        } else {
+        case .BUSINESS:
             return "enterprises"
         }
     }

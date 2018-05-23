@@ -32,7 +32,7 @@ open class TransferAPI {
              completion: @escaping (Error?) -> Void) {
         
         do {
-            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(fromTenantId)/\(NetHelper.getPath(from: fromAccountType))/\(fromuserId)/accounts/\(fromAccountId)/transfers")
+            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(fromTenantId)/\(NetHelper.getPath(from: AccountType(rawValue: fromAccountType)!))/\(fromuserId)/accounts/\(fromAccountId)/transfers")
                 else { fatalError() }
             
             var request = URLRequest(url: url)

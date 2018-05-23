@@ -35,7 +35,7 @@ open class BalanceAPI {
                  completion: @escaping (BalanceItem?, Error?) -> Void) {
         
         guard let url = URL(string:
-            hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(NetHelper.getPath(from: accountType))/\(ownerId)/accounts/\(accountId)/balance") else { fatalError() }
+            hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(NetHelper.getPath(from: AccountType(rawValue: accountType)!))/\(ownerId)/accounts/\(accountId)/balance") else { fatalError() }
         
         var request = URLRequest(url: url)
         request.addBearerAuthorizationToken(token: token)
@@ -65,13 +65,23 @@ open class BalanceAPI {
                 
                 guard let balance = reply?["balance"] as? [String: Any] else  { return }
                 guard let amount = balance["amount"] as? Int64 else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return }
-                let moneyBalance = Money(value: amount,
-                                         currency: balance["currency"] as? String)
-                
+                let moneyBalance : Money
+                if let moneyCurrency = balance["currency"] as? String {
+                    moneyBalance = Money(value: amount,
+                          currency: Currency(rawValue: moneyCurrency))
+                } else {
+                    moneyBalance = Money(value: amount)
+                }
+
                 guard let availableBalance = reply?["availableBalance"] as? [String: Any] else  { return }
                 guard let availableAmount = availableBalance["amount"] as? Int64 else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return }
-                let availableMoneyBalance = Money(value: availableAmount,
-                              currency: availableBalance["currency"] as? String)
+                
+                let availableMoneyBalance: Money
+                if let availableCurrency = availableBalance["currency"] as? String {
+                    availableMoneyBalance = Money(value: availableAmount, currency: Currency(rawValue: availableCurrency))
+                } else {
+                    availableMoneyBalance = Money(value: availableAmount)
+                }
                 
                 completion(BalanceItem(balance: moneyBalance, availableBalance: availableMoneyBalance), nil)
                 

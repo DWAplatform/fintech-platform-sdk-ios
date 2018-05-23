@@ -15,9 +15,7 @@ class CashInApiIntegrationTest: XCTestCase {
     
     var hostName: String? = nil
     var accessToken: String? = nil
-    var tenantId: String? = nil
-    var userId: String? = nil
-    var accountId: String? = nil
+    var account: Account? = nil
     
     let fintechPlatform = FintechPlatformAPI.sharedInstance
     
@@ -46,19 +44,17 @@ class CashInApiIntegrationTest: XCTestCase {
     func testCashIn() {
         guard let hostName = hostName else { XCTFail(); return }
         guard let accessToken = accessToken else { XCTFail(); return }
-        guard let tenantId = tenantId else { XCTFail(); return }
-        guard let userId = userId else { XCTFail(); return }
-        guard let accountId = accountId else { XCTFail(); return }
+        guard let account = account else { XCTFail(); return }
         
         //  create payment card API using FintechPlatformAPI instance.
         let paymentCardAPI = fintechPlatform.getPaymentCardAPI(hostName: hostName, isSanbox: true)
         
         
         // create First Card
-        var paymentCard1: PaymentCardItem? = nil
+        var paymentCard1: PaymentCard? = nil
         var paymentCard1OptError: Error? = nil
         let expectationRegisterCard1 = XCTestExpectation(description: "registerCard")
-        paymentCardAPI.registerCard(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL", cardNumber: "1234123412341234", expiration: "0122", cvx: "123", currency: "EUR", idempotency: "idemp1") { optPaymentCardItem, optError in
+        paymentCardAPI.registerCard(token: accessToken, account: account, cardNumber: "1234123412341234", expiration: "0122", cvx: "123", currency: "EUR", idempotency: "idemp1") { optPaymentCardItem, optError in
             
             paymentCard1OptError = optError
             paymentCard1 = optPaymentCardItem
@@ -76,7 +72,7 @@ class CashInApiIntegrationTest: XCTestCase {
         var cashIn1Fee: Money? = nil
         
         let cashInAPI = fintechPlatform.getCashInAPI(hostName: hostName)
-        cashInAPI.cashInFee(token: accessToken, tenantId: tenantId, accountId: accountId, ownerId: userId, accountType: "PERSONAL", cardId: paymentCard1!.cardId, amount: Money(value: 1000)) { optCashInResponse, optError in
+        cashInAPI.cashInFee(token: accessToken, account: account, cardId: paymentCard1!.cardId, amount: Money(value: 1000)) { optCashInResponse, optError in
             cashIn1FeeOptError = optError
             cashIn1Fee = optCashInResponse
             
@@ -96,7 +92,7 @@ class CashInApiIntegrationTest: XCTestCase {
         var cashIn1OptError1: Error? = nil
         var cashIn1: CashInResponse? = nil
         
-        cashInAPI.cashIn(token: accessToken, ownerId: userId, accountId: accountId, accountType: "PERSONAL", tenantId: tenantId, cardId: paymentCard1!.cardId, amount: Money(value: 1000), idempotency: "IdempCashIn") { optCashInResponse, optError in
+        cashInAPI.cashIn(token: accessToken, account: account, cardId: paymentCard1!.cardId, amount: Money(value: 1000), idempotency: "IdempCashIn") { optCashInResponse, optError in
             cashIn1OptError1 = optError
             cashIn1 = optCashInResponse
             
@@ -116,7 +112,7 @@ class CashInApiIntegrationTest: XCTestCase {
         var cashIn1OptError11: Error? = nil
         var cashIn11: CashInResponse? = nil
         
-        cashInAPI.cashIn(token: accessToken, ownerId: userId, accountId: accountId, accountType: "PERSONAL", tenantId: tenantId, cardId: paymentCard1!.cardId, amount: Money(value: -500), idempotency: "IdempCashIn11") { optCashInResponse, optError in
+        cashInAPI.cashIn(token: accessToken, account: account, cardId: paymentCard1!.cardId, amount: Money(value: -500), idempotency: "IdempCashIn11") { optCashInResponse, optError in
             cashIn1OptError11 = optError
             cashIn11 = optCashInResponse
             
@@ -142,7 +138,7 @@ class CashInApiIntegrationTest: XCTestCase {
         var cashIn1OptError2: Error? = nil
         var cashIn2: CashInResponse? = nil
         
-        cashInAPI.cashIn(token: accessToken, ownerId: userId, accountId: accountId, accountType: "PERSONAL", tenantId: tenantId, cardId: paymentCard1!.cardId, amount: Money(value: 10000), idempotency: "IdempCashIn") { optCashInResponse, optError in
+        cashInAPI.cashIn(token: accessToken, account: account, cardId: paymentCard1!.cardId, amount: Money(value: 10000), idempotency: "IdempCashIn") { optCashInResponse, optError in
             cashIn1OptError2 = optError
             cashIn2 = optCashInResponse
             
@@ -161,7 +157,7 @@ class CashInApiIntegrationTest: XCTestCase {
         var cashIn1OptError3: Error? = nil
         var cashIn3: CashInResponse? = nil
         
-        cashInAPI.cashIn(token: accessToken, ownerId: userId, accountId: accountId, accountType: "PERSONAL", tenantId: tenantId, cardId: UUID().uuidString, amount: Money(value: 10000), idempotency: "IdempCashInError") { optCashInResponse, optError in
+        cashInAPI.cashIn(token: accessToken, account: account, cardId: UUID().uuidString, amount: Money(value: 10000), idempotency: "IdempCashInError") { optCashInResponse, optError in
             cashIn1OptError3 = optError
             cashIn3 = optCashInResponse
             
@@ -186,7 +182,7 @@ class CashInApiIntegrationTest: XCTestCase {
         var cashIn1OptError4: Error? = nil
         var cashIn4: CashInResponse? = nil
         
-        cashInAPI.cashIn(token: accessToken, ownerId: userId, accountId: accountId, accountType: "PERSONAL", tenantId: tenantId, cardId: paymentCard1!.cardId, amount: Money(value: 100000000), idempotency: "IdempCashInError") { optCashInResponse, optError in
+        cashInAPI.cashIn(token: accessToken, account: account, cardId: paymentCard1!.cardId, amount: Money(value: 100000000), idempotency: "IdempCashInError") { optCashInResponse, optError in
             cashIn1OptError4 = optError
             cashIn4 = optCashInResponse
             

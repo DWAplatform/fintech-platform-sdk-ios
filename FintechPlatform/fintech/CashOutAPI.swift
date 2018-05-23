@@ -38,7 +38,7 @@ open class CashOutAPI {
                       idempotency: String,
                       completion: @escaping (Error?) -> Void) {
         
-        let path = NetHelper.getPath(from: accountType)
+        let path = NetHelper.getPath(from: AccountType(rawValue: accountType)!)
         
         do {
             guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(path)/\(ownerId)/accounts/\(accountId)/linkedBanks/\(linkedBankId)/cashOuts")
@@ -119,7 +119,7 @@ open class CashOutAPI {
                          amount: Money,
                          completion: @escaping (Money?, Error?) -> Void) {
         
-        let path = NetHelper.getPath(from: accountType)
+        let path = NetHelper.getPath(from: AccountType(rawValue: accountType)!)
         let query = "?amount=\(amount.getValue())&currency=\(amount.getCurrency())"
         guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(path)/\(ownerId)/accounts/\(accountId)/linkedBanks/\(linkedBankId)/cashOutsFee\(query)") else { fatalError() }
         
@@ -153,7 +153,7 @@ open class CashOutAPI {
                 guard let amount = reply?["amount"] as? Int64 else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return }
                 guard let currency = reply?["currency"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return }
                 
-                let moneyFee = Money(value: amount, currency: currency)
+                let moneyFee = Money(value: amount, currency: Currency(rawValue: currency))
                 completion(moneyFee, nil)
                 
             } catch {

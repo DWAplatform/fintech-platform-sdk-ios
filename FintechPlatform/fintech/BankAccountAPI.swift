@@ -39,7 +39,7 @@ open class BankAccountAPI {
                                completion: @escaping (BankAccount?, Error?) -> Void) {
         
         do {
-            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(NetHelper.getPath(from: accountType))/\(ownerId)/accounts/\(accountId)/linkedBanks")
+            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(NetHelper.getPath(from: AccountType(rawValue: accountType)!))/\(ownerId)/accounts/\(accountId)/linkedBanks")
                 else { fatalError() }
             
             var request = URLRequest(url: url)
