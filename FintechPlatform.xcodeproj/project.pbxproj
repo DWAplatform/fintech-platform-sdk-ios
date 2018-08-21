@@ -18,6 +18,7 @@
 		BF07DC6E20C0617B007CE06A /* kycAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF07DC6C20C0617B007CE06A /* kycAPI.swift */; };
 		BF07DC7020C062EE007CE06A /* DocType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF07DC6F20C062EE007CE06A /* DocType.swift */; };
 		BF07DC7120C062EE007CE06A /* DocType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF07DC6F20C062EE007CE06A /* DocType.swift */; };
+		BF41E29920DB990000E1CAF0 /* CashInAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43436A207CF1F100C9C041 /* CashInAPI.swift */; };
 		BF434359207CEF0800C9C041 /* FintechPlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF43434F207CEF0800C9C041 /* FintechPlatform.framework */; };
 		BF43435E207CEF0800C9C041 /* FintechPlatformTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43435D207CEF0800C9C041 /* FintechPlatformTests.swift */; };
 		BF434360207CEF0800C9C041 /* FintechPlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = BF434352207CEF0800C9C041 /* FintechPlatform.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -461,6 +462,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF41E29920DB990000E1CAF0 /* CashInAPI.swift in Sources */,
 				BF07DC6E20C0617B007CE06A /* kycAPI.swift in Sources */,
 				B4316CB5209AFB29007B2E7E /* PaymentCardApiIntegrationTest.swift in Sources */,
 				BF07DC7120C062EE007CE06A /* DocType.swift in Sources */,

@@ -115,22 +115,26 @@ open class CashInAPI {
                     }
                     
                     if (CashInStatus(rawValue: status)! == .FAILED) {
-                        if let errorObj = reply?["error"] as? [String:String] {
-                            if let code = errorObj["code"], let message = errorObj["message"] {
+                        if let errorObj = reply?["error"] as? [String:String], let code = errorObj["code"], let message = errorObj["message"] {
                                 
-                                var errorsList = [ServerError]()
-                                if let errorCode = ErrorCode(rawValue: code){
-                                    errorsList.append(ServerError(code: errorCode, message: message))
-                                } else {
-                                    errorsList.append(ServerError(code: ErrorCode.unknown_error, message: message))
-                                }
-                                
-                                completion(nil, WebserviceError.APIResponseError(serverErrors: errorsList, error: error))
-                                return
+                            var errorsList = [ServerError]()
+                            if let errorCode = ErrorCode(rawValue: code){
+                                errorsList.append(ServerError(code: errorCode, message: message))
+                            } else {
+                                errorsList.append(ServerError(code: ErrorCode.unknown_error, message: message))
                             }
+                            
+                            completion(nil, WebserviceError.APIResponseError(serverErrors: errorsList, error: error))
+                            
+                        } else {
+                            completion(nil, WebserviceError.MissingMandatoryReplyParameters)
                         }
+                        
+                        return
                     }
                     
+                    
+                    // status !failed
                     let optredirecturl: String?
                     if let redirecturl = reply?["redirectURL"] {
                         optredirecturl = redirecturl as? String
