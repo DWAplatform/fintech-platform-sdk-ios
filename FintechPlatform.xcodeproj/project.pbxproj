@@ -12,10 +12,11 @@
 		B4316CB5209AFB29007B2E7E /* PaymentCardApiIntegrationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4316CB4209AFB29007B2E7E /* PaymentCardApiIntegrationTest.swift */; };
 		B4339A39209DBD2D002CDE58 /* DateTimeConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4339A38209DBD2D002CDE58 /* DateTimeConversion.swift */; };
 		B4C15B1C20A0325200ADA8A2 /* CashInApiIntegrationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C15B1B20A0325200ADA8A2 /* CashInApiIntegrationTest.swift */; };
+		BF01F287212D658F00B56208 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF01F286212D658F00B56208 /* Account.swift */; };
 		BF02D47E20A9CB6900F213BF /* ErrorCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02D47D20A9CB6900F213BF /* ErrorCode.swift */; };
 		BF02D48020A9D07700F213BF /* ServerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF02D47F20A9D07700F213BF /* ServerError.swift */; };
-		BF07DC6D20C0617B007CE06A /* kycAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF07DC6C20C0617B007CE06A /* kycAPI.swift */; };
-		BF07DC6E20C0617B007CE06A /* kycAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF07DC6C20C0617B007CE06A /* kycAPI.swift */; };
+		BF07DC6D20C0617B007CE06A /* KycAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF07DC6C20C0617B007CE06A /* KycAPI.swift */; };
+		BF07DC6E20C0617B007CE06A /* KycAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF07DC6C20C0617B007CE06A /* KycAPI.swift */; };
 		BF07DC7020C062EE007CE06A /* DocType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF07DC6F20C062EE007CE06A /* DocType.swift */; };
 		BF07DC7120C062EE007CE06A /* DocType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF07DC6F20C062EE007CE06A /* DocType.swift */; };
 		BF41E29920DB990000E1CAF0 /* CashInAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43436A207CF1F100C9C041 /* CashInAPI.swift */; };
@@ -65,9 +66,10 @@
 		B4316CB4209AFB29007B2E7E /* PaymentCardApiIntegrationTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentCardApiIntegrationTest.swift; sourceTree = "<group>"; };
 		B4339A38209DBD2D002CDE58 /* DateTimeConversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimeConversion.swift; sourceTree = "<group>"; };
 		B4C15B1B20A0325200ADA8A2 /* CashInApiIntegrationTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashInApiIntegrationTest.swift; sourceTree = "<group>"; };
+		BF01F286212D658F00B56208 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		BF02D47D20A9CB6900F213BF /* ErrorCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorCode.swift; sourceTree = "<group>"; };
 		BF02D47F20A9D07700F213BF /* ServerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerError.swift; sourceTree = "<group>"; };
-		BF07DC6C20C0617B007CE06A /* kycAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = kycAPI.swift; sourceTree = "<group>"; };
+		BF07DC6C20C0617B007CE06A /* KycAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KycAPI.swift; sourceTree = "<group>"; };
 		BF07DC6F20C062EE007CE06A /* DocType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocType.swift; sourceTree = "<group>"; };
 		BF43434F207CEF0800C9C041 /* FintechPlatform.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FintechPlatform.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF434352207CEF0800C9C041 /* FintechPlatform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FintechPlatform.h; sourceTree = "<group>"; };
@@ -183,7 +185,7 @@
 				BF434382207D394200C9C041 /* PaymentCardAPI.swift */,
 				BF434388207DF2FC00C9C041 /* ProfileAPI.swift */,
 				BF434392207E073800C9C041 /* TransferAPI.swift */,
-				BF07DC6C20C0617B007CE06A /* kycAPI.swift */,
+				BF07DC6C20C0617B007CE06A /* KycAPI.swift */,
 			);
 			path = fintech;
 			sourceTree = "<group>";
@@ -203,6 +205,7 @@
 				BF434390207E009500C9C041 /* UserDocuments.swift */,
 				BF8CC7F020851D1400229741 /* BalanceItem.swift */,
 				BF07DC6F20C062EE007CE06A /* DocType.swift */,
+				BF01F286212D658F00B56208 /* Account.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -450,8 +453,9 @@
 				BF434375207CF93C00C9C041 /* NetHelper.swift in Sources */,
 				BF43437D207D322900C9C041 /* TransactionsResponse.swift in Sources */,
 				BF43436B207CF1F100C9C041 /* CashInAPI.swift in Sources */,
-				BF07DC6D20C0617B007CE06A /* kycAPI.swift in Sources */,
+				BF07DC6D20C0617B007CE06A /* KycAPI.swift in Sources */,
 				BF434385207D39A200C9C041 /* PaymentCardItem.swift in Sources */,
+				BF01F287212D658F00B56208 /* Account.swift in Sources */,
 				BF43436D207CF27500C9C041 /* FintechPlatformAPI.swift in Sources */,
 				BF43438D207DF58900C9C041 /* UserProfile.swift in Sources */,
 				BF434393207E073800C9C041 /* TransferAPI.swift in Sources */,
@@ -463,7 +467,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF41E29920DB990000E1CAF0 /* CashInAPI.swift in Sources */,
-				BF07DC6E20C0617B007CE06A /* kycAPI.swift in Sources */,
+				BF07DC6E20C0617B007CE06A /* KycAPI.swift in Sources */,
 				B4316CB5209AFB29007B2E7E /* PaymentCardApiIntegrationTest.swift in Sources */,
 				BF07DC7120C062EE007CE06A /* DocType.swift in Sources */,
 				B4C15B1C20A0325200ADA8A2 /* CashInApiIntegrationTest.swift in Sources */,

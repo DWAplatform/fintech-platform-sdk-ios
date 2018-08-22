@@ -49,4 +49,8 @@ public class FintechPlatformAPI {
     public func getTransferAPI(hostName: String) -> TransferAPI {
         return TransferAPI(hostName: hostName)
     }
+    
+    public func getKycAPI(hostName: String) -> KycAPI {
+        return KycAPI(hostName: hostName)
+    }
 }
