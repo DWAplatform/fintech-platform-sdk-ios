@@ -78,14 +78,14 @@ open class KycAPI {
      * Needed to begin a KYC procedure. The validate [documentId] can take from 2h to 2 days to complete.
      - parameters:
      - token: got from "Create User token" request.
-     */
+ 
     open func kycProcedure(token: String,
                       account: Account,
                       documentId: UUID,
                       completion: @escaping (KycRequested?, Error?) -> Void) {
         
     }
-    /*
+    
 
      open fun kycProcedure(token: String,
      account: Account,

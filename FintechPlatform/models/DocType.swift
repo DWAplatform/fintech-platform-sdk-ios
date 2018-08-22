@@ -7,7 +7,7 @@
 //
 
 import Foundation
-enum DocType: String {
+public enum DocType: String {
     case IDENTITY_CARD
     case PASSPORT
     case DRIVING_LICENCE
