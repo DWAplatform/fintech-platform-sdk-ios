@@ -24,7 +24,12 @@ open class KycAPI {
      - userId: Fintech id of the User of the Fintech Tenant.
      - completion: callback contains the list of docType required.
      */
-    open func kycRequired(token: String, tenantId: String, ownerId: String, accountId: String, accountType: String, completion: @escaping ([DocType]?, Error?) -> Void) {
+    open func kycRequired(token: String,
+                          tenantId: String,
+                          ownerId: String,
+                          accountId: String,
+                          accountType: String,
+                          completion: @escaping ([DocType]?, Error?) -> Void) {
         let path = NetHelper.getPath(from: accountType)
     
         guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(path)/\(ownerId)/accounts/\(accountId)/kycRequiredDocuments")
@@ -78,14 +83,65 @@ open class KycAPI {
      * Needed to begin a KYC procedure. The validate [documentId] can take from 2h to 2 days to complete.
      - parameters:
      - token: got from "Create User token" request.
- 
+     */
     open func kycProcedure(token: String,
                       account: Account,
                       documentId: UUID,
                       completion: @escaping (KycRequested?, Error?) -> Void) {
         
+        struct Body: Codable {
+            var documentId: String
+        }
+        
+        struct Response: Codable {
+            var kycId: UUID
+            var documentId: UUID
+            var status: KycStatus
+            
+            var kycRequested: KycRequested {
+                return KycRequested(kycId: kycId, documentId: documentId, status: status)
+            }
+        }
+
+        guard let url = URL(string: "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\(account.accountType))/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/kycs") else { fatalError() }
+        
+        let body = Body(documentId: documentId.uuidString)
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = try? JSONEncoder().encode(body)
+        request.addBearerAuthorizationToken(token: token)
+        
+        session.dataTask(with: request) { (data, response, error) in
+            if let error = error { completion(nil, error); return }
+            
+            guard let data = data else {
+                completion(nil, WebserviceError.DataEmptyError)
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(nil, WebserviceError.NoHTTPURLResponse)
+                return
+            }
+            
+            if (httpResponse.statusCode != 200) {
+                completion(nil, NetHelper.createRequestError(data: data, error: error))
+                return
+            }
+            
+            do {
+                let reply = try JSONDecoder().decode(Response.self, from: data)
+                completion(reply.kycRequested, nil)
+            } catch {
+                completion(nil, WebserviceError.NOJSONReply)
+            }
+        }.resume()
+        
     }
     
+    /*
+    KOTLIN VERSION
 
      open fun kycProcedure(token: String,
      account: Account,

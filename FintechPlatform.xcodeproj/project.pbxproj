@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		11FBA61EEC74C05CA91BB2F1 /* Pods_FintechPlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A37622AEB1A9D3A0BE76E50 /* Pods_FintechPlatform.framework */; };
+		5FD5F88921358B8F00C7B8A6 /* KycRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD5F88821358B8F00C7B8A6 /* KycRequest.swift */; };
+		5FD5F88A21358B8F00C7B8A6 /* KycRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD5F88821358B8F00C7B8A6 /* KycRequest.swift */; };
+		5FD5F88C21358C0600C7B8A6 /* KycStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD5F88B21358C0600C7B8A6 /* KycStatus.swift */; };
+		5FD5F88D21358C0600C7B8A6 /* KycStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD5F88B21358C0600C7B8A6 /* KycStatus.swift */; };
 		8E4CA2E0CABAF86484CF727E /* Pods_FintechPlatformTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77388DF9753FA968BFEEEB11 /* Pods_FintechPlatformTests.framework */; };
 		B4316CB5209AFB29007B2E7E /* PaymentCardApiIntegrationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4316CB4209AFB29007B2E7E /* PaymentCardApiIntegrationTest.swift */; };
 		B4339A39209DBD2D002CDE58 /* DateTimeConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4339A38209DBD2D002CDE58 /* DateTimeConversion.swift */; };
@@ -59,6 +63,8 @@
 /* Begin PBXFileReference section */
 		0A37622AEB1A9D3A0BE76E50 /* Pods_FintechPlatform.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FintechPlatform.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3657704FD0D71F9E37A3860C /* Pods-FintechPlatformTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FintechPlatformTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FintechPlatformTests/Pods-FintechPlatformTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5FD5F88821358B8F00C7B8A6 /* KycRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KycRequest.swift; sourceTree = "<group>"; };
+		5FD5F88B21358C0600C7B8A6 /* KycStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KycStatus.swift; sourceTree = "<group>"; };
 		6150075E10E0BE9EE629057B /* Pods-FintechPlatform.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FintechPlatform.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FintechPlatform/Pods-FintechPlatform.debug.xcconfig"; sourceTree = "<group>"; };
 		649A90C58F2405681930A430 /* Pods-FintechPlatformTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FintechPlatformTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FintechPlatformTests/Pods-FintechPlatformTests.release.xcconfig"; sourceTree = "<group>"; };
 		77388DF9753FA968BFEEEB11 /* Pods_FintechPlatformTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FintechPlatformTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -206,6 +212,8 @@
 				BF8CC7F020851D1400229741 /* BalanceItem.swift */,
 				BF07DC6F20C062EE007CE06A /* DocType.swift */,
 				BF01F286212D658F00B56208 /* Account.swift */,
+				5FD5F88821358B8F00C7B8A6 /* KycRequest.swift */,
+				5FD5F88B21358C0600C7B8A6 /* KycStatus.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -255,7 +263,6 @@
 				BF43434B207CEF0800C9C041 /* Frameworks */,
 				BF43434C207CEF0800C9C041 /* Headers */,
 				BF43434D207CEF0800C9C041 /* Resources */,
-				5A26F114FD676593EBBA5A3D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -274,8 +281,6 @@
 				BF434354207CEF0800C9C041 /* Sources */,
 				BF434355207CEF0800C9C041 /* Frameworks */,
 				BF434356207CEF0800C9C041 /* Resources */,
-				F14B6C45CF843B673F599809 /* [CP] Embed Pods Frameworks */,
-				61E1CE2FEFF48C5BA33C7629 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -359,52 +364,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		5A26F114FD676593EBBA5A3D /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FintechPlatform/Pods-FintechPlatform-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		61E1CE2FEFF48C5BA33C7629 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FintechPlatformTests/Pods-FintechPlatformTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F14B6C45CF843B673F599809 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FintechPlatformTests/Pods-FintechPlatformTests-frameworks.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FE94346C37A7E17C8F00D34E /* [CP] Check Pods Manifest.lock */ = {
@@ -422,7 +382,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -444,9 +404,11 @@
 				BF43438F207DF64500C9C041 /* CardSanityCheck.swift in Sources */,
 				BF434387207D3A6200C9C041 /* CardHelper.swift in Sources */,
 				BF434370207CF6D800C9C041 /* Money.swift in Sources */,
+				5FD5F88C21358C0600C7B8A6 /* KycStatus.swift in Sources */,
 				BF07DC7020C062EE007CE06A /* DocType.swift in Sources */,
 				BF434381207D38FE00C9C041 /* BankAccount.swift in Sources */,
 				BF43437B207D318800C9C041 /* TransactionsAPI.swift in Sources */,
+				5FD5F88921358B8F00C7B8A6 /* KycRequest.swift in Sources */,
 				BF434377207D223900C9C041 /* CashOutAPI.swift in Sources */,
 				BF434391207E009500C9C041 /* UserDocuments.swift in Sources */,
 				BF02D48020A9D07700F213BF /* ServerError.swift in Sources */,
@@ -467,9 +429,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF41E29920DB990000E1CAF0 /* CashInAPI.swift in Sources */,
+				5FD5F88A21358B8F00C7B8A6 /* KycRequest.swift in Sources */,
 				BF07DC6E20C0617B007CE06A /* KycAPI.swift in Sources */,
 				B4316CB5209AFB29007B2E7E /* PaymentCardApiIntegrationTest.swift in Sources */,
 				BF07DC7120C062EE007CE06A /* DocType.swift in Sources */,
+				5FD5F88D21358C0600C7B8A6 /* KycStatus.swift in Sources */,
 				B4C15B1C20A0325200ADA8A2 /* CashInApiIntegrationTest.swift in Sources */,
 				BF43435E207CEF0800C9C041 /* FintechPlatformTests.swift in Sources */,
 			);

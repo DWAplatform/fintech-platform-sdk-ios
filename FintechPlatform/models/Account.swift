@@ -9,10 +9,10 @@
 import Foundation
 
 public class Account {
-    private let tenantId: UUID
-    private let accountType: AccountType
-    private let ownerId: UUID
-    private let accountId: UUID
+    let tenantId: UUID
+    let accountType: AccountType
+    let ownerId: UUID
+    let accountId: UUID
     
     private init(tenantId: UUID,
                   accountType: AccountType,
@@ -46,9 +46,9 @@ public struct User {
     }
 }
 
-public enum AccountType {
-    case PERSONAL
-    case BUSINESS
+public enum AccountType: String {
+    case PERSONAL = "PERSONAL"
+    case BUSINESS = "BUSINESS"
 }
 
 public struct Enterprise {
