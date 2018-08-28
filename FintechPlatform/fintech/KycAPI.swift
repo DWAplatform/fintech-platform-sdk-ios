@@ -103,7 +103,7 @@ open class KycAPI {
             }
         }
 
-        guard let url = URL(string: "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\(account.accountType))/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/kycs") else { fatalError() }
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\(account.accountType))/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/kycs") else { fatalError() }
         
         let body = Body(documentId: documentId.uuidString)
 
