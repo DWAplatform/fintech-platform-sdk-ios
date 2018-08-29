@@ -9,7 +9,7 @@
 import Foundation
 
 public struct KycRequested: Codable {
-    var kycId: UUID
-    var documentId: UUID
-    var status: KycStatus
+    public var kycId: UUID
+    public var documentId: UUID
+    public var status: KycStatus
 }

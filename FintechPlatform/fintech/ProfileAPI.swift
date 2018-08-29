@@ -248,9 +248,9 @@ open class ProfileAPI {
                 do {
                     let docs = try JSONSerialization.jsonObject(
                         with: data,
-                        options: []) as? [String:String]
+                        options: []) as? [String: Any]
                     
-                    guard let documentId = docs?["documentId"] else {
+                    guard let documentId = docs?["documentId"] as? String else {
                         completion(nil, WebserviceError.MissingMandatoryReplyParameters)
                         return
                     }
