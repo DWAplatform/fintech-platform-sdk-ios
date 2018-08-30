@@ -9,7 +9,7 @@
 import Foundation
 
 public struct PersonalAccount: Codable {
-    var account: Account
-    var accountLevel: AccountLevel
-    var accountLevelStatus: AccountLevelStatus
+    public var account: Account
+    public var accountLevel: AccountLevel
+    public var accountLevelStatus: AccountLevelStatus
 }
