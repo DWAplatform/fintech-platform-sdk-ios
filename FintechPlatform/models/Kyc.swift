@@ -9,9 +9,9 @@
 import Foundation
 
 public struct Kyc: Codable {    
-    var kycId: UUID
-    var documentId: UUID
-    var status: KycStatus
+    public var kycId: UUID
+    public var documentId: UUID
+    public var status: KycStatus
     var created: Date
     var error: Error
     
