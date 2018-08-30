@@ -12,11 +12,11 @@ public struct Kyc: Codable {
     public var kycId: UUID
     public var documentId: UUID
     public var status: KycStatus
-    var created: Date
-    var error: Error
+    public var created: Date
+    public var error: Error
     
-    struct Error: Codable {
-        var code: String
-        var message: String
+    public struct Error: Codable {
+        public var code: String
+        public var message: String
     }
 }
