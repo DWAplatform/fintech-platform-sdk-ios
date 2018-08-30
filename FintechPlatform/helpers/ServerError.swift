@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct ServerError{
+public struct ServerError: Codable {
     public let code: ErrorCode
     public let message: String
     
@@ -16,4 +16,8 @@ public struct ServerError{
         self.code = code
         self.message = message
     }
+}
+
+public enum ServerErrorInternal: Error {
+    case parse(ServerError)
 }

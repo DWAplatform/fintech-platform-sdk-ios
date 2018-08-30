@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum ErrorCode: String {
+public enum ErrorCode: String, Codable {
     case unknown_error
     case invalid_parameter
     case asp_generic_error
