@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class Account {
+public class Account: Codable {
     let tenantId: UUID
     let accountType: AccountType
     let ownerId: UUID
@@ -46,7 +46,7 @@ public struct User {
     }
 }
 
-public enum AccountType: String {
+public enum AccountType: String, Codable {
     case PERSONAL = "PERSONAL"
     case BUSINESS = "BUSINESS"
 }

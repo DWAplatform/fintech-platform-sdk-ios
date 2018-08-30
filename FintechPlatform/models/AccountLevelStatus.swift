@@ -1,0 +1,22 @@
+//
+//  AccountLevelStatus.swift
+//  FintechPlatform
+//
+//  Created by Matteo Stefanini on 29/08/2018.
+//  Copyright © 2018 Fintech Platform. All rights reserved.
+//
+
+import Foundation
+
+public enum AccountLevelStatus: String, Codable {
+    case LEVEL1_WAITING_CREATION = "LEVEL1_WAITING_CREATION"
+    case LEVEL1_CREATED = "LEVEL1_CREATED"
+    case REQUEST_UPGRADE_TO_LEVEL2 = "REQUEST_UPGRADE_TO_LEVEL2"
+    case LEVEL2_WAITING_UPGRADE = "LEVEL2_WAITING_UPGRADE"
+    case LEVEL2_UPGRADED = "LEVEL2_UPGRADED"
+    case LEVEL2_REFUSED_UPGRADE = "LEVEL2_REFUSED_UPGRADE"
+    case REQUEST_UPGRADE_TO_LEVEL3 = "REQUEST_UPGRADE_TO_LEVEL3"
+    case LEVEL3_WAITING_UPGRADE = "LEVEL3_WAITING_UPGRADE"
+    case LEVEL3_UPGRADED = "LEVEL3_UPGRADED"
+    case LEVEL3_REFUSED_UPGRADE = "LEVEL3_REFUSED_UPGRADE"
+}
