@@ -13,7 +13,7 @@ public struct Kyc: Codable {
     public var documentId: UUID
     public var status: KycStatus
     public var created: Date
-    public var error: Error
+    public var error: Error?
     
     public struct Error: Codable {
         public var code: String
