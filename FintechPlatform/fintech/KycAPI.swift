@@ -140,53 +140,40 @@ open class KycAPI {
         
     }
     
-    /*
-    KOTLIN VERSION
-
-     open fun kycProcedure(token: String,
-     account: Account,
-     documentId: UUID,
-     completion: (KycRequested?, Exception?) -> Unit): IRequest<*>? {
-     val url = netHelper.getURL("/rest/v1/fintech/tenants/${account.tenantId}/${netHelper.getPathFromAccountType(account.accountType)}/${account.ownerId}/accounts/${account.accountId}/kycs")
-     
-     val jsonObject = JSONObject()
-     jsonObject.put("documentId", documentId.toString())
-     
-     var request: IRequest<*>?
-     try {
-     val r = requestProvider.jsonObjectRequest(Request.Method.POST, url, jsonObject,
-     netHelper.getHeaderBuilder().authorizationToken(token).getHeaderMap(), { response ->
-     
-     val error = response.optJSONObject("error")
-     error?.let {
-     val rep =
-     try {
-     Error(ErrorCode.valueOf(error.getString("code")), error.getString("message"))
-     } catch (x: Exception) {
-     Error(ErrorCode.unknown_error, "[${error.getString("code")}] ${error.getString("message")}")
-     }
-     
-     completion(null, NetHelper.APIResponseError(listOf(rep), null))
-     return@jsonObjectRequest
-     }
-     
-     val kyc = KycRequested(
-     UUID.fromString(response.getString("kycId")),
-     UUID.fromString(response.getString("documentId")),
-     KycStatus.valueOf(response.getString("status")))
-     completion(kyc, null)
-     }) { error ->
-     completion(null, netHelper.createRequestError(error))
-     }
-     r.setIRetryPolicy(netHelper.defaultpolicy)
-     queue.add(r)
-     request = r
-     } catch (e: Exception) {
-     log.error(TAG, "kycRequired", e)
-     request = null
-     }
-     return request
-     }
-
- */
+    open func kycStatus(token: String,
+                          account: Account,
+                          completion: @escaping (Kyc?, Error?) -> Void) {
+        
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.rawValue)/\(account.ownerId)/accounts/\(account.accountId)/kycs")
+            else { fatalError() }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addBearerAuthorizationToken(token: token)
+        
+        session.dataTask(with: request) { (data, response, error) in
+            if let error = error { completion(nil, error); return }
+            guard let data = data else {
+                completion(nil, WebserviceError.DataEmptyError)
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(nil, WebserviceError.NoHTTPURLResponse)
+                return
+            }
+            
+            if (httpResponse.statusCode != 200) {
+                completion(nil, NetHelper.createRequestError(data: data, error: error))
+                return
+            }
+            
+            do {
+                let reply = try JSONDecoder().decode([Kyc].self, from: data)
+                completion(reply.first, nil)
+            } catch {
+                completion(nil, WebserviceError.NOJSONReply)
+            }
+        }.resume()
+    }
 }
