@@ -17,7 +17,7 @@ open class AccountAPI {
         self.hostName = hostName
     }
     
-    public func getPersonalAccount(token: String,
+    open func getPersonalAccount(token: String,
                             account: Account,
                             completion: @escaping (PersonalAccount?, Error?) -> Void) {
         
@@ -68,7 +68,7 @@ open class AccountAPI {
         }.resume()
     }
     
-    public func updatePersonalAccount(token: String,
+    open func updatePersonalAccount(token: String,
                                account: Account,
                                completion: @escaping (PersonalAccount?, Error?) -> Void) {
         struct Request: Codable {
