@@ -64,12 +64,16 @@ open class KycAPI {
                 
                 if let jsonArray = reply?["docType"] as? [[String]] {
                     
-                    jsonArray.forEach { types in
-                        kycRequired = types.map { (type: String) -> DocType in
-                            guard let docType = DocType(rawValue: type) else { return DocType.PASSPORT }
-                            return docType
-                        }
-                    }
+//                    jsonArray.forEach { types in
+//                        kycRequired = types.map { (type: String) -> DocType in
+//                            guard let docType = DocType(rawValue: type) else { return DocType.PASSPORT }
+//                            return docType
+//                        }
+//                    }
+                    kycRequired = Array(jsonArray.joined()).map({ (elem) -> DocType in
+                        guard let docType = DocType(rawValue: elem) else { return DocType.PASSPORT }
+                        return docType
+                    })
                 }
                 
                 completion(kycRequired, nil)
