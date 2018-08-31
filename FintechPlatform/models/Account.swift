@@ -49,6 +49,15 @@ public struct User {
 public enum AccountType: String, Codable {
     case PERSONAL = "PERSONAL"
     case BUSINESS = "BUSINESS"
+    
+    var path: String {
+        switch self {
+        case .PERSONAL:
+            return "users"
+        case .BUSINESS:
+            return "enterprises"
+        }
+    }
 }
 
 public struct Enterprise {

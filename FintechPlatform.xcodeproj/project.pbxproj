@@ -198,7 +198,6 @@
 		BF434369207CF18E00C9C041 /* fintech */ = {
 			isa = PBXGroup;
 			children = (
-				BF43436A207CF1F100C9C041 /* CashInAPI.swift */,
 				BF434376207D223900C9C041 /* CashOutAPI.swift */,
 				BF434378207D2E8400C9C041 /* BalanceAPI.swift */,
 				BF43437A207D318800C9C041 /* TransactionsAPI.swift */,
@@ -206,6 +205,7 @@
 				BF434382207D394200C9C041 /* PaymentCardAPI.swift */,
 				BF434388207DF2FC00C9C041 /* ProfileAPI.swift */,
 				BF434392207E073800C9C041 /* TransferAPI.swift */,
+				BF43436A207CF1F100C9C041 /* CashInAPI.swift */,
 				BF07DC6C20C0617B007CE06A /* KycAPI.swift */,
 				5FD5F89621370BFE00C7B8A6 /* AccountAPI.swift */,
 			);

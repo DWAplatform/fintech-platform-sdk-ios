@@ -26,7 +26,7 @@ open class AccountAPI {
             var level: String
         }
         
-        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.rawValue)/\(account.ownerId)/accounts/\(account.accountId)")
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/users/\(account.ownerId)/accounts/\(account.accountId)")
             else { fatalError() }
         
         var request = URLRequest(url: url)
@@ -81,7 +81,7 @@ open class AccountAPI {
             var level: AccountLevel
         }
         
-        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.rawValue)/\(account.ownerId)/accounts/\(account.accountId)")
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)")
             else { fatalError() }
         
         let body = Request(levelStatus: AccountLevelStatus.REQUEST_UPGRADE_TO_LEVEL2,
