@@ -148,7 +148,7 @@ open class KycAPI {
                           account: Account,
                           completion: @escaping (Kyc?, Error?) -> Void) {
         
-        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/users/\(account.ownerId)/accounts/\(account.accountId)/kycs")
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/kycs")
             else { fatalError() }
         
         var request = URLRequest(url: url)
@@ -173,7 +173,9 @@ open class KycAPI {
             }
             
             do {
-                let reply = try JSONDecoder().decode([Kyc].self, from: data)
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                let reply = try decoder.decode([Kyc].self, from: data)
                 completion(reply.first, nil)
             } catch {
                 completion(nil, WebserviceError.NOJSONReply)
