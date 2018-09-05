@@ -22,11 +22,4 @@ public class DateTimeConversion {
         dateFormatter.dateFormat = format
         return dateFormatter.string(from: date)
     }
-    
-    public func getCurrentDate() -> Date? {
-        let date = Date()
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.year, .month, .day], from: date)
-        return components.date
-    }
 }
