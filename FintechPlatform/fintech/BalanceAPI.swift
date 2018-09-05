@@ -56,21 +56,8 @@ open class BalanceAPI {
             }
             
             do {
-                let reply = try JSONSerialization.jsonObject(
-                    with: data,
-                    options: []) as? [String:Any]
-                
-                guard let balance = reply?["balance"] as? [String: Any] else  { return }
-                guard let amount = balance["amount"] as? Int64 else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return }
-                let moneyBalance = Money(value: amount,
-                                         currency: balance["currency"] as? String)
-                
-                guard let availableBalance = reply?["availableBalance"] as? [String: Any] else  { return }
-                guard let availableAmount = availableBalance["amount"] as? Int64 else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return }
-                let availableMoneyBalance = Money(value: availableAmount,
-                              currency: availableBalance["currency"] as? String)
-                
-                completion(BalanceItem(balance: moneyBalance, availableBalance: availableMoneyBalance), nil)
+                let response = try JSONDecoder().decode(BalanceItem.self, from: data)
+                completion(response, nil)
                 
             } catch {
                 completion(nil, error)

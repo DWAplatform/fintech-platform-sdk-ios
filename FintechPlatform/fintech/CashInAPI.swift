@@ -140,16 +140,14 @@ open class CashInAPI {
                     
                     let created: Date?
                     if let createdStr = reply?["created"] as? String {
-                        let dtc = DateTimeConversion()
-                        created = dtc.convertFromRFC3339ToDate(str: createdStr)
+                        created = DateTimeConversion.convertFromRFC3339ToDate(str: createdStr)
                     } else {
                         created = nil
                     }
                     
                     let updated: Date?
                     if let updatedStr = reply?["updated"] as? String {
-                        let dtc = DateTimeConversion()
-                        updated = dtc.convertFromRFC3339ToDate(str: updatedStr)
+                        updated = DateTimeConversion.convertFromRFC3339ToDate(str: updatedStr)
                     } else {
                         updated = nil
                     }
@@ -217,7 +215,7 @@ open class CashInAPI {
                 guard let amount = reply?["amount"] as? Int64 else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return }
                 guard let currency = reply?["currency"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return }
 
-                let moneyFee = Money(value: amount, currency: currency)
+                let moneyFee = Money(value: amount, currency: Currency(rawValue: currency))
                 completion(moneyFee, nil)
                 
             } catch {
@@ -226,6 +224,59 @@ open class CashInAPI {
         }.resume()
     }
 
+    open func cashInBalanceOverflow(token: String,
+                               account: Account,
+                               current: Date,
+                               completion: @escaping (BalanceItem?, Error?) -> Void) {
+        
+        var dateComponent = DateComponents()
+        dateComponent.year = -1
+        
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/cashInBalance"),
+            let oneYearBefore = Calendar.current.date(byAdding: dateComponent, to: current),
+            let yearAgoFormatted = DateTimeConversion.convert2RFC3339(date: oneYearBefore),
+            let nowFormatted = DateTimeConversion.convert2RFC3339(date: current)
+            else { fatalError() }
+        
+        struct Body: Codable {
+            var fromDate: String
+            var toDate: String
+        }
+
+        let body = Body(fromDate: yearAgoFormatted, toDate: nowFormatted)
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.httpBody = try? JSONEncoder().encode(body)
+        request.addBearerAuthorizationToken(token: token)
+        
+        session.dataTask(with: request) { (data, response, error) in
+            guard error == nil else { completion(nil, error); return }
+            
+            guard let data = data else {
+                completion(nil, WebserviceError.DataEmptyError)
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(nil, WebserviceError.NoHTTPURLResponse)
+                return
+            }
+            
+            if (httpResponse.statusCode != 200) {
+                completion(nil, WebserviceError.StatusCodeNotSuccess)
+                return
+            }
+            
+            do {
+                let response = try JSONDecoder().decode(BalanceItem.self, from: data)
+            
+                completion(response, nil)
+            } catch {
+                completion(nil, error)
+            }
+        }.resume()
+    }
 }
 
 

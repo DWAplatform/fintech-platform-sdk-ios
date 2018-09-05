@@ -8,14 +8,25 @@
 
 import Foundation
 
-class DateTimeConversion {
-    private let format = "yyyy-MM-dd'T'HH:mm:ssXXX"
+public class DateTimeConversion {
+    private static let format = "yyyy-MM-dd'T'HH:mm:ssXXX"
     
-    func convertFromRFC3339ToDate(str: String) -> Date? {
+    public static func convertFromRFC3339ToDate(str: String) -> Date? {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = format
         return dateFormatter.date(from: str)
     }
     
+    public static func convert2RFC3339(date: Date) -> String? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        return dateFormatter.string(from: date)
+    }
     
+    public func getCurrentDate() -> Date? {
+        let date = Date()
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month, .day], from: date)
+        return components.date
+    }
 }

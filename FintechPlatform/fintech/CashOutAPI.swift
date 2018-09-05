@@ -136,14 +136,7 @@ open class CashOutAPI {
             }
             
             do {
-                let reply = try JSONSerialization.jsonObject(
-                    with: data,
-                    options: []) as? [String:Any]
-                
-                guard let amount = reply?["amount"] as? Int64 else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return }
-                guard let currency = reply?["currency"] as? String else { completion(nil, WebserviceError.MissingMandatoryReplyParameters); return }
-                
-                let moneyFee = Money(value: amount, currency: currency)
+                let moneyFee = try JSONDecoder().decode(Money.self, from: data)
                 completion(moneyFee, nil)
                 
             } catch {

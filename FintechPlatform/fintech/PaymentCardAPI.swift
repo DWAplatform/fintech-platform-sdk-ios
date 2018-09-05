@@ -83,16 +83,14 @@ open class PaymentCardAPI {
         
         let created: Date?
         if let createdStr = card["created"] as? String {
-            let dtc = DateTimeConversion()
-            created = dtc.convertFromRFC3339ToDate(str: createdStr)
+            created = DateTimeConversion.convertFromRFC3339ToDate(str: createdStr)
         } else {
             created = nil
         }
         
         let updated: Date?
         if let updatedStr = card["updated"] as? String {
-            let dtc = DateTimeConversion()
-            updated = dtc.convertFromRFC3339ToDate(str: updatedStr)
+            updated = DateTimeConversion.convertFromRFC3339ToDate(str: updatedStr)
         } else {
             updated = nil
         }

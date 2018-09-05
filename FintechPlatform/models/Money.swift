@@ -9,18 +9,18 @@
 import Foundation
 
 
-public class Money {
+public class Money: Codable {
     
-    private let value: Int64;
-    private let currency: String?
+    private let amount: Int64;
+    private let currency: Currency?
     
-    public init(value: Int64, currency: String? = "EUR") {
-        self.value = value
+    public init(value: Int64, currency: Currency? = .EUR) {
+        self.amount = value
         self.currency = currency
     }
     
-    public init(value: Int, currency: String? = "EUR") {
-        self.value = Int64(value)
+    public init(value: Int, currency: Currency? = .EUR) {
+        self.amount = Int64(value)
         self.currency = currency
     }
     
@@ -80,7 +80,7 @@ public class Money {
     
     public func toString(separator: String) -> String {
         
-        var value = self.value
+        var value = self.amount
         var sign = ""
         if (value < 0) {
             sign = "- "
@@ -129,14 +129,27 @@ public class Money {
     }
     
     public func getValue() -> Int {
-        return Int(value);
+        return Int(amount);
     }
     
     public func getLongvalue() -> Int64 {
-        return value;
+        return amount;
     }
     
-    public func getCurrency() -> String {
+    public func getCurrency() -> Currency {
         return currency!
     }
+}
+
+public enum Currency : String, Codable {
+    case EUR = "EUR"
+    case USD = "USD"
+    case GBP = "GBP"
+    case SEK = "SEK"
+    case NOK = "NOK"
+    case DKK = "DKK"
+    case CHF = "CHF"
+    case PLN = "PLN"
+    case CAD = "CAD"
+    case AUD = "AUD"
 }

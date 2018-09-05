@@ -7,7 +7,7 @@
 //
 
 import Foundation
-public struct BalanceItem {
+public struct BalanceItem: Codable {
     public let balance: Money
     public let availableBalance: Money
     
