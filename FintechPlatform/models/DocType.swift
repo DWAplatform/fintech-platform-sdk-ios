@@ -8,7 +8,7 @@
 
 import Foundation
 public enum DocType: String {
-    case IDENTITY_CARD
-    case PASSPORT
-    case DRIVING_LICENCE
+    case IDENTITY_CARD = "IDENTITY_CARD"
+    case PASSPORT = "PASSPORT"
+    case DRIVING_LICENCE = "DRIVING_LICENCE"
 }
