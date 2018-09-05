@@ -25,11 +25,10 @@ open class ProfileAPI {
      - returns: UserProfile, all details about user profile.
      */
     open func searchUser(token: String,
-                    tenantId: String,
-                    userId: String,
+                    user: User,
                     completion: @escaping (UserProfile?, Error?) -> Void) {
         
-        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/users/\(userId)") else { fatalError() }
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(user.tenantId)/users/\(user.userId)") else { fatalError() }
         var request = URLRequest(url: url)
         request.addBearerAuthorizationToken(token: token)
         request.httpMethod = "GET"
@@ -60,31 +59,30 @@ open class ProfileAPI {
             * "6": > 120k
      */
     open func editProfile(token: String,
-                 userId: String,
-                 tenantId: String,
-                 name: String? = nil,
-                 surname: String? = nil,
-                 nationality: String? = nil,
-                 countryofresidence: String? = nil,
-                 birthday: Date? = nil,
-                 address: String? = nil,
-                 zipcode: String? = nil,
-                 city: String? = nil,
-                 photo: String? = nil,
-                 telnum: String? = nil,
-                 email: String? = nil,
-                 jobinfo: String? = nil,
-                 income: String? = nil,
-                 completion: @escaping (UserProfileResponse?, Error?) -> Void) {
+                          user: User,
+                         name: String? = nil,
+                         surname: String? = nil,
+                         nationality: String? = nil,
+                         countryofresidence: String? = nil,
+                         birthday: Date? = nil,
+                         address: String? = nil,
+                         zipcode: String? = nil,
+                         city: String? = nil,
+                         photo: String? = nil,
+                         telnum: String? = nil,
+                         email: String? = nil,
+                         jobinfo: String? = nil,
+                         income: String? = nil,
+                         completion: @escaping (UserProfileResponse?, Error?) -> Void) {
         
         do {
-            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/users/\(userId)") else { fatalError() }
+            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(user.tenantId)/users/\(user.userId)") else { fatalError() }
 
             var request = URLRequest(url: url)
             
             let jsonObject: NSMutableDictionary = NSMutableDictionary()
             
-            jsonObject.setValue(userId, forKey: "userId")
+            jsonObject.setValue(user.userId, forKey: "userId")
             
             if let name = name {
                 jsonObject.setValue(name, forKey: "name")
@@ -198,14 +196,13 @@ open class ProfileAPI {
      - returns: return document UUID identifier.
      */
     public func documents(token: String,
-                    userId: String,
-                    tenantId: String,
-                    doctype: String,
-                    documents: [String?],
-                    idempotency: String,
-                    completion: @escaping (String?, Error?) -> Void) {
+                          user: User,
+                          doctype: DocType,
+                          documents: [String?],
+                          idempotency: String,
+                          completion: @escaping (String?, Error?) -> Void) {
     
-        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/users/\(userId)/documents") else { fatalError() }
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(user.tenantId)/users/\(user.userId)/documents") else { fatalError() }
     
         var request = URLRequest(url: url)
     
@@ -275,11 +272,10 @@ open class ProfileAPI {
      - returns: returns list of documents uploaded to Fintech Platform
      */
     public func getDocuments(token: String,
-                      userId: String,
-                      tenantId: String,
-                      completion: @escaping ([UserDocuments?]?, Error?) -> Void){
+                             user: User,
+                             completion: @escaping ([UserDocuments?]?, Error?) -> Void){
         
-        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/users/\(userId)/documents/") else { fatalError() }
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(user.tenantId)/users/\(user.userId)/documents/") else { fatalError() }
         var request = URLRequest(url: url)
         request.addBearerAuthorizationToken(token: token)
         

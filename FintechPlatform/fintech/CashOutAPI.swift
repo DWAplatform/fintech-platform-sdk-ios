@@ -29,19 +29,13 @@ open class CashOutAPI {
         - idempotency: parameter to avoid multiple inserts.
      */
     open func cashOut(token: String,
-                      tenantId: String,
-                      accountId: String,
-                      ownerId: String,
-                      accountType: String,
+                      account: Account,
                       linkedBankId: String,
                       amount: Int64,
                       idempotency: String,
                       completion: @escaping (Error?) -> Void) {
-        
-        let path = NetHelper.getPath(from: accountType)
-        
         do {
-            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(path)/\(ownerId)/accounts/\(accountId)/linkedBanks/\(linkedBankId)/cashOuts")
+            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/linkedBanks/\(linkedBankId)/cashOuts")
                 else { fatalError() }
             
             var request = URLRequest(url: url)
@@ -111,17 +105,13 @@ open class CashOutAPI {
      - amount: amount of money to transfer from Fintech Account to bank account
  */
     open func cashOutFee(token: String,
-                         tenantId: String,
-                         accountId: String,
-                         ownerId: String,
-                         accountType: String,
+                         account: Account,
                          linkedBankId: String,
                          amount: Money,
                          completion: @escaping (Money?, Error?) -> Void) {
         
-        let path = NetHelper.getPath(from: accountType)
         let query = "?amount=\(amount.getValue())&currency=\(amount.getCurrency())"
-        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(path)/\(ownerId)/accounts/\(accountId)/linkedBanks/\(linkedBankId)/cashOutsFee\(query)") else { fatalError() }
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/linkedBanks/\(linkedBankId)/cashOutsFee\(query)") else { fatalError() }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"

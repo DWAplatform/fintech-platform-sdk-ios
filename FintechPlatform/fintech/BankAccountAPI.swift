@@ -30,16 +30,13 @@ open class BankAccountAPI {
      * [completion] callback will be call with BankAccount object in case of success or Exception in case of errors.
      */
     open func createLinkedBank(token: String,
-                               tenantId: String,
-                               accountId: String,
-                               ownerId: String,
-                               accountType: String,
+                               account: Account,
                                iban: String,
                                idempotency: String? = nil,
                                completion: @escaping (BankAccount?, Error?) -> Void) {
         
         do {
-            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(NetHelper.getPath(from: accountType))/\(ownerId)/accounts/\(accountId)/linkedBanks")
+            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/linkedBanks")
                 else { fatalError() }
             
             var request = URLRequest(url: url)
@@ -94,7 +91,7 @@ open class BankAccountAPI {
                         return
                     }
                     
-                    let ucc = BankAccount(bankaccountid: ibanid, iban: iban, activestate: activestate, accountId: accountId)
+                    let ucc = BankAccount(bankaccountid: ibanid, iban: iban, activestate: activestate, accountId: account.accountId.uuidString)
                     completion(ucc, nil)
                 } catch {
                     completion(nil, error)

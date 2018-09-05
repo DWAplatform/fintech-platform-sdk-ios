@@ -34,10 +34,7 @@ open class PaymentCardAPI {
      - Returns: PaymentCardItem with his own id, and alias card number.
      */
     open func registerCard(token: String,
-                           tenantId: String,
-                           accountId: String,
-                           ownerId: String,
-                           accountType: String,
+                           accoount: Account,
                            cardNumber: String,
                            expiration: String,
                            cvx: String,
@@ -45,13 +42,13 @@ open class PaymentCardAPI {
                            idempotency: String? = nil,
                            completion: @escaping (PaymentCardItem?, Error?) -> Void ){
         
-        self.createCreditCardRegistration(with: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, numberalias: CardHelper.generateAlias(cardNumber: cardNumber), expiration: expiration, currency: currency, token: token, idempotency: idempotency) { (optCardRegistration, optError) in
+        self.createCreditCardRegistration(with: accoount, numberalias: CardHelper.generateAlias(cardNumber: cardNumber), expiration: expiration, currency: currency, token: token, idempotency: idempotency) { (optCardRegistration, optError) in
             if let error = optError { completion(nil, error); return }
             if let cardReply = optCardRegistration {
-                self.getCardSafe(with: CardToRegister(cardNumber: cardNumber, expiration: expiration, cvx: cvx), ownerId: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, token: token, isSandbox: self.isSandbox) { (optCardToReg, optError) in
+                self.getCardSafe(with: CardToRegister(cardNumber: cardNumber, expiration: expiration, cvx: cvx), account: accoount, token: token, isSandbox: self.isSandbox) { (optCardToReg, optError) in
                     if let error = optError { completion(nil, error); return }
                     if let cardToReg = optCardToReg {
-                        self.postCardRegistrationData(with: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, cardnumber: cardToReg.cardNumber, expiration: cardToReg.expiration, cxv: cardToReg.cxv, cardReply: cardReply, token: token, idempotency: idempotency, completion: { (optPaymentCardItem, optError) in
+                        self.postCardRegistrationData(with: accoount, cardnumber: cardToReg.cardNumber, expiration: cardToReg.expiration, cxv: cardToReg.cxv, cardReply: cardReply, token: token, idempotency: idempotency, completion: { (optPaymentCardItem, optError) in
                             if let error = optError { completion(nil, error) }
                             if let paymentCard = optPaymentCardItem {
                                 completion(paymentCard, nil)
@@ -116,13 +113,10 @@ open class PaymentCardAPI {
      - return: completion callback returns the list of cards or an Exception if occurent some errors
      */
     open func getPaymentCards(token: String,
-                             tenantId: String,
-                             accountId: String,
-                             ownerId: String,
-                             accountType: String,
-                             completion: @escaping ([PaymentCardItem]?, Error?) -> Void) {
-        let path = NetHelper.getPath(from: accountType)
-        guard let baseUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(path)/\(ownerId)/accounts/\(accountId)/linkedCards") else { fatalError() }
+                              account: Account,
+                              completion: @escaping ([PaymentCardItem]?, Error?) -> Void) {
+
+        guard let baseUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/linkedCards") else { fatalError() }
         
         var request = URLRequest(url:  baseUrl)
         request.httpMethod = "GET"
@@ -163,6 +157,7 @@ open class PaymentCardAPI {
             }
         }.resume()
     }
+    
     /**
      Delete specific card linked to Fintech Platform Account.
      
@@ -177,14 +172,11 @@ open class PaymentCardAPI {
      - return: completion callback returns a boolean if deletion was competed or an Error if not.
      */
     open func deletePaymentCard(token: String,
-                           tenantId: String,
-                           accountId: String,
-                           ownerId: String,
-                           accountType: String,
-                           cardId: String,
-                           completion: @escaping (Bool, Error?) -> Void) {
-        let path = NetHelper.getPath(from: accountType)
-        guard let baseUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(path)/\(ownerId)/accounts/\(accountId)/linkedCards/\(cardId)") else { fatalError() }
+                                account: Account,
+                                cardId: String,
+                                completion: @escaping (Bool, Error?) -> Void) {
+        
+        guard let baseUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/linkedCards/\(cardId)") else { fatalError() }
         
         var request = URLRequest(url:  baseUrl)
         request.httpMethod = "DELETE"
@@ -211,14 +203,11 @@ open class PaymentCardAPI {
     }
     
     open func setDefaultCard(token:String,
-                             ownerId: String,
-                             accountId: String,
-                             accountType: String,
-                             tenantId: String,
+                             account: Account,
                              cardId: String,
                              completion: @escaping (PaymentCardItem?, Error?) -> Void) {
-        let path = NetHelper.getPath(from: accountType)
-        guard let baseUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(path)/\(ownerId)/accounts/\(accountId)/linkedCards/\(cardId)/default") else { fatalError() }
+
+        guard let baseUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/linkedCards/\(cardId)/default") else { fatalError() }
         
         var request = URLRequest(url:  baseUrl)
         request.httpMethod = "PUT"
@@ -257,20 +246,15 @@ open class PaymentCardAPI {
         }.resume()
     }
     
-    private func createCreditCardRegistration(with ownerId: String,
-                                              accountId: String,
-                                              tenantId: String,
-                                              accountType: String,
+    private func createCreditCardRegistration(with account: Account,
                                               numberalias: String,
                                               expiration: String,
                                               currency: String,
                                               token: String,
                                               idempotency: String?,
                                               completion: @escaping (CreateCardRegistrationReply?, Error?) -> Void) {
-        
-        
         do {
-            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(NetHelper.getPath(from: accountType))/\(ownerId)/accounts/\(accountId)/linkedCards")
+            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/linkedCards")
                 else { fatalError() }
             
             var request = URLRequest(url: url)
@@ -360,10 +344,7 @@ open class PaymentCardAPI {
     }
     
     private func getCardSafe(with cardToRegister: CardToRegister,
-                             ownerId: String,
-                             accountId: String,
-                             tenantId: String,
-                             accountType: String,
+                             account: Account,
                              token: String,
                              isSandbox: Bool,
                              completion: @escaping (CardToRegister?, Error?) -> Void) {
@@ -371,7 +352,7 @@ open class PaymentCardAPI {
         if (!self.isSandbox) {
             completion(CardToRegister(cardNumber: cardToRegister.cardNumber, expiration: cardToRegister.expiration, cvx: cardToRegister.cxv), nil)
         }
-        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(NetHelper.getPath(from: accountType))/\(ownerId)/accounts/\(accountId)/linkedCardsTestCards")
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/linkedCardsTestCards")
             else { fatalError() }
         
         var request = URLRequest(url: url)
@@ -428,10 +409,7 @@ open class PaymentCardAPI {
     }
     
     
-    private func postCardRegistrationData(with ownerId: String,
-                                          accountId: String,
-                                          tenantId: String,
-                                          accountType: String,
+    private func postCardRegistrationData(with account: Account,
                                           cardnumber: String,
                                           expiration: String,
                                           cxv: String,
@@ -477,23 +455,19 @@ open class PaymentCardAPI {
                 return
             }
             
-            self.sendCardResponseString(with: ownerId, accountId: accountId, tenantId: tenantId, accountType: accountType, responseString: responseString, cardReply: cardReply, token: token, completion: completion)
+            self.sendCardResponseString(with: account, responseString: responseString, cardReply: cardReply, token: token, completion: completion)
             
             }.resume()
     }
     
     
-    private func sendCardResponseString(with ownerId: String,
-                                        accountId: String,
-                                        tenantId: String,
-                                        accountType: String,
+    private func sendCardResponseString(with account: Account,
                                         responseString: String,
                                         cardReply: CreateCardRegistrationReply,
                                         token: String,
                                         completion: @escaping (PaymentCardItem?, Error?) -> Void) {
-        
         do {
-            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(NetHelper.getPath(from: accountType))/\(ownerId)/accounts/\(accountId)/linkedCards/\(cardReply.cardId)")
+            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/linkedCards/\(cardReply.cardId)")
                 else { fatalError() }
             
             var request = URLRequest(url: url)

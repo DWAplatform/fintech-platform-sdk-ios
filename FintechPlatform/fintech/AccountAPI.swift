@@ -18,8 +18,8 @@ open class AccountAPI {
     }
     
     open func getPersonalAccount(token: String,
-                            account: Account,
-                            completion: @escaping (PersonalAccount?, Error?) -> Void) {
+                                 account: Account,
+                                 completion: @escaping (PersonalAccount?, Error?) -> Void) {
         
         struct Response: Codable {
             var levelStatus: String
@@ -69,8 +69,8 @@ open class AccountAPI {
     }
     
     open func updatePersonalAccount(token: String,
-                               account: Account,
-                               completion: @escaping (PersonalAccount?, Error?) -> Void) {
+                                    account: Account,
+                                    completion: @escaping (PersonalAccount?, Error?) -> Void) {
         struct Request: Codable {
             var levelStatus: AccountLevelStatus
             var status: String

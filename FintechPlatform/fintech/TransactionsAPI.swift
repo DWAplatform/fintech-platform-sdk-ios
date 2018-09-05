@@ -30,20 +30,17 @@ open class TransactionsAPI {
      - returns: TransactionResponse is a detailed model of transactions parameters.
      */
     open func transactions(token: String,
-                      ownerId: String,
-                      accountId: String,
-                      accountType: String,
-                      tenantId: String,
-                      limit: Int?=nil,
-                      offset: Int?=nil,
-                      completion: @escaping ([TransactionResponse]?, Error?) -> Void) {
+                           account: Account,
+                           limit: Int?=nil,
+                           offset: Int?=nil,
+                           completion: @escaping ([TransactionResponse]?, Error?) -> Void) {
         
         var optUrl : URL?
         if let limit = limit , let offset = offset {
             let query = "?limit=\(limit)&offset=\(offset)"
-            optUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(NetHelper.getPath(from: accountType))/\(ownerId)/accounts/\(accountId)/transactionsDetailed\(query)")
+            optUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/transactionsDetailed\(query)")
         } else {
-            optUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(NetHelper.getPath(from: accountType))/\(ownerId)/accounts/\(accountId)/transactionsDetailed")
+            optUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/transactionsDetailed")
         }
         
         guard let url =  optUrl else { fatalError() }
@@ -126,7 +123,7 @@ open class TransactionsAPI {
                     let error = joReply["error"] as? [String:Any]
                     
                     let transaction = TransactionResponse(transactionId: transactionId,
-                                                          accountId: accountId,
+                                                          accountId: account.accountId.uuidString,
                                                           status: status,
                                                           operationtype: operationType,
                                                           creationdate: creationDate,

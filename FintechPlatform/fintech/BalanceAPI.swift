@@ -28,14 +28,11 @@ open class BalanceAPI {
      - returns: Balance item contains two variables, balance and availableBalance
      */
     open func balance(token: String,
-                 ownerId: String,
-                 accountId: String,
-                 tenantId: String,
-                 accountType: String,
-                 completion: @escaping (BalanceItem?, Error?) -> Void) {
+                      account: Account,
+                      completion: @escaping (BalanceItem?, Error?) -> Void) {
         
         guard let url = URL(string:
-            hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(NetHelper.getPath(from: accountType))/\(ownerId)/accounts/\(accountId)/balance") else { fatalError() }
+            hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/balance") else { fatalError() }
         
         var request = URLRequest(url: url)
         request.addBearerAuthorizationToken(token: token)

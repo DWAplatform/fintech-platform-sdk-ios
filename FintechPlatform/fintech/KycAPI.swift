@@ -25,14 +25,10 @@ open class KycAPI {
      - completion: callback contains the list of docType required.
      */
     open func kycRequired(token: String,
-                          tenantId: String,
-                          ownerId: String,
-                          accountId: String,
-                          accountType: String,
+                          account: Account,
                           completion: @escaping ([DocType]?, Error?) -> Void) {
-        let path = NetHelper.getPath(from: accountType)
     
-        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(tenantId)/\(path)/\(ownerId)/accounts/\(accountId)/kycRequiredDocuments")
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/kycRequiredDocuments")
             else { fatalError() }
         
         var request = URLRequest(url: url)
@@ -63,13 +59,6 @@ open class KycAPI {
                 var kycRequired = [DocType]()
                 
                 if let jsonArray = reply?["docType"] as? [[String]] {
-                    
-//                    jsonArray.forEach { types in
-//                        kycRequired = types.map { (type: String) -> DocType in
-//                            guard let docType = DocType(rawValue: type) else { return DocType.PASSPORT }
-//                            return docType
-//                        }
-//                    }
                     kycRequired = Array(jsonArray.joined()).map({ (elem) -> DocType in
                         guard let docType = DocType(rawValue: elem) else { return DocType.PASSPORT }
                         return docType
