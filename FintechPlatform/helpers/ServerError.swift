@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct ServerError: Codable {
+public struct ServerError: Codable, Error {
     public let code: ErrorCode
     public let message: String
     
