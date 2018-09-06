@@ -28,7 +28,7 @@ open class ProfileAPI {
                     user: User,
                     completion: @escaping (UserProfile?, Error?) -> Void) {
         
-        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(user.tenantId)/users/\(user.userId)") else { fatalError() }
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(user.tenantId.uuidString)/users/\(user.userId.uuidString)") else { fatalError() }
         var request = URLRequest(url: url)
         request.addBearerAuthorizationToken(token: token)
         request.httpMethod = "GET"
@@ -76,13 +76,13 @@ open class ProfileAPI {
                          completion: @escaping (UserProfileResponse?, Error?) -> Void) {
         
         do {
-            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(user.tenantId)/users/\(user.userId)") else { fatalError() }
+            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(user.tenantId.uuidString)/users/\(user.userId.uuidString)") else { fatalError() }
 
             var request = URLRequest(url: url)
             
             let jsonObject: NSMutableDictionary = NSMutableDictionary()
             
-            jsonObject.setValue(user.userId, forKey: "userId")
+            jsonObject.setValue(user.userId.uuidString, forKey: "userId")
             
             if let name = name {
                 jsonObject.setValue(name, forKey: "name")
@@ -202,7 +202,7 @@ open class ProfileAPI {
                           idempotency: String,
                           completion: @escaping (String?, Error?) -> Void) {
     
-        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(user.tenantId)/users/\(user.userId)/documents") else { fatalError() }
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(user.tenantId.uuidString)/users/\(user.userId.uuidString)/documents") else { fatalError() }
     
         var request = URLRequest(url: url)
     
@@ -275,7 +275,7 @@ open class ProfileAPI {
                              user: User,
                              completion: @escaping ([UserDocuments?]?, Error?) -> Void){
         
-        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(user.tenantId)/users/\(user.userId)/documents/") else { fatalError() }
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(user.tenantId.uuidString)/users/\(user.userId.uuidString)/documents/") else { fatalError() }
         var request = URLRequest(url: url)
         request.addBearerAuthorizationToken(token: token)
         

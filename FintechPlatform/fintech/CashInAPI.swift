@@ -38,7 +38,7 @@ open class CashInAPI {
                      completion: @escaping (CashInResponse?, Error?) -> Void) {
 
         do {
-            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/linkedCards/\(cardId)/cashIns")
+            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\(account.accountType.path)/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/linkedCards/\(cardId)/cashIns")
                 else { fatalError() }
             
             var request = URLRequest(url: url)
@@ -183,7 +183,7 @@ open class CashInAPI {
                         completion: @escaping (Money?, Error?) -> Void) {
 
         let query = "?amount=\(amount.getValue())&currency=\(amount.getCurrency())"
-        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/linkedCards/\(cardId)/cashInsFee\(query)") else { fatalError() }
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\(account.accountType.path)/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/linkedCards/\(cardId)/cashInsFee\(query)") else { fatalError() }
 
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -232,7 +232,7 @@ open class CashInAPI {
         var dateComponent = DateComponents()
         dateComponent.year = -1
         
-        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/cashInBalance"),
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\(account.accountType.path)/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/cashInBalance"),
             let oneYearBefore = Calendar.current.date(byAdding: dateComponent, to: current),
             let yearAgoFormatted = DateTimeConversion.convert2RFC3339(date: oneYearBefore),
             let nowFormatted = DateTimeConversion.convert2RFC3339(date: current)

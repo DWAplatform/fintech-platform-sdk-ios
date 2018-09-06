@@ -114,7 +114,7 @@ open class PaymentCardAPI {
                               account: Account,
                               completion: @escaping ([PaymentCardItem]?, Error?) -> Void) {
 
-        guard let baseUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/linkedCards") else { fatalError() }
+        guard let baseUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\(account.accountType.path)/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/linkedCards") else { fatalError() }
         
         var request = URLRequest(url:  baseUrl)
         request.httpMethod = "GET"
@@ -174,7 +174,7 @@ open class PaymentCardAPI {
                                 cardId: String,
                                 completion: @escaping (Bool, Error?) -> Void) {
         
-        guard let baseUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/linkedCards/\(cardId)") else { fatalError() }
+        guard let baseUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\(account.accountType.path)/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/linkedCards/\(cardId)") else { fatalError() }
         
         var request = URLRequest(url:  baseUrl)
         request.httpMethod = "DELETE"
@@ -205,7 +205,7 @@ open class PaymentCardAPI {
                              cardId: String,
                              completion: @escaping (PaymentCardItem?, Error?) -> Void) {
 
-        guard let baseUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/linkedCards/\(cardId)/default") else { fatalError() }
+        guard let baseUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\(account.accountType.path)/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/linkedCards/\(cardId)/default") else { fatalError() }
         
         var request = URLRequest(url:  baseUrl)
         request.httpMethod = "PUT"
@@ -252,7 +252,7 @@ open class PaymentCardAPI {
                                               idempotency: String?,
                                               completion: @escaping (CreateCardRegistrationReply?, Error?) -> Void) {
         do {
-            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/linkedCards")
+            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\(account.accountType.path)/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/linkedCards")
                 else { fatalError() }
             
             var request = URLRequest(url: url)
@@ -350,7 +350,7 @@ open class PaymentCardAPI {
         if (!self.isSandbox) {
             completion(CardToRegister(cardNumber: cardToRegister.cardNumber, expiration: cardToRegister.expiration, cvx: cardToRegister.cxv), nil)
         }
-        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/linkedCardsTestCards")
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\(account.accountType.path)/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/linkedCardsTestCards")
             else { fatalError() }
         
         var request = URLRequest(url: url)
@@ -465,7 +465,7 @@ open class PaymentCardAPI {
                                         token: String,
                                         completion: @escaping (PaymentCardItem?, Error?) -> Void) {
         do {
-            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/linkedCards/\(cardReply.cardId)")
+            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\(account.accountType.path)/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/linkedCards/\(cardReply.cardId)")
                 else { fatalError() }
             
             var request = URLRequest(url: url)

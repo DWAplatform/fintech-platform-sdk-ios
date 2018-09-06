@@ -28,7 +28,7 @@ open class KycAPI {
                           account: Account,
                           completion: @escaping ([DocType]?, Error?) -> Void) {
     
-        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/kycRequiredDocuments")
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\(account.accountType.path)/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/kycRequiredDocuments")
             else { fatalError() }
         
         var request = URLRequest(url: url)
@@ -137,7 +137,7 @@ open class KycAPI {
                           account: Account,
                           completion: @escaping (Kyc?, Error?) -> Void) {
         
-        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/kycs")
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\(account.accountType.path)/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/kycs")
             else { fatalError() }
         
         var request = URLRequest(url: url)

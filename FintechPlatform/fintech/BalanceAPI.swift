@@ -32,7 +32,7 @@ open class BalanceAPI {
                       completion: @escaping (BalanceItem?, Error?) -> Void) {
         
         guard let url = URL(string:
-            hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/balance") else { fatalError() }
+            hostName + "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\(account.accountType.path)/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/balance") else { fatalError() }
         
         var request = URLRequest(url: url)
         request.addBearerAuthorizationToken(token: token)

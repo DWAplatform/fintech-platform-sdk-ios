@@ -36,7 +36,7 @@ open class BankAccountAPI {
                                completion: @escaping (BankAccount?, Error?) -> Void) {
         
         do {
-            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/\(account.accountType.path)/\(account.ownerId)/accounts/\(account.accountId)/linkedBanks")
+            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\(account.accountType.path)/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/linkedBanks")
                 else { fatalError() }
             
             var request = URLRequest(url: url)
