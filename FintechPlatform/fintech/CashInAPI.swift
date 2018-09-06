@@ -48,7 +48,7 @@ open class CashInAPI {
             
             let joAmount : NSMutableDictionary = NSMutableDictionary()
             joAmount.setValue(amount.getLongvalue(), forKey: "amount")
-            joAmount.setValue(amount.getCurrency(), forKey: "currency")
+            joAmount.setValue(amount.getCurrency().rawValue, forKey: "currency")
             
             let joFee : NSMutableDictionary = NSMutableDictionary()
             joFee.setValue(0, forKey: "amount")

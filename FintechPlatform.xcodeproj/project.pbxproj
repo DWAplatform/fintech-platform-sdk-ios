@@ -33,6 +33,7 @@
 		BF07DC6E20C0617B007CE06A /* KycAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF07DC6C20C0617B007CE06A /* KycAPI.swift */; };
 		BF07DC7020C062EE007CE06A /* DocType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF07DC6F20C062EE007CE06A /* DocType.swift */; };
 		BF07DC7120C062EE007CE06A /* DocType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF07DC6F20C062EE007CE06A /* DocType.swift */; };
+		BF2645E321415F1B00DC7B04 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF01F286212D658F00B56208 /* Account.swift */; };
 		BF41E29920DB990000E1CAF0 /* CashInAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43436A207CF1F100C9C041 /* CashInAPI.swift */; };
 		BF434359207CEF0800C9C041 /* FintechPlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF43434F207CEF0800C9C041 /* FintechPlatform.framework */; };
 		BF43435E207CEF0800C9C041 /* FintechPlatformTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43435D207CEF0800C9C041 /* FintechPlatformTests.swift */; };
@@ -466,6 +467,7 @@
 				B4C15B1C20A0325200ADA8A2 /* CashInApiIntegrationTest.swift in Sources */,
 				BF43435E207CEF0800C9C041 /* FintechPlatformTests.swift in Sources */,
 				5FD5F89B21370E8D00C7B8A6 /* PersonalAccount.swift in Sources */,
+				BF2645E321415F1B00DC7B04 /* Account.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
