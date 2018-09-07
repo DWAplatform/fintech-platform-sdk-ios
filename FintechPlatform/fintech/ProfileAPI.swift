@@ -215,7 +215,7 @@ open class ProfileAPI {
             }
             
             let jsonObject: NSMutableDictionary = NSMutableDictionary()
-            jsonObject.setValue(doctype, forKey: "docType")
+            jsonObject.setValue(doctype.rawValue, forKey: "docType")
             jsonObject.setValue(pages, forKey: "pages")
             let jsdata = try JSONSerialization.data(withJSONObject: jsonObject, options: JSONSerialization.WritingOptions())
             
