@@ -362,7 +362,7 @@ open class ProfileAPI {
                 with: data,
                 options: []) as? [String:String]
             
-            let userprofile: UserProfile?
+            var userprofile: UserProfile?
             if let userid = dictuserprofile?["userId"] {
                 userprofile = UserProfile(userid: userid)
             } else {

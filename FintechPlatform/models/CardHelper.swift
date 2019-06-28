@@ -11,7 +11,7 @@ open class CardHelper {
         self.sanityCheck = sanityCheck
     }
     
-    open static func generateAlias(cardNumber: String) -> String {
+    public static func generateAlias(cardNumber: String) -> String {
         let indexTo = cardNumber.index(cardNumber.startIndex, offsetBy: 6)
         let indexFrom = cardNumber.index(cardNumber.endIndex, offsetBy: -4)
         return "\(String(cardNumber[..<indexTo]))XXXXXX\(String(cardNumber[indexFrom...]))"
