@@ -57,3 +57,39 @@ public struct TransactionResponse {
         self.message = message
     }
 }
+
+public struct ExternalTransactions : Codable {
+    public let transactionId : String
+    public let ownerId: String
+    public let accountId: String
+    public let amount: Money
+    public let fee: Money?
+    public let status: String
+    public let message: String?
+    public let accountingDate: String?
+    public let valueDate: String?
+    public let error: ServerError?
+    
+    public init(
+    transactionId: String,
+    ownerId: String,
+    accountId: String,
+    amount: Money,
+    fee: Money? = nil,
+    status: String,
+    message: String? = nil,
+    accountingDate: String?,
+    valueDate: String? = nil,
+    error: ServerError? = nil) {
+        self.transactionId = transactionId
+        self.ownerId = ownerId
+        self.accountId = accountId
+        self.amount = amount
+        self.fee = fee
+        self.status = status
+        self.message = message
+        self.accountingDate = accountingDate
+        self.valueDate = valueDate
+        self.error = error
+    }
+}

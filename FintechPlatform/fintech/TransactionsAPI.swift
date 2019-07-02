@@ -146,4 +146,52 @@ open class TransactionsAPI {
             }
             }.resume()
     }
+    
+    open func externalTransactions(token: String,
+                                   account: Account,
+                                   limit: Int?=nil,
+                                   offset: Int?=nil,
+                                   completion: @escaping ([ExternalTransactions]?, Error?) -> Void)  {
+        var optUrl : URL?
+        if let limit = limit , let offset = offset {
+            let query = "?limit=\(limit)&offset=\(offset)"
+            optUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\(account.accountType.path)/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/externalBankTransactions\(query)")
+        } else {
+            optUrl = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\(account.accountType.path)/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/externalBankTransactions")
+        }
+        
+        guard let url =  optUrl else { fatalError() }
+        
+        var request = URLRequest(url: url)
+        request.addBearerAuthorizationToken(token: token)
+
+        session.dataTask(with: request) { (data, response, error) in
+            guard error == nil else { completion(nil, error); return }
+            guard let data = data else {
+                completion(nil, WebserviceError.DataEmptyError)
+                return
+            }
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(nil, WebserviceError.NoHTTPURLResponse)
+                return
+            }
+            
+            if (httpResponse.statusCode != 200) {
+                switch(httpResponse.statusCode) {
+                case 401:
+                    completion(nil, WebserviceError.TokenError)
+                default:
+                    completion(nil, NetHelper.createRequestError(data: data, error: error))
+                }
+                return
+            }
+            
+            do {
+                let reply = try JSONDecoder().decode([ExternalTransactions].self, from: data)
+                completion(reply, nil)
+            } catch {
+                completion(nil, error)
+            }
+        }.resume()
+    }
 }
