@@ -34,6 +34,7 @@
 		BF07DC7020C062EE007CE06A /* DocType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF07DC6F20C062EE007CE06A /* DocType.swift */; };
 		BF07DC7120C062EE007CE06A /* DocType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF07DC6F20C062EE007CE06A /* DocType.swift */; };
 		BF2645E321415F1B00DC7B04 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF01F286212D658F00B56208 /* Account.swift */; };
+		BF3444F322CD008F00B9DB94 /* TransferAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3444F222CD008F00B9DB94 /* TransferAccount.swift */; };
 		BF41E29920DB990000E1CAF0 /* CashInAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43436A207CF1F100C9C041 /* CashInAPI.swift */; };
 		BF434359207CEF0800C9C041 /* FintechPlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF43434F207CEF0800C9C041 /* FintechPlatform.framework */; };
 		BF43435E207CEF0800C9C041 /* FintechPlatformTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43435D207CEF0800C9C041 /* FintechPlatformTests.swift */; };
@@ -93,6 +94,7 @@
 		BF02D47F20A9D07700F213BF /* ServerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerError.swift; sourceTree = "<group>"; };
 		BF07DC6C20C0617B007CE06A /* KycAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KycAPI.swift; sourceTree = "<group>"; };
 		BF07DC6F20C062EE007CE06A /* DocType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocType.swift; sourceTree = "<group>"; };
+		BF3444F222CD008F00B9DB94 /* TransferAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferAccount.swift; sourceTree = "<group>"; };
 		BF43434F207CEF0800C9C041 /* FintechPlatform.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FintechPlatform.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF434352207CEF0800C9C041 /* FintechPlatform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FintechPlatform.h; sourceTree = "<group>"; };
 		BF434353207CEF0800C9C041 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -235,6 +237,7 @@
 				5FD5F89C2137102C00C7B8A6 /* AccountLevel.swift */,
 				5FD5F89F2137103C00C7B8A6 /* AccountLevelStatus.swift */,
 				5FD5F8A221371A2800C7B8A6 /* Kyc.swift */,
+				BF3444F222CD008F00B9DB94 /* TransferAccount.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -447,6 +450,7 @@
 				BF43436D207CF27500C9C041 /* FintechPlatformAPI.swift in Sources */,
 				BF43438D207DF58900C9C041 /* UserProfile.swift in Sources */,
 				BF434393207E073800C9C041 /* TransferAPI.swift in Sources */,
+				BF3444F322CD008F00B9DB94 /* TransferAccount.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
