@@ -25,17 +25,18 @@ open class TransferAPI {
                   idempotency: String,
                   completion: @escaping (Error?) -> Void) {
         do {
-            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\(NetHelper.getPath(from: account.accountType.path))/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/transfers")
+            guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\( account.accountType.path)/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/transfers")
                 else { fatalError() }
             
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
             
+            let accoType=transferAccount.creditedAccount.accountType.rawValue
             let joCredited: NSMutableDictionary = NSMutableDictionary()
             joCredited.setValue(transferAccount.creditedAccount.ownerId, forKey: "ownerId")
             joCredited.setValue(transferAccount.creditedAccount.accountId, forKey: "accountId")
             joCredited.setValue(transferAccount.creditedAccount.tenantId, forKey: "tenantId")
-            joCredited.setValue(transferAccount.creditedAccount.accountType, forKey: "accountType")
+            joCredited.setValue(accoType, forKey: "accountType")
             
             let joAmount: NSMutableDictionary = NSMutableDictionary()
             joAmount.setValue(amount, forKey: "amount")
