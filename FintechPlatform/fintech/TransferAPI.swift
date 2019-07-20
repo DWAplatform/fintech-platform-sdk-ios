@@ -101,8 +101,60 @@ open class TransferAPI {
                     message: String?,
                     amount: Money,
                     idempotency: String,
-                    completion: @escaping (String?, Error?) -> Void) {
+                    completion: @escaping (UUID?, Error?) -> Void) {
         
+        struct Body: Codable {
+            var creditedAccount: CreditedAccount
+            var amount: Money
+            var fee: Money?
+            var message: String?
+        }
+        
+        struct Response: Codable {
+            var qrCreditTransferId: UUID
+        }
+        
+        let body = Body(creditedAccount: CreditedAccount(ownerId: account.ownerId.uuidString,
+                                                         accountId: account.accountId.uuidString,
+                                                         tenantId: account.tenantId.uuidString,
+                                                         accountType: account.accountType),
+                        amount: amount,
+                        fee: nil,
+                        message: nil)
+        
+        guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId)/qrCreditTransfers")
+            else { fatalError() }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = try? JSONEncoder().encode(body)
+        request.addBearerAuthorizationToken(token: token)
+        
+        session.dataTask(with: request) { (data, response, error) in
+            if let error = error { completion(nil, error); return }
+            
+            guard let data = data else {
+                completion(nil, WebserviceError.DataEmptyError)
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(nil, WebserviceError.NoHTTPURLResponse)
+                return
+            }
+            
+            if (httpResponse.statusCode != 200) {
+                completion(nil, NetHelper.createRequestError(data: data, error: error))
+                return
+            }
+            
+            do {
+                let reply = try JSONDecoder().decode(Response.self, from: data)
+                completion(reply.qrCreditTransferId, nil)
+            } catch {
+                completion(nil, WebserviceError.NOJSONReply)
+            }
+        }.resume()
     }
     
     open func getQr(token: String,
