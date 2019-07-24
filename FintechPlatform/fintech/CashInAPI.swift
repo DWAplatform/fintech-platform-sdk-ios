@@ -168,20 +168,16 @@ open class CashInAPI {
     /**
     Gets Fee from amount to cash into Fintech Account.
      - parameters:
-         - token: got from "Create User token" request.
-         - tenantId: Fintech tenant id
-         - accountId: Fintech Account id
-         - ownerId: Fintech id of the owner of the Fintech Account
-         - accountType: set if PERSONAL or BUSINESS type of account
-         - cardId: unique Id of payment card linked to Fintech Account
-         - amount: amount of money to transfer from Fintech Account to bank account
+        - token: got from "Create User token" request.
+        - account: Fintech platform Account ids, based on the Fintech User ownership and tenancy.
+        - cardId: unique Id of payment card linked to Fintech Account
+        - amount: amount of money to transfer from Fintech Account to bank account
      */
     open func cashInFee(token: String,
                         account: Account,
                         cardId: String,
                         amount: Money,
                         completion: @escaping (Money?, Error?) -> Void) {
-
         let query = "?amount=\(amount.getValue())&currency=\(amount.getCurrency())"
         guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\(account.accountType.path)/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/linkedCards/\(cardId)/cashInsFee\(query)") else { fatalError() }
 
