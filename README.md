@@ -17,7 +17,7 @@ $ gem install cocoapods
 To integrate DWAplatform into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
 ```ruby
-pod 'FintechPlatform', '~> 1.3.6'
+pod 'FintechPlatform', '~> 1.3.7'
 ```
 
 Then, run the following command:
@@ -69,9 +69,13 @@ Fintech Account (accountId) is credited with 20,00 € using a card (cardId) own
     
     
     //  Set User Account Linked Card parameters
-    let tenantId = "87e4ff86-18b6-44cf-87af-af2411ab68c5"
-    let userId = "08ad02e8-89fb-44b8-ab65-87eea175adc2"
-    let accountId = "f0c84dbc-5d1d-4973-b212-1ac2cd34e5c3"
+    let account = Account.personalAccount(user: User(
+                userId: UUID(uuidString: "08ad02e8-89fb-44b8-ab65-87eea175adc2")!, 
+                tenantId: UUID(uuidString: "87e4ff86-18b6-44cf-87af-af2411ab68c5")!
+                ), 
+                accountId: UUID(uuidString: "f0c84dbc-5d1d-4973-b212-1ac2cd34e5c3")!
+        )
+
     let cardId = "2bde23fc-df93-4ff2-acce-51f42be62062"
     
     //  Amount to cashIn
@@ -86,29 +90,28 @@ Fintech Account (accountId) is credited with 20,00 € using a card (cardId) own
 
     //  Start Cash in
     cashInAPI.cashIn(token: accessToken,
-	                userId: userId,
-	                accountId: accountId,
-	                accountType: "PERSONAL",
-	                tenantId: tenantId,
+	                account: account,
 	                cardId: cardId,
 	                amount: amountToCashIn,
 	                idempotency: idempotencyKey) { optcashinresponse, opterror in
+        DispatchQueue.main.async {
+            if let error = opterror {
+                completion(nil, handleErrors(error: error))
+                return
+            }
 
-        if let error = opterror {
-            completion(nil, handleErrors(error: error))
-            return
-        }
+            guard let cashInResponse = optcashinresponse else {
+                completion(nil, nil)
+                return
+            }
+        
+            if (cashInResponse.securecodeneeded) {
+                // 3d secure required
+                self.view.goToSecure3D(redirecturl: cashInResponse.redirecturl ?? "")
+            } else {
+                // Cash in completed
+            }
 
-        guard let cashInResponse = optcashinresponse else {
-            completion(nil, nil)
-            return
-        }
-    
-        if (cashInResponse.securecodeneeded) {
-            // 3d secure required
-            self.view.goToSecure3D(redirecturl: cashInResponse.redirecturl ?? "")
-        } else {
-            // Cash in completed
         }
     }
 
