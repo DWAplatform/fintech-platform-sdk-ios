@@ -35,14 +35,14 @@
 		BF07DC7120C062EE007CE06A /* DocType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF07DC6F20C062EE007CE06A /* DocType.swift */; };
 		BF2645E321415F1B00DC7B04 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF01F286212D658F00B56208 /* Account.swift */; };
 		BF3444F322CD008F00B9DB94 /* TransferAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3444F222CD008F00B9DB94 /* TransferAccount.swift */; };
-		BF41E29920DB990000E1CAF0 /* CashInAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43436A207CF1F100C9C041 /* CashInAPI.swift */; };
+		BF41E29920DB990000E1CAF0 /* PayInAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43436A207CF1F100C9C041 /* PayInAPI.swift */; };
 		BF434359207CEF0800C9C041 /* FintechPlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF43434F207CEF0800C9C041 /* FintechPlatform.framework */; };
 		BF43435E207CEF0800C9C041 /* FintechPlatformTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43435D207CEF0800C9C041 /* FintechPlatformTests.swift */; };
 		BF434360207CEF0800C9C041 /* FintechPlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = BF434352207CEF0800C9C041 /* FintechPlatform.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BF43436B207CF1F100C9C041 /* CashInAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43436A207CF1F100C9C041 /* CashInAPI.swift */; };
+		BF43436B207CF1F100C9C041 /* PayInAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43436A207CF1F100C9C041 /* PayInAPI.swift */; };
 		BF43436D207CF27500C9C041 /* FintechPlatformAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43436C207CF27500C9C041 /* FintechPlatformAPI.swift */; };
 		BF434370207CF6D800C9C041 /* Money.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43436F207CF6D800C9C041 /* Money.swift */; };
-		BF434372207CF8BE00C9C041 /* CashInResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF434371207CF8BE00C9C041 /* CashInResponse.swift */; };
+		BF434372207CF8BE00C9C041 /* PayInResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF434371207CF8BE00C9C041 /* PayInResponse.swift */; };
 		BF434375207CF93C00C9C041 /* NetHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF434374207CF93C00C9C041 /* NetHelper.swift */; };
 		BF434377207D223900C9C041 /* CashOutAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF434376207D223900C9C041 /* CashOutAPI.swift */; };
 		BF434379207D2E8400C9C041 /* BalanceAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF434378207D2E8400C9C041 /* BalanceAPI.swift */; };
@@ -101,10 +101,10 @@
 		BF434358207CEF0800C9C041 /* FintechPlatformTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FintechPlatformTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF43435D207CEF0800C9C041 /* FintechPlatformTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FintechPlatformTests.swift; sourceTree = "<group>"; };
 		BF43435F207CEF0800C9C041 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BF43436A207CF1F100C9C041 /* CashInAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashInAPI.swift; sourceTree = "<group>"; };
+		BF43436A207CF1F100C9C041 /* PayInAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayInAPI.swift; sourceTree = "<group>"; };
 		BF43436C207CF27500C9C041 /* FintechPlatformAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FintechPlatformAPI.swift; sourceTree = "<group>"; };
 		BF43436F207CF6D800C9C041 /* Money.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Money.swift; sourceTree = "<group>"; };
-		BF434371207CF8BE00C9C041 /* CashInResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashInResponse.swift; sourceTree = "<group>"; };
+		BF434371207CF8BE00C9C041 /* PayInResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayInResponse.swift; sourceTree = "<group>"; };
 		BF434374207CF93C00C9C041 /* NetHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetHelper.swift; sourceTree = "<group>"; };
 		BF434376207D223900C9C041 /* CashOutAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashOutAPI.swift; sourceTree = "<group>"; };
 		BF434378207D2E8400C9C041 /* BalanceAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceAPI.swift; sourceTree = "<group>"; };
@@ -208,7 +208,7 @@
 				BF434382207D394200C9C041 /* PaymentCardAPI.swift */,
 				BF434388207DF2FC00C9C041 /* ProfileAPI.swift */,
 				BF434392207E073800C9C041 /* TransferAPI.swift */,
-				BF43436A207CF1F100C9C041 /* CashInAPI.swift */,
+				BF43436A207CF1F100C9C041 /* PayInAPI.swift */,
 				BF07DC6C20C0617B007CE06A /* KycAPI.swift */,
 				5FD5F89621370BFE00C7B8A6 /* AccountAPI.swift */,
 			);
@@ -219,7 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				BF43436F207CF6D800C9C041 /* Money.swift */,
-				BF434371207CF8BE00C9C041 /* CashInResponse.swift */,
+				BF434371207CF8BE00C9C041 /* PayInResponse.swift */,
 				BF43437C207D322900C9C041 /* TransactionsResponse.swift */,
 				BF434380207D38FE00C9C041 /* BankAccount.swift */,
 				BF434384207D39A200C9C041 /* PaymentCardItem.swift */,
@@ -426,7 +426,7 @@
 				BF43438B207DF33F00C9C041 /* UserProfileResponse.swift in Sources */,
 				5FD5F89A21370E8D00C7B8A6 /* PersonalAccount.swift in Sources */,
 				BF434379207D2E8400C9C041 /* BalanceAPI.swift in Sources */,
-				BF434372207CF8BE00C9C041 /* CashInResponse.swift in Sources */,
+				BF434372207CF8BE00C9C041 /* PayInResponse.swift in Sources */,
 				BF43438F207DF64500C9C041 /* CardSanityCheck.swift in Sources */,
 				BF434387207D3A6200C9C041 /* CardHelper.swift in Sources */,
 				BF434370207CF6D800C9C041 /* Money.swift in Sources */,
@@ -442,7 +442,7 @@
 				BF02D48020A9D07700F213BF /* ServerError.swift in Sources */,
 				BF434375207CF93C00C9C041 /* NetHelper.swift in Sources */,
 				BF43437D207D322900C9C041 /* TransactionsResponse.swift in Sources */,
-				BF43436B207CF1F100C9C041 /* CashInAPI.swift in Sources */,
+				BF43436B207CF1F100C9C041 /* PayInAPI.swift in Sources */,
 				BF07DC6D20C0617B007CE06A /* KycAPI.swift in Sources */,
 				5FD5F89721370BFE00C7B8A6 /* AccountAPI.swift in Sources */,
 				BF434385207D39A200C9C041 /* PaymentCardItem.swift in Sources */,
@@ -459,7 +459,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5FD5F8A12137103C00C7B8A6 /* AccountLevelStatus.swift in Sources */,
-				BF41E29920DB990000E1CAF0 /* CashInAPI.swift in Sources */,
+				BF41E29920DB990000E1CAF0 /* PayInAPI.swift in Sources */,
 				5FD5F88A21358B8F00C7B8A6 /* KycRequest.swift in Sources */,
 				BF07DC6E20C0617B007CE06A /* KycAPI.swift in Sources */,
 				5FD5F89821370BFE00C7B8A6 /* AccountAPI.swift in Sources */,

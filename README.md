@@ -44,7 +44,7 @@ We supply the following modules:
 
 ###### FintechPlatformAPI:
 
-1. Cash in 
+1. Pay in 
 2. Cash out
 3. Balance
 4. Payment card registration
@@ -53,7 +53,7 @@ We supply the following modules:
 7. Peer to peer transfers
 8. (profile) User personal informations
 
-Sample usage CashIn API Component in Swift
+Sample usage PayIn API Component in Swift
 -------------------------------------------------
 
 Fintech Account (accountId) is credited with 20,00 € using a card (cardId) owned by the user (userId)
@@ -78,38 +78,38 @@ Fintech Account (accountId) is credited with 20,00 € using a card (cardId) own
 
     let cardId = "2bde23fc-df93-4ff2-acce-51f42be62062"
     
-    //  Amount to cashIn
-    let amountToCashIn = Money(value: 2000) // amount in euro cent
+    //  Amount to payIn
+    let amountToPayIn = Money(value: 2000) // amount in euro cent
     
     //  Optional Idempotency
     let idempotencyKey = "idemp1"
     
-    //  create cash in API using FintechPlatformAPI instance.
+    //  create pay in API using FintechPlatformAPI instance.
     let fintechPlatform = FintechPlatformAPI.sharedInstance
-    let cashInAPI = fintechPlatform.getCashInAPI(hostName: hostName)
+    let payInAPI = fintechPlatform.getPayInAPI(hostName: hostName)
 
-    //  Start Cash in
-    cashInAPI.cashIn(token: accessToken,
+    //  Start Pay in
+    payInAPI.payIn(token: accessToken,
 	                account: account,
 	                cardId: cardId,
-	                amount: amountToCashIn,
-	                idempotency: idempotencyKey) { optcashinresponse, opterror in
+	                amount: amountToPayIn,
+	                idempotency: idempotencyKey) { optcpayinresponse, opterror in
         DispatchQueue.main.async {
             if let error = opterror {
                 completion(nil, handleErrors(error: error))
                 return
             }
 
-            guard let cashInResponse = optcashinresponse else {
+            guard let payInResponse = optpayinresponse else {
                 completion(nil, nil)
                 return
             }
         
-            if (cashInResponse.securecodeneeded) {
+            if (payInResponse.securecodeneeded) {
                 // 3d secure required
-                self.view.goToSecure3D(redirecturl: cashInResponse.redirecturl ?? "")
+                self.view.goToSecure3D(redirecturl: payInResponse.redirecturl ?? "")
             } else {
-                // Cash in completed
+                // Pay in completed
             }
 
         }

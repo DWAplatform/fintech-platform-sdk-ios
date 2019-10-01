@@ -94,7 +94,7 @@ class CashInApiIntegrationTest: XCTestCase {
         // cashIn without 3d secure
         let expectationCashIn1 = XCTestExpectation(description: "CashIn")
         var cashIn1OptError1: Error? = nil
-        var cashIn1: CashInResponse? = nil
+        var cashIn1: PayInResponse? = nil
         
         cashInAPI.cashIn(token: accessToken, ownerId: userId, accountId: accountId, accountType: "PERSONAL", tenantId: tenantId, cardId: paymentCard1!.cardId, amount: Money(value: 1000), idempotency: "IdempCashIn") { optCashInResponse, optError in
             cashIn1OptError1 = optError
@@ -108,13 +108,13 @@ class CashInApiIntegrationTest: XCTestCase {
         XCTAssertNil(cashIn1OptError1, "CashInFee Error reply")
         XCTAssertNotNil(cashIn1, "CashIn No Fee In Response")
         XCTAssertFalse(cashIn1!.securecodeneeded)
-        XCTAssertEqual(cashIn1?.status, CashInStatus.SUCCEEDED)
-        XCTAssertNotEqual(cashIn1?.status, CashInStatus.FAILED)
+        XCTAssertEqual(cashIn1?.status, PayInStatus.SUCCEEDED)
+        XCTAssertNotEqual(cashIn1?.status, PayInStatus.FAILED)
         
         // cashIn failed
         let expectationCashIn11 = XCTestExpectation(description: "CashIn")
         var cashIn1OptError11: Error? = nil
-        var cashIn11: CashInResponse? = nil
+        var cashIn11: PayInResponse? = nil
         
         cashInAPI.cashIn(token: accessToken, ownerId: userId, accountId: accountId, accountType: "PERSONAL", tenantId: tenantId, cardId: paymentCard1!.cardId, amount: Money(value: -500), idempotency: "IdempCashIn11") { optCashInResponse, optError in
             cashIn1OptError11 = optError
@@ -140,7 +140,7 @@ class CashInApiIntegrationTest: XCTestCase {
         // cashIn with 3d secure
         let expectationCashIn2 = XCTestExpectation(description: "CashIn")
         var cashIn1OptError2: Error? = nil
-        var cashIn2: CashInResponse? = nil
+        var cashIn2: PayInResponse? = nil
         
         cashInAPI.cashIn(token: accessToken, ownerId: userId, accountId: accountId, accountType: "PERSONAL", tenantId: tenantId, cardId: paymentCard1!.cardId, amount: Money(value: 10000), idempotency: "IdempCashIn") { optCashInResponse, optError in
             cashIn1OptError2 = optError
@@ -154,12 +154,12 @@ class CashInApiIntegrationTest: XCTestCase {
         XCTAssertNil(cashIn1OptError2, "CashInFee Error reply")
         XCTAssertNotNil(cashIn2, "CashIn No Fee In Response")
         XCTAssertTrue(cashIn2!.securecodeneeded)
-        XCTAssertEqual(cashIn2?.status, CashInStatus.CREATED)
+        XCTAssertEqual(cashIn2?.status, PayInStatus.CREATED)
         
         // cashIn with error
         let expectationCashIn3 = XCTestExpectation(description: "CashInError")
         var cashIn1OptError3: Error? = nil
-        var cashIn3: CashInResponse? = nil
+        var cashIn3: PayInResponse? = nil
         
         cashInAPI.cashIn(token: accessToken, ownerId: userId, accountId: accountId, accountType: "PERSONAL", tenantId: tenantId, cardId: UUID().uuidString, amount: Money(value: 10000), idempotency: "IdempCashInError") { optCashInResponse, optError in
             cashIn1OptError3 = optError
@@ -184,7 +184,7 @@ class CashInApiIntegrationTest: XCTestCase {
         // cashIn with ASP error
         let expectationCashIn4 = XCTestExpectation(description: "CashInError")
         var cashIn1OptError4: Error? = nil
-        var cashIn4: CashInResponse? = nil
+        var cashIn4: PayInResponse? = nil
         
         cashInAPI.cashIn(token: accessToken, ownerId: userId, accountId: accountId, accountType: "PERSONAL", tenantId: tenantId, cardId: paymentCard1!.cardId, amount: Money(value: 100000000), idempotency: "IdempCashInError") { optCashInResponse, optError in
             cashIn1OptError4 = optError

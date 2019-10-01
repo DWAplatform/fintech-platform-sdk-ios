@@ -1,5 +1,5 @@
 //
-//  CashInAPi.swift
+//  PayInAPi.swift
 //  FintechPlatform
 //
 //  Created by ingrid on 10/04/18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-open class CashInAPI {
+open class PayInAPI {
     
     lazy var session: SessionProtocol = URLSession.shared
     
@@ -19,7 +19,7 @@ open class CashInAPI {
     }
     
     /**
-     * CashIn transfers money from Linked Card to the Fintech Account.
+     * PayIn transfers money from Linked Card to the Fintech Account.
      - parameters:
          - token: got from "Create User token" request.
          - tenantId: Fintech tenant id
@@ -30,12 +30,12 @@ open class CashInAPI {
          - amount: amount of money to transfer from payment card to Fintech Account
          - idempotency: parameter to avoid multiple inserts.
      */
-    open func cashIn(token: String,
+    open func payIn(token: String,
                      account: Account,
                      cardId: String,
                      amount: Money,
                      idempotency: String,
-                     completion: @escaping (CashInResponse?, Error?) -> Void) {
+                     completion: @escaping (PayInResponse?, Error?) -> Void) {
 
         do {
             guard let url = URL(string: hostName + "/rest/v1/fintech/tenants/\(account.tenantId.uuidString)/\(account.accountType.path)/\(account.ownerId.uuidString)/accounts/\(account.accountId.uuidString)/linkedCards/\(cardId)/cashIns")
@@ -110,7 +110,7 @@ open class CashInAPI {
                         return
                     }
                     
-                    if (CashInStatus(rawValue: status)! == .FAILED) {
+                    if (PayInStatus(rawValue: status)! == .FAILED) {
                         if let errorObj = reply?["error"] as? [String:String], let code = errorObj["code"], let message = errorObj["message"] {
                                 
                             var errorsList = [ServerError]()
@@ -152,7 +152,7 @@ open class CashInAPI {
                         updated = nil
                     }
                 
-                    let payinreply = CashInResponse(transactionid: transactionid, securecodeneeded: securecodeneeded, redirecturl: optredirecturl, status: CashInStatus(rawValue: status)!, created: created, updated: updated)
+                    let payinreply = PayInResponse(transactionid: transactionid, securecodeneeded: securecodeneeded, redirecturl: optredirecturl, status: PayInStatus(rawValue: status)!, created: created, updated: updated)
                     
                     completion(payinreply, nil)
                 } catch {
@@ -166,14 +166,14 @@ open class CashInAPI {
     }
     
     /**
-    Gets Fee from amount to cash into Fintech Account.
+    Gets Fee from amount to pay into Fintech Account.
      - parameters:
         - token: got from "Create User token" request.
         - account: Fintech platform Account ids, based on the Fintech User ownership and tenancy.
         - cardId: unique Id of payment card linked to Fintech Account
         - amount: amount of money to transfer from Fintech Account to bank account
      */
-    open func cashInFee(token: String,
+    open func payInFee(token: String,
                         account: Account,
                         cardId: String,
                         amount: Money,
@@ -220,10 +220,10 @@ open class CashInAPI {
         }.resume()
     }
 
-    open func cashInBalanceOverflow(token: String,
-                               account: Account,
-                               current: Date,
-                               completion: @escaping (BalanceItem?, Error?) -> Void) {
+    open func payInBalanceOverflow(token: String,
+                                   account: Account,
+                                   current: Date,
+                                   completion: @escaping (BalanceItem?, Error?) -> Void) {
         
         var dateComponent = DateComponents()
         dateComponent.year = -1

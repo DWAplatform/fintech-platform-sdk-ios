@@ -18,8 +18,8 @@ public class FintechPlatformAPI {
     
     private init() {}
     
-    public func getCashInAPI(hostName: String) -> CashInAPI {
-        return CashInAPI(hostName: hostName)
+    public func getPayInAPI(hostName: String) -> PayInAPI {
+        return PayInAPI(hostName: hostName)
     }
     
     public func getCashOutAPI(hostName: String) -> CashOutAPI {
