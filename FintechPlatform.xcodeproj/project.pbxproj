@@ -33,6 +33,8 @@
 		BF07DC6E20C0617B007CE06A /* KycAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF07DC6C20C0617B007CE06A /* KycAPI.swift */; };
 		BF07DC7020C062EE007CE06A /* DocType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF07DC6F20C062EE007CE06A /* DocType.swift */; };
 		BF07DC7120C062EE007CE06A /* DocType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF07DC6F20C062EE007CE06A /* DocType.swift */; };
+		BF0DF6AF23435912000858B2 /* EnterpriseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0DF6AE23435912000858B2 /* EnterpriseAPI.swift */; };
+		BF0DF6B123435B0C000858B2 /* EnterpriseProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0DF6B023435B0C000858B2 /* EnterpriseProfile.swift */; };
 		BF2645E321415F1B00DC7B04 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF01F286212D658F00B56208 /* Account.swift */; };
 		BF3444F322CD008F00B9DB94 /* TransferAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3444F222CD008F00B9DB94 /* TransferAccount.swift */; };
 		BF41E29920DB990000E1CAF0 /* PayInAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43436A207CF1F100C9C041 /* PayInAPI.swift */; };
@@ -54,7 +56,6 @@
 		BF434385207D39A200C9C041 /* PaymentCardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF434384207D39A200C9C041 /* PaymentCardItem.swift */; };
 		BF434387207D3A6200C9C041 /* CardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF434386207D3A6200C9C041 /* CardHelper.swift */; };
 		BF434389207DF2FC00C9C041 /* ProfileAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF434388207DF2FC00C9C041 /* ProfileAPI.swift */; };
-		BF43438B207DF33F00C9C041 /* UserProfileResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43438A207DF33F00C9C041 /* UserProfileResponse.swift */; };
 		BF43438D207DF58900C9C041 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43438C207DF58900C9C041 /* UserProfile.swift */; };
 		BF43438F207DF64500C9C041 /* CardSanityCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF43438E207DF64500C9C041 /* CardSanityCheck.swift */; };
 		BF434391207E009500C9C041 /* UserDocuments.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF434390207E009500C9C041 /* UserDocuments.swift */; };
@@ -94,6 +95,8 @@
 		BF02D47F20A9D07700F213BF /* ServerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerError.swift; sourceTree = "<group>"; };
 		BF07DC6C20C0617B007CE06A /* KycAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KycAPI.swift; sourceTree = "<group>"; };
 		BF07DC6F20C062EE007CE06A /* DocType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocType.swift; sourceTree = "<group>"; };
+		BF0DF6AE23435912000858B2 /* EnterpriseAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterpriseAPI.swift; sourceTree = "<group>"; };
+		BF0DF6B023435B0C000858B2 /* EnterpriseProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterpriseProfile.swift; sourceTree = "<group>"; };
 		BF3444F222CD008F00B9DB94 /* TransferAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferAccount.swift; sourceTree = "<group>"; };
 		BF43434F207CEF0800C9C041 /* FintechPlatform.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FintechPlatform.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF434352207CEF0800C9C041 /* FintechPlatform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FintechPlatform.h; sourceTree = "<group>"; };
@@ -116,7 +119,6 @@
 		BF434384207D39A200C9C041 /* PaymentCardItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentCardItem.swift; sourceTree = "<group>"; };
 		BF434386207D3A6200C9C041 /* CardHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHelper.swift; sourceTree = "<group>"; };
 		BF434388207DF2FC00C9C041 /* ProfileAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAPI.swift; sourceTree = "<group>"; };
-		BF43438A207DF33F00C9C041 /* UserProfileResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileResponse.swift; sourceTree = "<group>"; };
 		BF43438C207DF58900C9C041 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		BF43438E207DF64500C9C041 /* CardSanityCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSanityCheck.swift; sourceTree = "<group>"; };
 		BF434390207E009500C9C041 /* UserDocuments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDocuments.swift; sourceTree = "<group>"; };
@@ -211,6 +213,7 @@
 				BF43436A207CF1F100C9C041 /* PayInAPI.swift */,
 				BF07DC6C20C0617B007CE06A /* KycAPI.swift */,
 				5FD5F89621370BFE00C7B8A6 /* AccountAPI.swift */,
+				BF0DF6AE23435912000858B2 /* EnterpriseAPI.swift */,
 			);
 			path = fintech;
 			sourceTree = "<group>";
@@ -224,7 +227,6 @@
 				BF434380207D38FE00C9C041 /* BankAccount.swift */,
 				BF434384207D39A200C9C041 /* PaymentCardItem.swift */,
 				BF434386207D3A6200C9C041 /* CardHelper.swift */,
-				BF43438A207DF33F00C9C041 /* UserProfileResponse.swift */,
 				BF43438C207DF58900C9C041 /* UserProfile.swift */,
 				BF43438E207DF64500C9C041 /* CardSanityCheck.swift */,
 				BF434390207E009500C9C041 /* UserDocuments.swift */,
@@ -238,6 +240,7 @@
 				5FD5F89F2137103C00C7B8A6 /* AccountLevelStatus.swift */,
 				5FD5F8A221371A2800C7B8A6 /* Kyc.swift */,
 				BF3444F222CD008F00B9DB94 /* TransferAccount.swift */,
+				BF0DF6B023435B0C000858B2 /* EnterpriseProfile.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -423,7 +426,6 @@
 				BF8CC7F120851D1400229741 /* BalanceItem.swift in Sources */,
 				BF434383207D394200C9C041 /* PaymentCardAPI.swift in Sources */,
 				BF434389207DF2FC00C9C041 /* ProfileAPI.swift in Sources */,
-				BF43438B207DF33F00C9C041 /* UserProfileResponse.swift in Sources */,
 				5FD5F89A21370E8D00C7B8A6 /* PersonalAccount.swift in Sources */,
 				BF434379207D2E8400C9C041 /* BalanceAPI.swift in Sources */,
 				BF434372207CF8BE00C9C041 /* PayInResponse.swift in Sources */,
@@ -444,7 +446,9 @@
 				BF43437D207D322900C9C041 /* TransactionsResponse.swift in Sources */,
 				BF43436B207CF1F100C9C041 /* PayInAPI.swift in Sources */,
 				BF07DC6D20C0617B007CE06A /* KycAPI.swift in Sources */,
+				BF0DF6B123435B0C000858B2 /* EnterpriseProfile.swift in Sources */,
 				5FD5F89721370BFE00C7B8A6 /* AccountAPI.swift in Sources */,
+				BF0DF6AF23435912000858B2 /* EnterpriseAPI.swift in Sources */,
 				BF434385207D39A200C9C041 /* PaymentCardItem.swift in Sources */,
 				BF01F287212D658F00B56208 /* Account.swift in Sources */,
 				BF43436D207CF27500C9C041 /* FintechPlatformAPI.swift in Sources */,

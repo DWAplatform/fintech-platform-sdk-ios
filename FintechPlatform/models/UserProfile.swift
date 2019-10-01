@@ -54,3 +54,12 @@ public struct UserProfile {
         self.income = income
     }
 }
+
+public struct UserProfileResponse {
+    public let userid: String
+    public var token: String?
+    
+    public init(userid: String) {
+        self.userid = userid
+    }
+}

@@ -198,6 +198,7 @@ open class ProfileAPI {
     public func documents(token: String,
                           user: User,
                           doctype: DocType,
+                          fileName: String? = nil,
                           documents: [String?],
                           idempotency: String,
                           completion: @escaping (String?, Error?) -> Void) {
@@ -261,7 +262,7 @@ open class ProfileAPI {
             completion(nil, error)
         }
     }
-    
+ /*
     /**
      Get User documents from Fintech Platform.
      - parameters:
@@ -333,7 +334,7 @@ open class ProfileAPI {
         
         
     }
-    
+ */
     private func searchUserReplyParser(data: Data?, response: URLResponse?, error: Error?) -> (UserProfile?, Error?) {
         
         guard error == nil else { return (nil, error) }

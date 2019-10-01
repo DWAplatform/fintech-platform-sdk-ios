@@ -51,7 +51,8 @@ We supply the following modules:
 5. IBAN address registration
 6. Transactions list
 7. Peer to peer transfers
-8. (profile) User personal informations
+8. Personal user informations
+9. Enterprise detailed informations
 
 Sample usage PayIn API Component in Swift
 -------------------------------------------------
